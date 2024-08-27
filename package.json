@@ -61,7 +61,7 @@
     "typescript-eslint": "^8.0.0"
   },
   "engines": {
-    "node": "20.16"
+    "node": "20.17"
   },
   "dependencies": {
     "@types/socket.io": "^3.0.2",
