@@ -19,6 +19,7 @@ export interface Message<X extends MessageContent> {
 export class NotificationMessage implements Message<Notification> {
   content: Notification
   sender: User
+  type = 'notificationMessage'
 
   constructor(sender: User, notification: Notification) {
     this.content = notification
@@ -37,6 +38,7 @@ export class NotificationMessage implements Message<Notification> {
 export class TextMessage implements Message<string> {
   content: string
   sender: User
+  type = 'textMessage'
 
   constructor(sender: User, text: string) {
     this.content = text
