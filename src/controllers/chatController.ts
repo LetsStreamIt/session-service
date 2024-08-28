@@ -46,11 +46,15 @@ export class ChatController {
   }
 
   async sendMessage(token: string, message: string, room: string): Promise<TextMessage> {
-    return new Promise((resolve) => {
-      const user: User = this.getUserFromToken(token)
-      const textMessage: TextMessage = new TextMessage(user, message)
-      this.rooms.find(new RoomId(room))?.sendMessage(textMessage)
-      resolve(textMessage)
+    return new Promise((resolve, reject) => {
+      if (message !== '') {
+        const user: User = this.getUserFromToken(token)
+        const textMessage: TextMessage = new TextMessage(user, message)
+        this.rooms.find(new RoomId(room))?.sendMessage(textMessage)
+        resolve(textMessage)
+      } else {
+        reject()
+      }
     })
   }
 

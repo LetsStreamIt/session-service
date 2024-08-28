@@ -1,5 +1,5 @@
 import { Namespace } from 'socket.io'
-import { Ack, TextMessage } from '../../../model/message'
+import { TextMessage } from '../../../model/message'
 import { chatReaction } from '../utils'
 import { ChatController } from '../../../controllers/chatController'
 import { SerializerImpl } from '../../../model/presentation/serialization/messageSerializer'
@@ -25,7 +25,6 @@ export function sendMessageCommand(
       chatController.sendMessage(token, message, room),
       (textMessage: TextMessage) => {
         chatNamespace.to(room).emit('textMessage', new SerializerImpl().serialize(textMessage))
-        ack(Ack.OK)
       },
       ack
     )
