@@ -1,7 +1,7 @@
 import { Namespace, Socket } from 'socket.io'
 import { ChatUpdate } from '../../../model/message'
 import { ChatController } from '../../../controllers/chat/chatController'
-import { chatCommandListener, chatReaction } from '../utils'
+import { commandListener, reaction } from '../../utils'
 import { leaveRoomCommand } from './leaveRoom'
 import { sendMessageCommand } from './sendMessage'
 import { SerializerImpl } from '../../../model/presentation/serialization/messageSerializer'
@@ -26,10 +26,10 @@ export function joinCommand(
 ): (message: any, ack: any) => void {
   return (message, ack) => {
     const { room } = message
-    chatReaction(
+    reaction(
       chatController.isUserJoined(token),
       () => {
-        chatReaction(
+        reaction(
           chatController.joinUserToRoom(token, room),
           (chatUpdate: ChatUpdate) => {
             chatNamespace
@@ -40,12 +40,12 @@ export function joinCommand(
               )
             socket.join(room)
             socket.emit('chatUpdate', new SerializerImpl().serialize(chatUpdate.messages))
-            chatCommandListener(
+            commandListener(
               socket,
               'leaveRoom',
               leaveRoomCommand(chatNamespace, socket, room, token, chatController)
             )
-            chatCommandListener(
+            commandListener(
               socket,
               'sendMessage',
               sendMessageCommand(chatNamespace, token, room, chatController)

@@ -1,5 +1,5 @@
 import { Namespace, Socket } from 'socket.io'
-import { Ack } from '../../model/message'
+import { Ack } from '../model/message'
 
 /**
  * Command listener util function
@@ -8,7 +8,7 @@ import { Ack } from '../../model/message'
  * @param verifyCommand
  * @param commandCallback
  */
-export function commandListener<X>(
+export function commandListenerWithVerification<X>(
   sn: Socket | Namespace,
   command: string,
   verifyCommand: (argv: X) => boolean,
@@ -22,21 +22,21 @@ export function commandListener<X>(
 }
 
 /**
- * Chat Command Listener with default message check.
+ * Command Listener with default message check.
  * @param socket
  * @param command
  * @param commandCallback
  */
-export function chatCommandListener(
+export function commandListener(
   socket: Socket,
   command: string,
   commandCallback: (argv: any, ack: any) => void
 ) {
   // TODO: implement check
-  commandListener(socket, command, () => true, commandCallback)
+  commandListenerWithVerification(socket, command, () => true, commandCallback)
 }
 
-export function chatReaction<X>(promise: Promise<X>, successReaction: (x: X) => void, ack?: any) {
+export function reaction<X>(promise: Promise<X>, successReaction: (x: X) => void, ack?: any) {
   promise
     .then((message: X) => {
       successReaction(message)

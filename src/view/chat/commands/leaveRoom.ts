@@ -1,7 +1,7 @@
 import { Namespace, Socket } from 'socket.io'
 import { NotificationMessage } from '../../../model/message'
 import { ChatController } from '../../../controllers/chat/chatController'
-import { chatReaction } from '../utils'
+import { reaction } from '../../utils'
 import { SerializerImpl } from '../../../model/presentation/serialization/messageSerializer'
 
 /**
@@ -21,7 +21,7 @@ export function leaveRoomCommand(
   chatController: ChatController
 ): () => void {
   return () => {
-    chatReaction(
+    reaction(
       chatController.leaveUserFromRoom(token, room),
       (notificationMessage: NotificationMessage) => {
         socket.leave(room /*, token*/)

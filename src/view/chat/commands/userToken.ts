@@ -1,5 +1,5 @@
 import { Namespace, Socket } from 'socket.io'
-import { chatCommandListener } from '../utils'
+import { commandListener } from '../../utils'
 import { joinCommand } from './joinRoom'
 import { ChatController } from '../../../controllers/chat/chatController'
 import { Ack } from '../../../model/message'
@@ -20,11 +20,7 @@ export function userTokenCommand(
 ): (message: any, ack: any) => void {
   return (message, ack) => {
     const { token } = message
-    chatCommandListener(
-      socket,
-      'joinRoom',
-      joinCommand(chatNamespace, socket, token, chatController)
-    )
+    commandListener(socket, 'joinRoom', joinCommand(chatNamespace, socket, token, chatController))
     ack(Ack.OK)
   }
 }
