@@ -1,7 +1,7 @@
 import { Namespace } from 'socket.io'
 import { TextMessage } from '../../../model/message'
 import { chatReaction } from '../utils'
-import { ChatController } from '../../../controllers/chatController'
+import { ChatController } from '../../../controllers/chat/chatController'
 import { SerializerImpl } from '../../../model/presentation/serialization/messageSerializer'
 
 /**

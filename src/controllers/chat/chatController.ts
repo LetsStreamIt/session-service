@@ -1,6 +1,6 @@
-import { ChatImpl, RoomEntitySet, RoomId, RoomImpl } from '../model/room'
-import { ChatUpdate, Notification, NotificationMessage, TextMessage } from '../model/message'
-import { User, UserEntitySet, UserId } from '../model/user'
+import { ChatImpl, RoomEntitySet, RoomId, RoomImpl } from '../../model/room'
+import { ChatUpdate, Notification, NotificationMessage, TextMessage } from '../../model/message'
+import { User, UserEntitySet, UserId } from '../../model/user'
 
 export class ChatController {
   rooms: RoomEntitySet

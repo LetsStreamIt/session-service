@@ -1,6 +1,6 @@
 import { Namespace, Socket } from 'socket.io'
 import { ChatUpdate } from '../../../model/message'
-import { ChatController } from '../../../controllers/chatController'
+import { ChatController } from '../../../controllers/chat/chatController'
 import { chatCommandListener, chatReaction } from '../utils'
 import { leaveRoomCommand } from './leaveRoom'
 import { sendMessageCommand } from './sendMessage'

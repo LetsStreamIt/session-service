@@ -1,10 +1,7 @@
 import { Namespace } from 'socket.io'
-import { ChatController } from '../../controllers/chatController'
+import { ChatController } from '../../controllers/chat/chatController'
+import { SessionNamespace } from '../sessionNamespace'
 import { connectionCommand } from './commands/connection'
-
-export interface SessionNamespace {
-  registerCommands(namespace: Namespace): void
-}
 
 export class ChatNamespace implements SessionNamespace {
   chatController: ChatController

@@ -2,7 +2,7 @@ import { Namespace, Socket } from 'socket.io'
 import { chatCommandListener, commandListener } from '../utils'
 import { disconnectionCommand } from './disconnect'
 import { userTokenCommand } from './userToken'
-import { ChatController } from '../../../controllers/chatController'
+import { ChatController } from '../../../controllers/chat/chatController'
 
 /**
  * On connection command.
