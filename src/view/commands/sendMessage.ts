@@ -1,20 +1,20 @@
-import { Namespace } from 'socket.io'
-import { TextMessage } from '../../../model/message'
-import { reaction } from '../../utils'
-import { ChatController } from '../../../controllers/chat/chatController'
-import { SerializerImpl } from '../../../model/presentation/serialization/messageSerializer'
+import { Server } from 'socket.io'
+import { TextMessage } from '../../model/message'
+import { reaction } from '../utils'
+import { ChatController } from '../../controllers/chat/chatController'
+import { SerializerImpl } from '../../model/presentation/serialization/messageSerializer'
 
 /**
  * Send message command.
  * Sends a message to the room specified as parameter.
- * @param chatNamespace
+ * @param io
  * @param token
  * @param room
  * @param chatController
  * @returns
  */
 export function sendMessageCommand(
-  chatNamespace: Namespace,
+  io: Server,
   token: string,
   room: string,
   chatController: ChatController
@@ -24,7 +24,7 @@ export function sendMessageCommand(
     reaction(
       chatController.sendMessage(token, message, room),
       (textMessage: TextMessage) => {
-        chatNamespace.to(room).emit('textMessage', new SerializerImpl().serialize(textMessage))
+        io.to(room).emit('textMessage', new SerializerImpl().serialize(textMessage))
       },
       ack
     )

@@ -1,26 +1,27 @@
-import { Namespace, Socket } from 'socket.io'
-import { commandListener } from '../../utils'
+import { Server, Socket } from 'socket.io'
+import { commandListener } from '../utils'
 import { joinCommand } from './joinRoom'
-import { ChatController } from '../../../controllers/chat/chatController'
-import { Ack } from '../../../model/message'
+import { ChatController } from '../../controllers/chat/chatController'
+import { Ack } from '../../model/message'
 
 /**
  * User token command.
  * After the token is received and validated, it enables the client to send
  * a joinRoom message.
- * @param chatNamespace
+ * @param io
  * @param socket
  * @param chatController
  * @returns
  */
 export function userTokenCommand(
-  chatNamespace: Namespace,
+  io: Server,
   socket: Socket,
   chatController: ChatController
 ): (message: any, ack: any) => void {
   return (message, ack) => {
     const { token } = message
-    commandListener(socket, 'joinRoom', joinCommand(chatNamespace, socket, token, chatController))
+    console.log('token received')
+    commandListener(socket, 'joinRoom', joinCommand(io, socket, token, chatController))
     ack(Ack.OK)
   }
 }

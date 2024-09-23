@@ -1,4 +1,4 @@
-import { Namespace, Socket } from 'socket.io'
+import { Server, Socket } from 'socket.io'
 import { Ack } from '../model/message'
 
 /**
@@ -9,7 +9,7 @@ import { Ack } from '../model/message'
  * @param commandCallback
  */
 export function commandListenerWithVerification<X>(
-  sn: Socket | Namespace,
+  sn: Socket | Server,
   command: string,
   verifyCommand: (argv: X) => boolean,
   commandCallback: (argv: X, ack: any) => void
