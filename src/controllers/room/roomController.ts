@@ -1,7 +1,8 @@
-import { ChatUpdate, Notification, NotificationMessage, TextMessage } from '../../model/message'
+import { Notification, NotificationMessage, TextMessage } from '../../model/message'
 import { ChatImpl, RoomRepository, RoomId, RoomImpl } from '../../model/room'
 import { User, UserRepository } from '../../model/user'
 import { ChatReactions } from '../../view/reactions/chatReactions'
+import { RoomReactions } from '../../view/reactions/roomReactions'
 import { getUserFromToken } from '../utils'
 
 export class RoomController {
@@ -21,7 +22,12 @@ export class RoomController {
     })
   }
 
-  async joinUserToRoom(token: string, room: string, chatReactions: ChatReactions): Promise<void> {
+  async joinUserToRoom(
+    token: string,
+    room: string,
+    roomReactions: RoomReactions,
+    chatReactions: ChatReactions
+  ): Promise<void> {
     return new Promise((resolve) => {
       const user: User = getUserFromToken(token)
       const roomId: RoomId = new RoomId(room)
@@ -34,9 +40,10 @@ export class RoomController {
           chatMessages.push(...value.getY.getMessages)
         }
       }
-      chatReactions.userJoinedReaction(
-        new ChatUpdate(new NotificationMessage(user, Notification.JOINROOM), chatMessages)
-      )
+
+      chatReactions.sendNotificationToRoom(new NotificationMessage(user, Notification.JOINROOM))
+      roomReactions.joinUserToRoom()
+      chatReactions.emitTextMessagesToClient(...chatMessages)
       resolve()
     })
   }
@@ -44,6 +51,7 @@ export class RoomController {
   async leaveUserFromRoom(
     token: string,
     room: string,
+    roomReactions: RoomReactions,
     chatReactions: ChatReactions
   ): Promise<void> {
     return new Promise((resolve) => {
@@ -51,7 +59,9 @@ export class RoomController {
       const user: User = getUserFromToken(token)
       this.rooms.find(roomId)?.leaveUser(user)
       this.removeRoomWhenAllUserLeft(roomId)
-      chatReactions.leaveRoomSendNotification(new NotificationMessage(user, Notification.LEAVEROOM))
+
+      roomReactions.leaveUserFromRoomAndDisconnect()
+      chatReactions.sendNotificationToRoom(new NotificationMessage(user, Notification.LEAVEROOM))
       resolve()
     })
   }
@@ -76,7 +86,7 @@ export class RoomController {
         const user: User = getUserFromToken(token)
         const textMessage: TextMessage = new TextMessage(user, message)
         this.rooms.find(new RoomId(room))?.sendMessage(textMessage)
-        chatReactions.sendTextMessage(textMessage)
+        chatReactions.sendTextMessagesToRoom(textMessage)
         resolve()
       } else {
         reject()

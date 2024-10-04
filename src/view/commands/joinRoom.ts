@@ -6,6 +6,7 @@ import { commandListener } from '../utils'
 import { RoomController } from '../../controllers/room/roomController'
 import { ChatReactions } from '../reactions/chatReactions'
 import { Commands } from './commands'
+import { RoomReactions } from '../reactions/roomReactions'
 
 /**
  * Join Command.
@@ -33,11 +34,21 @@ export function joinCommand(
       .then(() => {
         // User is not joined, join it to the room
         const chatReactions: ChatReactions = new ChatReactions(io, socket, room)
+        const roomReactions: RoomReactions = new RoomReactions(io, socket, room)
+
         roomController
-          .joinUserToRoom(token, room, chatReactions)
+          .joinUserToRoom(token, room, roomReactions, chatReactions)
           .then(() => {
             // Enable the user to send leave room command, as well as text messages
-            defineLeaveRoomCommand(io, socket, token, room, roomController, chatReactions)
+            defineLeaveRoomCommand(
+              io,
+              socket,
+              token,
+              room,
+              roomController,
+              roomReactions,
+              chatReactions
+            )
             defineChatCommands(io, socket, token, room, roomController, chatReactions)
             ack(Ack.OK)
           })
@@ -55,12 +66,13 @@ function defineLeaveRoomCommand(
   token: string,
   room: string,
   roomController: RoomController,
+  roomReactions: RoomReactions,
   chatReactions: ChatReactions
 ) {
   commandListener(
     socket,
     Commands.LEAVE_ROOM,
-    leaveRoomCommand(io, socket, room, token, roomController, chatReactions)
+    leaveRoomCommand(io, socket, room, token, roomController, roomReactions, chatReactions)
   )
 }
 
