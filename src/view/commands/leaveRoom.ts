@@ -1,8 +1,6 @@
 import { Server, Socket } from 'socket.io'
-import { NotificationMessage } from '../../model/message'
-import { ChatController } from '../../controllers/chat/chatController'
-import { reaction } from '../utils'
-import { SerializerImpl } from '../../model/presentation/serialization/messageSerializer'
+import { RoomController } from '../../controllers/room/roomController'
+import { ChatReactions } from '../reactions/chatReactions'
 
 /**
  * Leave command.
@@ -18,16 +16,10 @@ export function leaveRoomCommand(
   socket: Socket,
   room: string,
   token: string,
-  chatController: ChatController
+  roomController: RoomController,
+  chatReactions: ChatReactions
 ): () => void {
   return () => {
-    reaction(
-      chatController.leaveUserFromRoom(token, room),
-      (notificationMessage: NotificationMessage) => {
-        socket.leave(room /*, token*/)
-        socket.disconnect()
-        io.to(room).emit('notificationMessage', new SerializerImpl().serialize(notificationMessage))
-      }
-    )
+    roomController.leaveUserFromRoom(token, room, chatReactions)
   }
 }

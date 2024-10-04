@@ -10,7 +10,7 @@ export class Entity<X, Y> {
   }
 }
 
-export class EntitySet<X extends Entity<Y, Z>, Y = X['id'], Z = X['value']> {
+export class Repository<X extends Entity<Y, Z>, Y = X['id'], Z = X['value']> {
   private array: X[]
 
   constructor(array: X[]) {

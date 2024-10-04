@@ -1,6 +1,6 @@
-import { Entity, EntitySet } from './entity'
+import { Entity, Repository } from './entity'
 import { Message, MessageContent, TextMessage } from './message'
-import { User, UserEntitySet } from './user'
+import { User, UserRepository } from './user'
 
 export interface Chat {
   addMessage(message: TextMessage): void
@@ -49,7 +49,7 @@ export class Pair<X, Y> {
   }
 }
 
-export class RoomEntry extends Pair<UserEntitySet, Chat> {}
+export class RoomEntry extends Pair<UserRepository, Chat> {}
 
 export interface Room extends Entity<RoomId, RoomEntry> {
   isUserJoined(user: User): boolean
@@ -65,7 +65,7 @@ export class RoomImpl implements Room {
   id: RoomId
   value?: RoomEntry | undefined
 
-  constructor(id: RoomId, users: UserEntitySet, chat: Chat) {
+  constructor(id: RoomId, users: UserRepository, chat: Chat) {
     this.id = id
     this.value = new RoomEntry(users, chat)
   }
@@ -100,4 +100,4 @@ export class RoomImpl implements Room {
   }
 }
 
-export class RoomEntitySet extends EntitySet<Room> {}
+export class RoomRepository extends Repository<Room> {}

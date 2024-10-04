@@ -1,4 +1,4 @@
-import { Entity, EntitySet } from './entity'
+import { Entity, Repository } from './entity'
 import { Pair } from './room'
 
 export class User implements Entity<UserId, Pair<string, string>> {
@@ -19,4 +19,4 @@ export class UserId {
   }
 }
 
-export class UserEntitySet extends EntitySet<User> {}
+export class UserRepository extends Repository<User> {}

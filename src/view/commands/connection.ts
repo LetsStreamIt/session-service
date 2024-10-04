@@ -1,8 +1,9 @@
 import { Server, Socket } from 'socket.io'
 import { disconnectionCommand } from './disconnect'
 import { userTokenCommand } from './userToken'
-import { ChatController } from '../../controllers/chat/chatController'
 import { commandListener, commandListenerWithVerification } from '../utils'
+import { RoomController } from '../../controllers/room/roomController'
+import { Commands } from './commands'
 
 /**
  * On connection command.
@@ -10,16 +11,16 @@ import { commandListener, commandListenerWithVerification } from '../utils'
  * (1) send the token as first initialization step;
  * (2) disconnect from the namespace.
  * @param io
- * @param chatController
+ * @param roomController
  */
-export function connectionCommand(io: Server, chatController: ChatController) {
+export function connectionCommand(io: Server, roomController: RoomController) {
   commandListenerWithVerification(
     io,
-    'connection',
+    Commands.CONNECTION,
     () => true,
     (socket: Socket) => {
-      commandListener(socket, 'userToken', userTokenCommand(io, socket, chatController))
-      commandListener(socket, 'disconnect', disconnectionCommand(socket))
+      commandListener(socket, Commands.USER_TOKEN, userTokenCommand(io, socket, roomController))
+      commandListener(socket, Commands.DISCONNECT, disconnectionCommand(socket))
     }
   )
 }

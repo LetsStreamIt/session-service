@@ -1,8 +1,9 @@
 import { Server, Socket } from 'socket.io'
 import { commandListener } from '../utils'
 import { joinCommand } from './joinRoom'
-import { ChatController } from '../../controllers/chat/chatController'
 import { Ack } from '../../model/message'
+import { RoomController } from '../../controllers/room/roomController'
+import { Commands } from './commands'
 
 /**
  * User token command.
@@ -16,12 +17,11 @@ import { Ack } from '../../model/message'
 export function userTokenCommand(
   io: Server,
   socket: Socket,
-  chatController: ChatController
+  roomController: RoomController
 ): (message: any, ack: any) => void {
   return (message, ack) => {
     const { token } = message
-    console.log('token received')
-    commandListener(socket, 'joinRoom', joinCommand(io, socket, token, chatController))
+    commandListener(socket, Commands.JOIN_ROOM, joinCommand(io, socket, token, roomController))
     ack(Ack.OK)
   }
 }

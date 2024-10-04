@@ -1,10 +1,11 @@
 import { Server, Socket } from 'socket.io'
-import { ChatUpdate } from '../../model/message'
-import { ChatController } from '../../controllers/chat/chatController'
+import { Ack } from '../../model/message'
 import { leaveRoomCommand } from './leaveRoom'
-import { SerializerImpl } from '../../model/presentation/serialization/messageSerializer'
 import { sendMessageCommand } from './sendMessage'
-import { commandListener, reaction } from '../utils'
+import { commandListener } from '../utils'
+import { RoomController } from '../../controllers/room/roomController'
+import { ChatReactions } from '../reactions/chatReactions'
+import { Commands } from './commands'
 
 /**
  * Join Command.
@@ -22,36 +23,45 @@ export function joinCommand(
   io: Server,
   socket: Socket,
   token: string,
-  chatController: ChatController
+  roomController: RoomController
 ): (message: any, ack: any) => void {
   return (message, ack) => {
     const { room } = message
-    reaction(
-      chatController.isUserJoined(token),
-      () => {
-        reaction(
-          chatController.joinUserToRoom(token, room),
-          (chatUpdate: ChatUpdate) => {
-            io.to(room).emit(
-              'notificationMessage',
-              new SerializerImpl().serialize(chatUpdate.notificationMessage)
-            )
-            socket.join(room)
-            socket.emit('chatUpdate', new SerializerImpl().serialize(chatUpdate.messages))
-            commandListener(
-              socket,
-              'leaveRoom',
-              leaveRoomCommand(io, socket, room, token, chatController)
-            )
-            defineChatCommands(io, socket, token, room, chatController)
-            // Define video commands
-          },
-          ack
-        )
-      },
-      ack
-    )
+
+    roomController
+      .isUserJoined(token)
+      .then(() => {
+        // User is not joined, join it to the room
+        const chatReactions: ChatReactions = new ChatReactions(io, socket, room)
+        roomController
+          .joinUserToRoom(token, room, chatReactions)
+          .then(() => {
+            // Enable the user to send leave room command, as well as text messages
+            defineLeaveRoomCommand(io, socket, token, room, roomController, chatReactions)
+            defineChatCommands(io, socket, token, room, roomController, chatReactions)
+            ack(Ack.OK)
+          })
+          .catch(() => ack(Ack.FAILURE))
+      })
+      .catch(() => {
+        ack(Ack.FAILURE)
+      })
   }
+}
+
+function defineLeaveRoomCommand(
+  io: Server,
+  socket: Socket,
+  token: string,
+  room: string,
+  roomController: RoomController,
+  chatReactions: ChatReactions
+) {
+  commandListener(
+    socket,
+    Commands.LEAVE_ROOM,
+    leaveRoomCommand(io, socket, room, token, roomController, chatReactions)
+  )
 }
 
 function defineChatCommands(
@@ -59,7 +69,12 @@ function defineChatCommands(
   socket: Socket,
   token: string,
   room: string,
-  chatController: ChatController
+  roomController: RoomController,
+  chatReactions: ChatReactions
 ) {
-  commandListener(socket, 'sendMessage', sendMessageCommand(io, token, room, chatController))
+  commandListener(
+    socket,
+    Commands.SEND_MSG,
+    sendMessageCommand(io, token, room, roomController, chatReactions)
+  )
 }
