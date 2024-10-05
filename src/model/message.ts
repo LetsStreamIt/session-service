@@ -1,4 +1,4 @@
-import { User } from './user'
+import { User } from './room/user'
 
 export enum Notification {
   JOINROOM,

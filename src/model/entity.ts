@@ -1,5 +1,23 @@
 import { isDeepEqual } from './utils'
 
+export class Pair<X, Y> {
+  private readonly x: X
+  private readonly y: Y
+
+  constructor(x: X, y: Y) {
+    this.x = x
+    this.y = y
+  }
+
+  get getX(): X {
+    return this.x
+  }
+
+  get getY(): Y {
+    return this.y
+  }
+}
+
 export class Entity<X, Y> {
   id: X
   value?: Y

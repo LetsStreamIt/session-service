@@ -1,19 +1,15 @@
 import { TextMessage } from '../../model/message'
-import { ChatImpl, RoomRepository, RoomId, RoomImpl, Room } from '../../model/room'
-import { User, UserRepository } from '../../model/user'
+import { ChatImpl } from '../../model/room/chat'
+import { RoomRepository, RoomId, RoomImpl, Room } from '../../model/room/room'
+import { User, UserRepository } from '../../model/room/user'
 import { RoomReactions } from '../../view/reactions/roomReactions'
 import { getUserFromToken } from '../utils'
-import { ChatAggregate } from './chatAggregate'
 
 export class RoomAggregate {
   rooms: RoomRepository
 
-  chatAggregate: ChatAggregate
-  //videoAggregate: VideoAggregate
-
   constructor() {
     this.rooms = new RoomRepository()
-    this.chatAggregate = new ChatAggregate()
   }
 
   async isUserJoined(token: string): Promise<void> {
