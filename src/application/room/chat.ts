@@ -1,4 +1,4 @@
-import { ChatReactions } from '../../view/reactions/chatReactions'
+import { ChatReactions } from '../../presentation/reactions/chatReactions'
 import { TextMessage, NotificationMessage, Notification } from '../message'
 import { User } from './user'
 

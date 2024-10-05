@@ -1,11 +1,11 @@
-import { TextMessage } from '../../model/message'
-import { ChatImpl } from '../../model/room/chat'
-import { RoomRepository, RoomId, RoomImpl, Room } from '../../model/room/room'
-import { User, UserRepository } from '../../model/room/user'
-import { RoomReactions } from '../../view/reactions/roomReactions'
-import { getUserFromToken } from '../utils'
+import { TextMessage } from './message'
+import { ChatImpl } from './room/chat'
+import { RoomRepository, RoomId, RoomImpl, Room } from './room/room'
+import { User, UserRepository } from './room/user'
+import { RoomReactions } from '../presentation/reactions/roomReactions'
+import { getUserFromToken } from './userUtils'
 
-export class RoomAggregate {
+export class RoomService {
   rooms: RoomRepository
 
   constructor() {

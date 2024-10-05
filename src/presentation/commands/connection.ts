@@ -2,7 +2,7 @@ import { Server, Socket } from 'socket.io'
 import { disconnectionCommand } from './disconnect'
 import { userTokenCommand } from './userToken'
 import { commandListener, commandListenerWithVerification } from '../utils'
-import { RoomAggregate } from '../../aggregates/room/roomAggregate'
+import { RoomService } from '../../application/roomService'
 import { Commands } from './commands'
 
 /**
@@ -13,7 +13,7 @@ import { Commands } from './commands'
  * @param io
  * @param roomController
  */
-export function connectionCommand(io: Server, roomController: RoomAggregate) {
+export function connectionCommand(io: Server, roomController: RoomService) {
   commandListenerWithVerification(
     io,
     Commands.CONNECTION,

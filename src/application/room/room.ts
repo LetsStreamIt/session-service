@@ -1,4 +1,4 @@
-import { RoomReactions } from '../../view/reactions/roomReactions'
+import { RoomReactions } from '../../presentation/reactions/roomReactions'
 import { Entity, Pair, Repository } from '../entity'
 import { Message, MessageContent, TextMessage } from '../message'
 import { Chat } from './chat'

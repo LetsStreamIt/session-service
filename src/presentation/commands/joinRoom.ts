@@ -1,9 +1,9 @@
 import { Server, Socket } from 'socket.io'
-import { Ack } from '../../model/message'
+import { Ack } from '../../application/message'
 import { leaveRoomCommand } from './leaveRoom'
 import { sendMessageCommand } from './sendMessage'
 import { commandListener } from '../utils'
-import { RoomAggregate } from '../../aggregates/room/roomAggregate'
+import { RoomService } from '../../application/roomService'
 import { Commands } from './commands'
 import { RoomReactions } from '../reactions/roomReactions'
 
@@ -23,7 +23,7 @@ export function joinCommand(
   io: Server,
   socket: Socket,
   token: string,
-  roomController: RoomAggregate
+  roomController: RoomService
 ): (message: any, ack: any) => void {
   return (message, ack) => {
     const { room } = message
@@ -55,7 +55,7 @@ function defineLeaveRoomCommand(
   socket: Socket,
   token: string,
   room: string,
-  roomController: RoomAggregate,
+  roomController: RoomService,
   roomReactions: RoomReactions
 ) {
   commandListener(
@@ -70,7 +70,7 @@ function defineChatCommands(
   socket: Socket,
   token: string,
   room: string,
-  roomController: RoomAggregate,
+  roomController: RoomService,
   roomReactions: RoomReactions
 ) {
   commandListener(

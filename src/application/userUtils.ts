@@ -1,4 +1,4 @@
-import { User, UserId } from '../model/room/user'
+import { UserId, User } from './room/user'
 
 export function getUserEmailFromToken(token: string): UserId {
   return new UserId(token)

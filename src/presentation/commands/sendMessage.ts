@@ -1,6 +1,6 @@
 import { Server } from 'socket.io'
-import { Ack } from '../../model/message'
-import { RoomAggregate } from '../../aggregates/room/roomAggregate'
+import { Ack } from '../../application/message'
+import { RoomService } from '../../application/roomService'
 import { RoomReactions } from '../reactions/roomReactions'
 
 /**
@@ -16,7 +16,7 @@ export function sendMessageCommand(
   io: Server,
   token: string,
   room: string,
-  roomController: RoomAggregate,
+  roomController: RoomService,
   roomReactions: RoomReactions
 ): (message: any, ack: any) => void {
   return (data, ack) => {
