@@ -1,8 +1,7 @@
-import { Server, Socket } from 'socket.io'
+import { Socket, Server } from 'socket.io'
 import { Ack } from '../application/message'
 
-/**
- * Command listener util function
+/* Command listener util function
  * @param sn
  * @param command
  * @param verifyCommand

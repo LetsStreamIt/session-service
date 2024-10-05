@@ -15,8 +15,8 @@ jobs:
     runs-on: ${{ matrix.os }}-latest
     steps:
       - name: Checkout
-        uses: DanySK/action-checkout@0.2.19
-      - uses: actions/setup-node@v4.0.3
+        uses: DanySK/action-checkout@0.2.20
+      - uses: actions/setup-node@v4.0.4
         with:
           cache: npm
           node-version: lts/*
@@ -31,8 +31,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: DanySK/action-checkout@0.2.19
-      - uses: actions/setup-node@v4.0.3
+        uses: DanySK/action-checkout@0.2.20
+      - uses: actions/setup-node@v4.0.4
         with:
           cache: npm
           node-version: lts/*
@@ -45,8 +45,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: DanySK/action-checkout@0.2.19
-      - uses: actions/setup-node@v4.0.3
+        uses: DanySK/action-checkout@0.2.20
+      - uses: actions/setup-node@v4.0.4
         with:
           cache: npm
           node-version: lts/*
