@@ -1,7 +1,7 @@
 import { Server } from 'socket.io'
 import { connectionCommand } from './commands/connection'
-import { RoomController } from '../controllers/room/roomController'
+import { RoomAggregate } from '../aggregates/room/roomAggregate'
 
 export async function registerCommands(io: Server) {
-  connectionCommand(io, new RoomController())
+  connectionCommand(io, new RoomAggregate())
 }

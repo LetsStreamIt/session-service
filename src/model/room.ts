@@ -1,9 +1,15 @@
+import { ChatReactions } from '../view/reactions/chatReactions'
+import { RoomReactions } from '../view/reactions/roomReactions'
 import { Entity, Repository } from './entity'
-import { Message, MessageContent, TextMessage } from './message'
+import { Message, MessageContent, Notification, NotificationMessage, TextMessage } from './message'
 import { User, UserRepository } from './user'
 
 export interface Chat {
-  addMessage(message: TextMessage): void
+  userJoined(user: User, chatReactions: ChatReactions): void
+
+  userLeft(user: User, chatReactions: ChatReactions): void
+
+  sendMessage(message: TextMessage, chatReactions: ChatReactions): void
 
   get getMessages(): TextMessage[]
 }
@@ -15,9 +21,20 @@ export class ChatImpl implements Chat {
     this.messages = []
   }
 
-  addMessage(message: TextMessage): void {
-    this.messages.push(message)
+  userJoined(user: User, chatReactions: ChatReactions): void {
+    chatReactions.sendNotificationToRoom(new NotificationMessage(user, Notification.JOINROOM))
+    chatReactions.emitTextMessagesToClient(...this.messages)
   }
+
+  userLeft(user: User, chatReactions: ChatReactions): void {
+    chatReactions.sendNotificationToRoom(new NotificationMessage(user, Notification.LEAVEROOM))
+  }
+
+  sendMessage(message: TextMessage, chatReactions: ChatReactions): void {
+    this.messages.push(message)
+    chatReactions.sendTextMessagesToRoom(message)
+  }
+
   get getMessages(): TextMessage[] {
     return this.messages
   }
@@ -54,11 +71,11 @@ export class RoomEntry extends Pair<UserRepository, Chat> {}
 export interface Room extends Entity<RoomId, RoomEntry> {
   isUserJoined(user: User): boolean
 
-  joinUser(user: User): boolean
+  joinUser(user: User, roomReactions: RoomReactions): boolean
 
-  leaveUser(user: User): boolean
+  leaveUser(user: User, roomReactions: RoomReactions): boolean
 
-  sendMessage(message: Message<MessageContent>): void
+  sendMessage(message: Message<MessageContent>, roomReactions: RoomReactions): void
 }
 
 export class RoomImpl implements Room {
@@ -78,25 +95,29 @@ export class RoomImpl implements Room {
     return false
   }
 
-  joinUser(user: User): boolean {
+  joinUser(user: User, roomReactions: RoomReactions): boolean {
     if (!this.isUserJoined(user)) {
+      this.value?.getY.userJoined(user, roomReactions.getChatReactions)
       this.value?.getX.add(user)
+      roomReactions.joinUserToRoom()
       return true
     }
     return false
   }
 
-  leaveUser(user: User): boolean {
+  leaveUser(user: User, roomReactions: RoomReactions): boolean {
     if (this.isUserJoined(user)) {
       if (this.value) {
+        this.value?.getY.userLeft(user, roomReactions.getChatReactions)
+        roomReactions.leaveUserFromRoomAndDisconnect()
         return this.value.getX.remove(user.id)
       }
     }
     return false
   }
 
-  sendMessage(message: TextMessage): void {
-    this.value?.getY.addMessage(message)
+  sendMessage(message: TextMessage, roomReactions: RoomReactions): void {
+    this.value?.getY.sendMessage(message, roomReactions.chatReactions)
   }
 }
 

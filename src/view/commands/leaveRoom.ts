@@ -1,6 +1,5 @@
 import { Server, Socket } from 'socket.io'
-import { RoomController } from '../../controllers/room/roomController'
-import { ChatReactions } from '../reactions/chatReactions'
+import { RoomAggregate } from '../../aggregates/room/roomAggregate'
 import { RoomReactions } from '../reactions/roomReactions'
 
 /**
@@ -17,11 +16,10 @@ export function leaveRoomCommand(
   socket: Socket,
   room: string,
   token: string,
-  roomController: RoomController,
-  roomReactions: RoomReactions,
-  chatReactions: ChatReactions
+  roomController: RoomAggregate,
+  roomReactions: RoomReactions
 ): () => void {
   return () => {
-    roomController.leaveUserFromRoom(token, room, roomReactions, chatReactions)
+    roomController.leaveUserFromRoom(token, room, roomReactions)
   }
 }

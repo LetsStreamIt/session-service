@@ -3,8 +3,7 @@ import { Ack } from '../../model/message'
 import { leaveRoomCommand } from './leaveRoom'
 import { sendMessageCommand } from './sendMessage'
 import { commandListener } from '../utils'
-import { RoomController } from '../../controllers/room/roomController'
-import { ChatReactions } from '../reactions/chatReactions'
+import { RoomAggregate } from '../../aggregates/room/roomAggregate'
 import { Commands } from './commands'
 import { RoomReactions } from '../reactions/roomReactions'
 
@@ -24,7 +23,7 @@ export function joinCommand(
   io: Server,
   socket: Socket,
   token: string,
-  roomController: RoomController
+  roomController: RoomAggregate
 ): (message: any, ack: any) => void {
   return (message, ack) => {
     const { room } = message
@@ -33,23 +32,14 @@ export function joinCommand(
       .isUserJoined(token)
       .then(() => {
         // User is not joined, join it to the room
-        const chatReactions: ChatReactions = new ChatReactions(io, socket, room)
         const roomReactions: RoomReactions = new RoomReactions(io, socket, room)
 
         roomController
-          .joinUserToRoom(token, room, roomReactions, chatReactions)
+          .joinUserToRoom(token, room, roomReactions)
           .then(() => {
             // Enable the user to send leave room command, as well as text messages
-            defineLeaveRoomCommand(
-              io,
-              socket,
-              token,
-              room,
-              roomController,
-              roomReactions,
-              chatReactions
-            )
-            defineChatCommands(io, socket, token, room, roomController, chatReactions)
+            defineLeaveRoomCommand(io, socket, token, room, roomController, roomReactions)
+            defineChatCommands(io, socket, token, room, roomController, roomReactions)
             ack(Ack.OK)
           })
           .catch(() => ack(Ack.FAILURE))
@@ -65,14 +55,13 @@ function defineLeaveRoomCommand(
   socket: Socket,
   token: string,
   room: string,
-  roomController: RoomController,
-  roomReactions: RoomReactions,
-  chatReactions: ChatReactions
+  roomController: RoomAggregate,
+  roomReactions: RoomReactions
 ) {
   commandListener(
     socket,
     Commands.LEAVE_ROOM,
-    leaveRoomCommand(io, socket, room, token, roomController, roomReactions, chatReactions)
+    leaveRoomCommand(io, socket, room, token, roomController, roomReactions)
   )
 }
 
@@ -81,12 +70,12 @@ function defineChatCommands(
   socket: Socket,
   token: string,
   room: string,
-  roomController: RoomController,
-  chatReactions: ChatReactions
+  roomController: RoomAggregate,
+  roomReactions: RoomReactions
 ) {
   commandListener(
     socket,
     Commands.SEND_MSG,
-    sendMessageCommand(io, token, room, roomController, chatReactions)
+    sendMessageCommand(io, token, room, roomController, roomReactions)
   )
 }

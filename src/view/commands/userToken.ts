@@ -2,7 +2,7 @@ import { Server, Socket } from 'socket.io'
 import { commandListener } from '../utils'
 import { joinCommand } from './joinRoom'
 import { Ack } from '../../model/message'
-import { RoomController } from '../../controllers/room/roomController'
+import { RoomAggregate } from '../../aggregates/room/roomAggregate'
 import { Commands } from './commands'
 
 /**
@@ -17,7 +17,7 @@ import { Commands } from './commands'
 export function userTokenCommand(
   io: Server,
   socket: Socket,
-  roomController: RoomController
+  roomController: RoomAggregate
 ): (message: any, ack: any) => void {
   return (message, ack) => {
     const { token } = message

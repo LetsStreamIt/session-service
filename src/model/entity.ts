@@ -11,19 +11,19 @@ export class Entity<X, Y> {
 }
 
 export class Repository<X extends Entity<Y, Z>, Y = X['id'], Z = X['value']> {
-  private array: X[]
+  private values: X[]
 
-  constructor(array: X[]) {
-    this.array = array
+  constructor(...values: X[]) {
+    this.values = values
   }
 
   contains(id: Y): boolean {
-    return this.array.some((el) => isDeepEqual(el.id, id))
+    return this.values.some((el) => isDeepEqual(el.id, id))
   }
 
   add(element: X): boolean {
     if (!this.contains(element.id)) {
-      this.array.push(element)
+      this.values.push(element)
       return true
     }
     return false
@@ -31,17 +31,17 @@ export class Repository<X extends Entity<Y, Z>, Y = X['id'], Z = X['value']> {
 
   remove(id: Y): boolean {
     if (this.contains(id)) {
-      this.array = this.array.filter((el) => !isDeepEqual(el.id, id))
+      this.values = this.values.filter((el) => !isDeepEqual(el.id, id))
       return true
     }
     return false
   }
 
   find(id: Y): X | undefined {
-    return this.array.find((el) => isDeepEqual(el.id, id))
+    return this.values.find((el) => isDeepEqual(el.id, id))
   }
 
-  get values(): X[] {
-    return this.array
+  get getValues(): X[] {
+    return this.values
   }
 }
