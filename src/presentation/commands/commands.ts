@@ -4,5 +4,7 @@ export enum Commands {
   DISCONNECT = 'disconnect',
   JOIN_ROOM = 'joinRoom',
   LEAVE_ROOM = 'leaveRoom',
-  SEND_MSG = 'sendMessage'
+  SEND_MSG = 'sendMessage',
+  STOP_VIDEO = 'stopVideo',
+  PLAY_VIDEO = 'playVideo'
 }

@@ -1,7 +1,7 @@
 import { Server } from 'socket.io'
-import { Ack } from '../../application/message'
-import { RoomService } from '../../application/roomService'
-import { RoomReactions } from '../reactions/roomReactions'
+import { Ack } from '../../../application/message'
+import { RoomService } from '../../../application/roomService'
+import { RoomReactions } from '../../reactions/roomReactions'
 
 /**
  * Send message command.

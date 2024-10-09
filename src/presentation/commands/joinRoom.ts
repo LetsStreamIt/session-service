@@ -1,11 +1,12 @@
 import { Server, Socket } from 'socket.io'
 import { Ack } from '../../application/message'
 import { leaveRoomCommand } from './leaveRoom'
-import { sendMessageCommand } from './sendMessage'
 import { commandListener } from '../utils'
 import { RoomService } from '../../application/roomService'
 import { Commands } from './commands'
 import { RoomReactions } from '../reactions/roomReactions'
+import { playVideoCommand, stopVideoCommand } from './videoCommands/videoCommands'
+import { sendMessageCommand } from './chatCommands/sendMessage'
 
 /**
  * Join Command.
@@ -40,6 +41,7 @@ export function joinCommand(
             // Enable the user to send leave room command, as well as text messages
             defineLeaveRoomCommand(io, socket, token, room, roomController, roomReactions)
             defineChatCommands(io, socket, token, room, roomController, roomReactions)
+            defineVideoCommands(io, socket, token, room, roomController, roomReactions)
             ack(Ack.OK)
           })
           .catch(() => ack(Ack.FAILURE))
@@ -77,5 +79,25 @@ function defineChatCommands(
     socket,
     Commands.SEND_MSG,
     sendMessageCommand(io, token, room, roomController, roomReactions)
+  )
+}
+
+function defineVideoCommands(
+  io: Server,
+  socket: Socket,
+  token: string,
+  room: string,
+  roomController: RoomService,
+  roomReactions: RoomReactions
+) {
+  commandListener(
+    socket,
+    Commands.PLAY_VIDEO,
+    playVideoCommand(io, token, room, roomController, roomReactions)
+  )
+  commandListener(
+    socket,
+    Commands.STOP_VIDEO,
+    stopVideoCommand(io, token, room, roomController, roomReactions)
   )
 }
