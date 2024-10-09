@@ -4,6 +4,7 @@ import { RoomRepository, RoomId, RoomImpl, Room } from './room/room'
 import { User, UserRepository } from './room/user'
 import { RoomReactions } from '../presentation/reactions/roomReactions'
 import { getUserFromToken } from './userUtils'
+import { VideoImpl } from './room/video'
 
 export class RoomService {
   rooms: RoomRepository
@@ -31,7 +32,7 @@ export class RoomService {
       const user: User = getUserFromToken(token)
       const roomId: RoomId = new RoomId(roomName)
       // Join the user to a new room, if not existing, or to an already-created one
-      this.rooms.add(new RoomImpl(roomId, new UserRepository(), new ChatImpl()))
+      this.rooms.add(new RoomImpl(roomId, new UserRepository(), new ChatImpl(), new VideoImpl()))
       this.rooms.find(roomId)?.joinUser(user, roomReactions)
       resolve()
     })
@@ -82,6 +83,36 @@ export class RoomService {
       } else {
         reject()
       }
+    })
+  }
+
+  async playVideo(
+    token: string,
+    timestamp: number,
+    roomName: string,
+    roomReactions: RoomReactions
+  ): Promise<void> {
+    return new Promise((resolve) => {
+      const room: Room | undefined = this.rooms.find(new RoomId(roomName))
+      if (room) {
+        room.playVideo(timestamp, roomReactions)
+      }
+      resolve()
+    })
+  }
+
+  async stopVideo(
+    token: string,
+    timestamp: number,
+    roomName: string,
+    roomReactions: RoomReactions
+  ): Promise<void> {
+    return new Promise((resolve) => {
+      const room: Room | undefined = this.rooms.find(new RoomId(roomName))
+      if (room) {
+        room.stopVideo(timestamp, roomReactions)
+      }
+      resolve()
     })
   }
 }

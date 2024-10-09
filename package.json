@@ -31,7 +31,8 @@
     "preversion": "npm run build && npm run cover:check",
     "prepare": "husky",
     "serve": "nodemon ./src/index.ts",
-    "test": "mocha"
+    "test": "mocha",
+    "debug": "node --inspect ./src/index.ts"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.4.0",

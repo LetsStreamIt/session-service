@@ -3,6 +3,7 @@ import { Entity, Pair, Repository } from '../entity'
 import { Message, MessageContent, TextMessage } from '../message'
 import { Chat } from './chat'
 import { User, UserRepository } from './user'
+import { Video } from './video'
 
 export class RoomId {
   roomName: string
@@ -12,7 +13,7 @@ export class RoomId {
   }
 }
 
-export class RoomEntry extends Pair<UserRepository, Chat> {}
+export class RoomEntry extends Pair<UserRepository, Pair<Chat, Video>> {}
 
 export interface Room extends Entity<RoomId, RoomEntry> {
   isUserJoined(user: User): boolean
@@ -22,15 +23,19 @@ export interface Room extends Entity<RoomId, RoomEntry> {
   leaveUser(user: User, roomReactions: RoomReactions): boolean
 
   sendMessage(message: Message<MessageContent>, roomReactions: RoomReactions): void
+
+  playVideo(timestamp: number, roomReactions: RoomReactions): void
+
+  stopVideo(timestamp: number, roomReactions: RoomReactions): void
 }
 
 export class RoomImpl implements Room {
   id: RoomId
   value?: RoomEntry | undefined
 
-  constructor(id: RoomId, users: UserRepository, chat: Chat) {
+  constructor(id: RoomId, users: UserRepository, chat: Chat, video: Video) {
     this.id = id
-    this.value = new RoomEntry(users, chat)
+    this.value = new RoomEntry(users, new Pair(chat, video))
   }
 
   isUserJoined(user: User): boolean {
@@ -43,7 +48,10 @@ export class RoomImpl implements Room {
 
   joinUser(user: User, roomReactions: RoomReactions): boolean {
     if (!this.isUserJoined(user)) {
-      this.value?.getY.userJoined(user, roomReactions.getChatReactions)
+      // Send join command to video and chat
+      this.value?.getY.getX.userJoined(user, roomReactions.getChatReactions)
+      this.value?.getY.getY.userJoined(user, roomReactions.getVideoReactions)
+
       this.value?.getX.add(user)
       roomReactions.joinUserToRoom()
       return true
@@ -54,8 +62,12 @@ export class RoomImpl implements Room {
   leaveUser(user: User, roomReactions: RoomReactions): boolean {
     if (this.isUserJoined(user)) {
       if (this.value) {
-        this.value?.getY.userLeft(user, roomReactions.getChatReactions)
         roomReactions.leaveUserFromRoomAndDisconnect()
+
+        // Send leave command to video and chat
+        this.value?.getY.getX.userLeft(user, roomReactions.getChatReactions)
+        this.value?.getY.getY.userLeft(user, roomReactions.getVideoReactions)
+
         return this.value.getX.remove(user.id)
       }
     }
@@ -63,7 +75,15 @@ export class RoomImpl implements Room {
   }
 
   sendMessage(message: TextMessage, roomReactions: RoomReactions): void {
-    this.value?.getY.sendMessage(message, roomReactions.chatReactions)
+    this.value?.getY.getX.sendMessage(message, roomReactions.chatReactions)
+  }
+
+  playVideo(timestamp: number, roomReactions: RoomReactions): void {
+    this.value?.getY.getY.playVideo(timestamp, roomReactions.videoReactions)
+  }
+
+  stopVideo(timestamp: number, roomReactions: RoomReactions): void {
+    this.value?.getY.getY.stopVideo(timestamp, roomReactions.videoReactions)
   }
 }
 
