@@ -1,6 +1,6 @@
 import { TextMessage } from './message'
 import { ChatImpl } from './room/chat'
-import { RoomRepository, RoomId, RoomImpl, Room } from './room/room'
+import { RoomRepository, RoomId, RoomImpl, Room, RoomEntry } from './room/room'
 import { User, UserRepository } from './room/user'
 import { RoomReactions } from '../presentation/reactions/roomReactions'
 import { getUserFromToken } from './userUtils'
@@ -16,11 +16,25 @@ export class RoomService {
   async isUserJoined(token: string): Promise<void> {
     return new Promise((resolve, reject) => {
       if (this.rooms.getValues.some((room) => room.isUserJoined(getUserFromToken(token)))) {
-        reject()
-      } else {
         resolve()
+      } else {
+        reject()
       }
     })
+  }
+
+  async createRoom(roomName: string) {
+    const roomId: RoomId = new RoomId(roomName)
+    const TIMEOUT = 5_000
+    this.rooms.add(new RoomImpl(roomId, new UserRepository(), new ChatImpl(), new VideoImpl()))
+    setTimeout(() => {
+      const room: Room | undefined = this.rooms.find(roomId)
+      if (room) {
+        if (room.value?.getX.getValues.length == 0) {
+          this.rooms.remove(roomId)
+        }
+      }
+    }, TIMEOUT)
   }
 
   async joinUserToRoom(
@@ -28,13 +42,17 @@ export class RoomService {
     roomName: string,
     roomReactions: RoomReactions
   ): Promise<void> {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       const user: User = getUserFromToken(token)
       const roomId: RoomId = new RoomId(roomName)
-      // Join the user to a new room, if not existing, or to an already-created one
-      this.rooms.add(new RoomImpl(roomId, new UserRepository(), new ChatImpl(), new VideoImpl()))
-      this.rooms.find(roomId)?.joinUser(user, roomReactions)
-      resolve()
+      const room: Room | undefined = this.rooms.find(roomId)
+      // Resolve the Promise if the room is already existing, reject otherwise
+      if (room) {
+        this.rooms.add(new RoomImpl(roomId, new UserRepository(), new ChatImpl(), new VideoImpl()))
+        room.joinUser(user, roomReactions)
+        resolve()
+      }
+      reject()
     })
   }
 
@@ -56,8 +74,8 @@ export class RoomService {
     })
   }
 
-  private removeRoomWhenAllUserLeft(roomId: RoomId) {
-    const roomEntry = this.rooms.find(roomId)?.value
+  private removeRoomWhenAllUserLeft(roomId: RoomId): void {
+    const roomEntry: RoomEntry | undefined = this.rooms.find(roomId)?.value
     if (roomEntry) {
       if (roomEntry.getX.getValues.length == 0) {
         this.rooms.remove(roomId)
