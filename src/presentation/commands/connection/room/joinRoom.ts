@@ -1,26 +1,22 @@
 import { Server, Socket } from 'socket.io'
-import { Ack } from '../../application/message'
+import { Ack } from '../../../../application/message'
+import { commandListener } from '../../../utils'
+import { RoomService } from '../../../../application/roomService'
+import { Commands } from '../../commands'
+import { RoomReactions } from '../../../reactions/roomReactions'
+import { playVideoCommand, stopVideoCommand } from '../../videoCommands/videoCommands'
+import { sendMessageCommand } from '../../chatCommands/sendMessage'
 import { leaveRoomCommand } from './leaveRoom'
-import { commandListener } from '../utils'
-import { RoomService } from '../../application/roomService'
-import { Commands } from './commands'
-import { RoomReactions } from '../reactions/roomReactions'
-import { playVideoCommand, stopVideoCommand } from './videoCommands/videoCommands'
-import { sendMessageCommand } from './chatCommands/sendMessage'
 
 /**
- * Join Command.
- * Returns a function that joins a socketIO socket to the specified room.
- * After the client successfully joins a room, it enables the client to further:
- * (1) send a message to the room;
- * (2) leave the room.
+ * Join Room Command.
  * @param io
  * @param socket
  * @param token
  * @param chatController
  * @returns
  */
-export function joinCommand(
+export function joinRoomCommand(
   io: Server,
   socket: Socket,
   token: string,
@@ -32,6 +28,9 @@ export function joinCommand(
     roomController
       .isUserJoined(token)
       .then(() => {
+        ack(Ack.FAILURE)
+      })
+      .catch(() => {
         // User is not joined, join it to the room
         const roomReactions: RoomReactions = new RoomReactions(io, socket, room)
 
@@ -42,12 +41,10 @@ export function joinCommand(
             defineLeaveRoomCommand(io, socket, token, room, roomController, roomReactions)
             defineChatCommands(io, socket, token, room, roomController, roomReactions)
             defineVideoCommands(io, socket, token, room, roomController, roomReactions)
+
             ack(Ack.OK)
           })
-          .catch(() => ack(Ack.FAILURE))
-      })
-      .catch(() => {
-        ack(Ack.FAILURE)
+          .catch(() => ack(Ack.OK))
       })
   }
 }

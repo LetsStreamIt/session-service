@@ -1,9 +1,9 @@
 import { Server, Socket } from 'socket.io'
-import { disconnectionCommand } from './disconnect'
 import { userTokenCommand } from './userToken'
-import { commandListener, commandListenerWithVerification } from '../utils'
-import { RoomService } from '../../application/roomService'
-import { Commands } from './commands'
+import { commandListener, commandListenerWithVerification } from '../../utils'
+import { RoomService } from '../../../application/roomService'
+import { Commands } from '../commands'
+import { disconnectionCommand } from './disconnect'
 
 /**
  * On connection command.

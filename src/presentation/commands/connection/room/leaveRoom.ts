@@ -1,6 +1,6 @@
 import { Server, Socket } from 'socket.io'
-import { RoomService } from '../../application/roomService'
-import { RoomReactions } from '../reactions/roomReactions'
+import { RoomService } from '../../../../application/roomService'
+import { RoomReactions } from '../../../reactions/roomReactions'
 
 /**
  * Leave command.
