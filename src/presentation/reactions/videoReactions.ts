@@ -26,7 +26,6 @@ export class VideoReactions {
   retreiveVideoState(): Promise<VideoState> {
     return new Promise((resolve, reject) => {
       this.socket.emit('videoState', (response: any) => {
-        console.log('RECV response', response)
         const videoState = new VideoStateDeserializer().deserialize(JSON.parse(response))
         resolve(videoState)
       })
@@ -34,7 +33,6 @@ export class VideoReactions {
   }
 
   synchronizeUser(videoState: VideoState): Promise<void> {
-    console.log('SENDING SYNCRONIZATION')
     return new Promise((resolve, reject) => {
       this.socket.emit('synchronize', new SerializerImpl().serialize(videoState))
       resolve()

@@ -27,11 +27,9 @@ export class VideoImpl implements Video {
   }
 
   async userJoined(user: User, videoReactions: VideoReactions): Promise<void> {
-    console.log('USER JOINED!!!!!!!!!', this.userReactions.size)
     return Promise.all(
       Array.from(this.userReactions.values()).map((vr) => vr.retreiveVideoState())
     ).then((videoStates) => {
-      console.log('VIDEO STATES!', videoStates)
       if (videoStates.length > 0) {
         const timestamps: number[] = videoStates.map((vs) => vs.timestamp)
         const minTimestamp: number = Math.min(...timestamps)
@@ -45,7 +43,6 @@ export class VideoImpl implements Video {
   userLeft(user: User, videoReactions: VideoReactions): void {
     for (let key of this.userReactions.keys()) {
       if (isDeepEqual(user.id, key.id)) {
-        console.log('DELETING')
         this.userReactions.delete(key)
         break
       }
