@@ -1,7 +1,7 @@
 import { Server, Socket } from 'socket.io'
-import { SessionCommandHandlers } from '../../../../application/commandHandlers/sessionCommandHandlers'
+import { SessionCommandHandlers } from '../../../../application/commands/sessionCommandHandlers'
 import { Ack } from '../../../../application/message'
-import { CreateSessionCommand } from '../../../../application/commandHandlers/commands'
+import { CreateSessionCommand } from '../../../../application/commands/sessionCommands'
 
 /**
  * Create Room Command

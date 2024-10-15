@@ -1,6 +1,6 @@
 import { Server, Socket } from 'socket.io'
 import { NotificationMessage, TextMessage } from '../../application/message'
-import { SerializerImpl } from '../../application/presentation/serialization/messageSerializer'
+import { SerializerImpl } from '../presentation/serialization/messageSerializer'
 
 export class ChatNotifications {
   io: Server

@@ -1,6 +1,6 @@
 import { Server, Socket } from 'socket.io'
-import { SerializerImpl } from '../../application/presentation/serialization/messageSerializer'
-import { VideoStateDeserializer } from '../../application/presentation/deserialization/videoStateDeserializer'
+import { VideoStateDeserializer } from '../presentation/deserialization/videoStateDeserializer'
+import { SerializerImpl } from '../presentation/serialization/messageSerializer'
 
 export enum PlayState {
   PAUSED = 'Paused',

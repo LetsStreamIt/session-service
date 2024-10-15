@@ -1,7 +1,7 @@
 import { Server, Socket } from 'socket.io'
 import { recvUserTokenCommand } from './userToken'
 import { commandListener, commandListenerWithVerification } from '../../utils'
-import { SessionCommandHandlers } from '../../../application/commandHandlers/sessionCommandHandlers'
+import { SessionCommandHandlers } from '../../../application/commands/sessionCommandHandlers'
 import { CommandType } from '../commandTypes'
 import { recvDisconnectionCommand } from './disconnect'
 

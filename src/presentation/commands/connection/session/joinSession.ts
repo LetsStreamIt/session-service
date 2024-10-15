@@ -1,13 +1,13 @@
 import { Server, Socket } from 'socket.io'
 import { Ack } from '../../../../application/message'
 import { commandListener } from '../../../utils'
-import { SessionCommandHandlers } from '../../../../application/commandHandlers/sessionCommandHandlers'
+import { SessionCommandHandlers } from '../../../../application/commands/sessionCommandHandlers'
 import { CommandType } from '../../commandTypes'
 import { SessionNotifications } from '../../../notifications/sessionNotifications'
 import { recvPlayVideoCommand, recvStopVideoCommand } from '../../videoCommands/videoCommands'
 import { recvSendMessageCommand } from '../../chatCommands/sendMessage'
 import { recvLeaveSessionCommand } from './leaveSession'
-import { JoinSessionCommand } from '../../../../application/commandHandlers/commands'
+import { JoinSessionCommand } from '../../../../application/commands/sessionCommands'
 
 /**
  * Join Room Command.
