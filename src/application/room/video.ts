@@ -1,4 +1,12 @@
 import { VideoNotifications } from '../../presentation/notifications/videoNotifications'
+import {
+  EventBus,
+  EventType,
+  UserJoinedEvent,
+  UserLeftSessionEvent,
+  VideoPlayedEvent,
+  VideoStoppedEvent
+} from '../eventBus'
 import { isDeepEqual } from '../utils'
 import { User } from './user'
 
@@ -13,47 +21,76 @@ export interface VideoState {
 }
 
 export interface Video {
-  userJoined(user: User, videoReactions: VideoNotifications): Promise<void>
-  userLeft(user: User, videoReactions: VideoNotifications): void
-  playVideo(timestamp: number, videoReactions: VideoNotifications): void
-  stopVideo(timestamp: number, videoReactions: VideoNotifications): void
+  registerEventHandlers(): void
 }
 
 export class VideoImpl implements Video {
   userReactions: Map<User, VideoNotifications>
+  eventBus: EventBus
 
-  constructor() {
+  constructor(eventBus: EventBus) {
     this.userReactions = new Map()
+    this.eventBus = eventBus
   }
 
-  async userJoined(user: User, videoReactions: VideoNotifications): Promise<void> {
-    return Promise.all(
-      Array.from(this.userReactions.values()).map((vr) => vr.retreiveVideoState())
-    ).then((videoStates) => {
-      if (videoStates.length > 0) {
-        const timestamps: number[] = videoStates.map((vs) => vs.timestamp)
-        const minTimestamp: number = Math.min(...timestamps)
-        const videoStateSync: VideoState = videoStates[timestamps.indexOf(minTimestamp)]
-        videoReactions.synchronizeUser(videoStateSync)
-      }
-      this.userReactions.set(user, videoReactions)
+  registerEventHandlers(): void {
+    this.eventBus.subscribe(EventType.UserJoinedSession, this.handleUserJoinedEvent)
+    this.eventBus.subscribe(EventType.UserLeftSession, this.handleUserLeftEvent)
+    this.eventBus.subscribe(EventType.VideoPlayed, this.handleVideoPlayedEvent)
+    this.eventBus.subscribe(EventType.VideoStopped, this.handleStopVideoEvent)
+  }
+
+  private handleUserJoinedEvent: (event: UserJoinedEvent) => Promise<void> = (
+    event: UserJoinedEvent
+  ) => {
+    return new Promise(() => {
+      console.log('Handling user joined in VIDEO')
+      return Promise.all(
+        Array.from(this.userReactions.values()).map((vr) => vr.retreiveVideoState())
+      ).then((videoStates) => {
+        if (videoStates.length > 0) {
+          const timestamps: number[] = videoStates.map((vs) => vs.timestamp)
+          const minTimestamp: number = Math.min(...timestamps)
+          const videoStateSync: VideoState = videoStates[timestamps.indexOf(minTimestamp)]
+          event.notifications.getVideoReactions.synchronizeUser(videoStateSync)
+        }
+        this.userReactions.set(event.user, event.notifications.getVideoReactions)
+      })
     })
   }
 
-  userLeft(user: User, videoReactions: VideoNotifications): void {
-    for (let key of this.userReactions.keys()) {
-      if (isDeepEqual(user.id, key.id)) {
-        this.userReactions.delete(key)
-        break
+  private handleUserLeftEvent: (event: UserLeftSessionEvent) => Promise<void> = (
+    event: UserLeftSessionEvent
+  ) => {
+    return new Promise(() => {
+      for (let key of this.userReactions.keys()) {
+        if (isDeepEqual(event.user.id, key.id)) {
+          this.userReactions.delete(key)
+          break
+        }
       }
-    }
+    })
   }
 
-  playVideo(timestamp: number, videoReactions: VideoNotifications): void {
-    videoReactions.syncronizeRoom({ state: PlayState.PLAYING, timestamp: timestamp })
+  private handleVideoPlayedEvent: (event: VideoPlayedEvent) => Promise<void> = (
+    event: VideoPlayedEvent
+  ) => {
+    return new Promise(() => {
+      event.notifications.getVideoReactions.syncronizeRoom({
+        state: PlayState.PLAYING,
+        timestamp: event.timestamp
+      })
+    })
   }
 
-  stopVideo(timestamp: number, videoReactions: VideoNotifications): void {
-    videoReactions.syncronizeRoom({ state: PlayState.PAUSED, timestamp: timestamp })
+  private handleStopVideoEvent: (event: VideoStoppedEvent) => Promise<void> = (
+    event: VideoStoppedEvent
+  ) => {
+    return new Promise(() => {
+      event.notifications.getVideoReactions.syncronizeRoom({
+        state: PlayState.PAUSED,
+        timestamp: event.timestamp
+      })
+    })
   }
 }

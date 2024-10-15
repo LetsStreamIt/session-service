@@ -1,9 +1,14 @@
-import { SessionNotifications } from '../../presentation/notifications/sessionNotifications'
 import { Entity, Pair, Repository } from '../entity'
-import { Message, MessageContent, TextMessage } from '../message'
-import { Chat } from './chat'
+import {
+  EventBus,
+  EventBusImpl,
+  EventType,
+  UserJoinedEvent,
+  UserLeftSessionEvent
+} from '../eventBus'
+import { Chat, ChatImpl } from './chat'
 import { User, UserRepository } from './user'
-import { Video } from './video'
+import { Video, VideoImpl } from './video'
 
 export class RoomId {
   roomName: string
@@ -16,26 +21,30 @@ export class RoomId {
 export class RoomEntry extends Pair<UserRepository, Pair<Chat, Video>> {}
 
 export interface Room extends Entity<RoomId, RoomEntry> {
+  registerEventHandlers(): void
   isUserJoined(user: User): boolean
-
-  joinUser(user: User, roomReactions: SessionNotifications): boolean
-
-  leaveUser(user: User, roomReactions: SessionNotifications): boolean
-
-  sendMessage(message: Message<MessageContent>, roomReactions: SessionNotifications): void
-
-  playVideo(timestamp: number, roomReactions: SessionNotifications): void
-
-  stopVideo(timestamp: number, roomReactions: SessionNotifications): void
+  eventBus(): EventBus
 }
 
 export class RoomImpl implements Room {
   id: RoomId
   value?: RoomEntry | undefined
+  sessionEventBus: EventBus
 
-  constructor(id: RoomId, users: UserRepository, chat: Chat, video: Video) {
+  constructor(id: RoomId) {
     this.id = id
-    this.value = new RoomEntry(users, new Pair(chat, video))
+    this.sessionEventBus = new EventBusImpl()
+    this.value = new RoomEntry(
+      new UserRepository(),
+      new Pair(new ChatImpl(this.sessionEventBus), new VideoImpl(this.sessionEventBus))
+    )
+  }
+
+  registerEventHandlers() {
+    this.value?.getY.getX.registerEventHandlers()
+    this.value?.getY.getY.registerEventHandlers()
+    this.sessionEventBus.subscribe(EventType.UserJoinedSession, this.handleUserJoinedEvent)
+    this.sessionEventBus.subscribe(EventType.UserLeftSession, this.handleUserLeftEvent)
   }
 
   isUserJoined(user: User): boolean {
@@ -46,44 +55,26 @@ export class RoomImpl implements Room {
     return false
   }
 
-  joinUser(user: User, roomReactions: SessionNotifications): boolean {
-    if (!this.isUserJoined(user)) {
-      // Send join command to video and chat
-      this.value?.getY.getX.userJoined(user, roomReactions.getChatReactions)
-      this.value?.getY.getY.userJoined(user, roomReactions.getVideoReactions)
-
-      this.value?.getX.add(user)
-      roomReactions.joinUserToRoom()
-      return true
-    }
-    return false
+  eventBus(): EventBus {
+    return this.sessionEventBus
   }
 
-  leaveUser(user: User, roomReactions: SessionNotifications): boolean {
-    if (this.isUserJoined(user)) {
-      if (this.value) {
-        roomReactions.leaveUserFromRoomAndDisconnect()
-
-        // Send leave command to video and chat
-        this.value?.getY.getX.userLeft(user, roomReactions.getChatReactions)
-        this.value?.getY.getY.userLeft(user, roomReactions.getVideoReactions)
-
-        return this.value.getX.remove(user.id)
-      }
-    }
-    return false
+  private handleUserJoinedEvent: (event: UserJoinedEvent) => Promise<void> = (
+    event: UserJoinedEvent
+  ) => {
+    return new Promise(() => {
+      this.value?.getX.add(event.user)
+      event.notifications.joinUserToRoom()
+    })
   }
 
-  sendMessage(message: TextMessage, roomReactions: SessionNotifications): void {
-    this.value?.getY.getX.sendMessage(message, roomReactions.chatReactions)
-  }
-
-  playVideo(timestamp: number, roomReactions: SessionNotifications): void {
-    this.value?.getY.getY.playVideo(timestamp, roomReactions.videoReactions)
-  }
-
-  stopVideo(timestamp: number, roomReactions: SessionNotifications): void {
-    this.value?.getY.getY.stopVideo(timestamp, roomReactions.videoReactions)
+  private handleUserLeftEvent: (event: UserLeftSessionEvent) => Promise<void> = (
+    event: UserLeftSessionEvent
+  ) => {
+    return new Promise(() => {
+      event.notifications.leaveUserFromRoomAndDisconnect()
+      this.value?.getX.remove(event.user.id)
+    })
   }
 }
 

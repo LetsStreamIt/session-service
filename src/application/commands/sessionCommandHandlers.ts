@@ -1,18 +1,18 @@
 import { TextMessage } from '../message'
-import { ChatImpl } from '../room/chat'
 import { RoomRepository, RoomId, RoomImpl, Room, RoomEntry } from '../room/room'
-import { User, UserRepository } from '../room/user'
+import { User } from '../room/user'
 import { getUserFromToken } from '../userUtils'
-import { VideoImpl } from '../room/video'
 import { sha256 } from 'js-sha256'
+import { CreateSessionCommand, JoinSessionCommand, LeaveSessionCommand } from './sessionCommands'
 import {
-  CreateSessionCommand,
-  JoinSessionCommand,
-  LeaveSessionCommand,
-  PlayVideoCommand,
-  SendMessageCommand,
-  StopVideoCommand
-} from './commands'
+  MessageSentEvent,
+  UserJoinedEvent,
+  UserLeftSessionEvent,
+  VideoPlayedEvent,
+  VideoStoppedEvent
+} from '../eventBus'
+import { SendMessageCommand } from './chatCommands'
+import { PlayVideoCommand, StopVideoCommand } from './videoCommands'
 
 export class SessionCommandHandlers {
   rooms: RoomRepository
@@ -28,11 +28,16 @@ export class SessionCommandHandlers {
   async handleCreateRoomCommand(command: CreateSessionCommand): Promise<string> {
     return new Promise((resolve, reject) => {
       if (this.isYoutubeVideoIdValid(command.videoId)) {
+        console.log('CREATING ROOM')
         const roomName: string = this.roomNameFromTokenAndVideoId(command.token, command.videoId)
 
         const roomId: RoomId = new RoomId(roomName)
         const TIMEOUT = 5_000
-        this.rooms.add(new RoomImpl(roomId, new UserRepository(), new ChatImpl(), new VideoImpl()))
+
+        const room: Room = new RoomImpl(roomId)
+        this.rooms.add(room)
+        room.registerEventHandlers()
+        console.log('EVERTING REGISTERED')
 
         setTimeout(() => {
           const room: Room | undefined = this.rooms.find(roomId)
@@ -58,7 +63,7 @@ export class SessionCommandHandlers {
 
         // Resolve the Promise if the room is already existing, reject otherwise
         if (room) {
-          room.joinUser(user, command.notifications)
+          room.eventBus().publish(new UserJoinedEvent(user, command.notifications))
           resolve()
         } else {
           reject()
@@ -76,7 +81,7 @@ export class SessionCommandHandlers {
       const room: Room | undefined = this.rooms.find(roomId)
 
       if (room) {
-        room.leaveUser(user, command.notifications)
+        room.eventBus().publish(new UserLeftSessionEvent(user, command.notifications))
         this.removeRoomWhenAllUserLeft(roomId)
       }
       resolve()
@@ -99,7 +104,7 @@ export class SessionCommandHandlers {
         const room: Room | undefined = this.rooms.find(new RoomId(command.sessionName))
         const textMessage: TextMessage = new TextMessage(user, command.message)
         if (room) {
-          room.sendMessage(textMessage, command.notifications)
+          room.eventBus().publish(new MessageSentEvent(textMessage, command.notifications))
         }
         resolve()
       } else {
@@ -112,7 +117,7 @@ export class SessionCommandHandlers {
     return new Promise((resolve) => {
       const room: Room | undefined = this.rooms.find(new RoomId(command.sessionName))
       if (room) {
-        room.playVideo(command.timestamp, command.notifications)
+        room.eventBus().publish(new VideoPlayedEvent(command.timestamp, command.notifications))
       }
       resolve()
     })
@@ -122,7 +127,7 @@ export class SessionCommandHandlers {
     return new Promise((resolve) => {
       const room: Room | undefined = this.rooms.find(new RoomId(command.sessionName))
       if (room) {
-        room.stopVideo(command.timestamp, command.notifications)
+        room.eventBus().publish(new VideoStoppedEvent(command.timestamp, command.notifications))
       }
       resolve()
     })

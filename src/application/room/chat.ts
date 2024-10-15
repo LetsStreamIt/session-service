@@ -1,39 +1,58 @@
-import { ChatNotifications } from '../../presentation/notifications/chatNotifications'
+import {
+  EventBus,
+  EventType,
+  MessageSentEvent,
+  UserJoinedEvent,
+  UserLeftSessionEvent
+} from '../eventBus'
 import { TextMessage, NotificationMessage, Notification } from '../message'
-import { User } from './user'
 
 export interface Chat {
-  userJoined(user: User, chatReactions: ChatNotifications): void
-
-  userLeft(user: User, chatReactions: ChatNotifications): void
-
-  sendMessage(message: TextMessage, chatReactions: ChatNotifications): void
-
-  get getMessages(): TextMessage[]
+  registerEventHandlers(): void
 }
 
 export class ChatImpl implements Chat {
   private readonly messages: TextMessage[]
+  private readonly eventBus: EventBus
 
-  constructor() {
+  constructor(eventBus: EventBus) {
     this.messages = []
+    this.eventBus = eventBus
   }
 
-  userJoined(user: User, chatReactions: ChatNotifications): void {
-    chatReactions.sendNotificationToRoom(new NotificationMessage(user, Notification.JOINROOM))
-    chatReactions.emitTextMessagesToClient(...this.messages)
+  registerEventHandlers() {
+    this.eventBus.subscribe(EventType.UserJoinedSession, this.handleUserJoinedEvent)
+    this.eventBus.subscribe(EventType.UserLeftSession, this.handleUserLeftEvent)
+    this.eventBus.subscribe(EventType.MessageSent, this.handleMessageSentEvent)
   }
 
-  userLeft(user: User, chatReactions: ChatNotifications): void {
-    chatReactions.sendNotificationToRoom(new NotificationMessage(user, Notification.LEAVEROOM))
+  private handleUserJoinedEvent: (event: UserJoinedEvent) => Promise<void> = (
+    event: UserJoinedEvent
+  ) => {
+    return new Promise(() => {
+      event.notifications.chatReactions.sendNotificationToRoom(
+        new NotificationMessage(event.user, Notification.JOINROOM)
+      )
+      event.notifications.chatReactions.emitTextMessagesToClient(...this.messages)
+    })
   }
 
-  sendMessage(message: TextMessage, chatReactions: ChatNotifications): void {
-    this.messages.push(message)
-    chatReactions.sendTextMessagesToRoom(message)
+  private handleUserLeftEvent: (event: UserLeftSessionEvent) => Promise<void> = (
+    event: UserJoinedEvent
+  ) => {
+    return new Promise(() => {
+      event.notifications.chatReactions.sendNotificationToRoom(
+        new NotificationMessage(event.user, Notification.LEAVEROOM)
+      )
+    })
   }
 
-  get getMessages(): TextMessage[] {
-    return this.messages
+  private handleMessageSentEvent: (event: MessageSentEvent) => Promise<void> = (
+    event: MessageSentEvent
+  ) => {
+    return new Promise(() => {
+      this.messages.push(event.textMessage)
+      event.notifications.chatReactions.sendTextMessagesToRoom(event.textMessage)
+    })
   }
 }
