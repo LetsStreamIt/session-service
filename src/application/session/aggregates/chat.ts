@@ -1,11 +1,11 @@
+import { TextMessage, NotificationMessage, Notification } from '../../message'
+import { EventBus } from '../events/eventBus'
 import {
-  EventBus,
   EventType,
-  MessageSentEvent,
   UserJoinedEvent,
-  UserLeftSessionEvent
-} from '../eventBus'
-import { TextMessage, NotificationMessage, Notification } from '../message'
+  UserLeftSessionEvent,
+  MessageSentEvent
+} from '../events/events'
 
 export interface Chat {
   registerEventHandlers(): void

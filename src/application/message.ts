@@ -1,4 +1,4 @@
-import { User } from './room/user'
+import { User } from './session/aggregates/user'
 
 export enum Notification {
   JOINROOM,

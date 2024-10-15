@@ -1,13 +1,13 @@
-import { VideoNotifications } from '../../presentation/notifications/videoNotifications'
+import { VideoNotifications } from '../../../presentation/notifications/videoNotifications'
+import { isDeepEqual } from '../../utils'
+import { EventBus } from '../events/eventBus'
 import {
-  EventBus,
   EventType,
   UserJoinedEvent,
   UserLeftSessionEvent,
   VideoPlayedEvent,
   VideoStoppedEvent
-} from '../eventBus'
-import { isDeepEqual } from '../utils'
+} from '../events/events'
 import { User } from './user'
 
 export enum PlayState {

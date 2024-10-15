@@ -1,4 +1,4 @@
-import { PlayState, VideoState } from '../../room/video'
+import { PlayState, VideoState } from '../../notifications/videoNotifications'
 import { AbstractDeserializer } from './deserializer'
 
 class PlayStateDeserializer extends AbstractDeserializer<PlayState> {

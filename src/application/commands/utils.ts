@@ -1,4 +1,4 @@
-import { UserId, User } from './room/user'
+import { User, UserId } from '../session/aggregates/user'
 
 export function getUserEmailFromToken(token: string): UserId {
   return new UserId(token)

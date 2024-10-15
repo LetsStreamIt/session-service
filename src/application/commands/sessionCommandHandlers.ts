@@ -1,18 +1,19 @@
 import { TextMessage } from '../message'
-import { RoomRepository, RoomId, RoomImpl, Room, RoomEntry } from '../room/room'
-import { User } from '../room/user'
-import { getUserFromToken } from '../userUtils'
+import { getUserFromToken } from './utils'
 import { sha256 } from 'js-sha256'
 import { CreateSessionCommand, JoinSessionCommand, LeaveSessionCommand } from './sessionCommands'
-import {
-  MessageSentEvent,
-  UserJoinedEvent,
-  UserLeftSessionEvent,
-  VideoPlayedEvent,
-  VideoStoppedEvent
-} from '../eventBus'
+
 import { SendMessageCommand } from './chatCommands'
 import { PlayVideoCommand, StopVideoCommand } from './videoCommands'
+import { RoomRepository, RoomId, Room, RoomImpl, RoomEntry } from '../session/aggregates/room'
+import { User } from '../session/aggregates/user'
+import {
+  UserJoinedEvent,
+  UserLeftSessionEvent,
+  MessageSentEvent,
+  VideoPlayedEvent,
+  VideoStoppedEvent
+} from '../session/events/events'
 
 export class SessionCommandHandlers {
   rooms: RoomRepository
@@ -28,7 +29,6 @@ export class SessionCommandHandlers {
   async handleCreateRoomCommand(command: CreateSessionCommand): Promise<string> {
     return new Promise((resolve, reject) => {
       if (this.isYoutubeVideoIdValid(command.videoId)) {
-        console.log('CREATING ROOM')
         const roomName: string = this.roomNameFromTokenAndVideoId(command.token, command.videoId)
 
         const roomId: RoomId = new RoomId(roomName)
@@ -37,7 +37,6 @@ export class SessionCommandHandlers {
         const room: Room = new RoomImpl(roomId)
         this.rooms.add(room)
         room.registerEventHandlers()
-        console.log('EVERTING REGISTERED')
 
         setTimeout(() => {
           const room: Room | undefined = this.rooms.find(roomId)

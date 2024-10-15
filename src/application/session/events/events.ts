@@ -1,6 +1,6 @@
-import { SessionNotifications } from '../presentation/notifications/sessionNotifications'
-import { TextMessage } from './message'
-import { User } from './room/user'
+import { SessionNotifications } from '../../../presentation/notifications/sessionNotifications'
+import { TextMessage } from '../../message'
+import { User } from '../aggregates/user'
 
 export interface SessionEvent {
   type: EventType
@@ -85,42 +85,5 @@ export class MessageSentEvent implements SessionEvent {
     this.type = EventType.MessageSent
     this.notifications = notifications
     this.textMessage = textMessage
-  }
-}
-
-export interface EventBus {
-  subscribe<X extends SessionEvent>(
-    eventType: EventType,
-    listener: (event: X) => Promise<void>
-  ): void
-  publish(event: SessionEvent): void
-}
-
-export class EventBusImpl implements EventBus {
-  listeners: Record<string, ((event: any) => Promise<void>)[]>
-
-  constructor() {
-    this.listeners = {}
-  }
-
-  subscribe<X extends SessionEvent>(
-    eventType: EventType,
-    listener: (event: X) => Promise<void>
-  ): void {
-    if (!this.listeners[eventType]) {
-      this.listeners[eventType] = []
-    }
-    this.listeners[eventType].push(listener)
-  }
-
-  publish(event: SessionEvent): void {
-    const eventType = event.type
-    if (this.listeners[eventType]) {
-      console.log('EVENT TYPE', eventType, this.listeners[eventType])
-      this.listeners[eventType].forEach((listener) => {
-        console.log('LISTENER', listener)
-        listener(event)
-      })
-    }
   }
 }
