@@ -1,4 +1,4 @@
-import { CommandType } from '../../presentation/commands/commandTypes'
+import { CommandType } from './commandType'
 import { SessionNotifications } from '../../presentation/notifications/sessionNotifications'
 import { SessionCommand } from './sessionCommands'
 

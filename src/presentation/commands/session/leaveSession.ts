@@ -1,7 +1,7 @@
 import { Server, Socket } from 'socket.io'
-import { SessionCommandHandlers } from '../../../../application/commands/sessionCommandHandlers'
-import { SessionNotifications } from '../../../notifications/sessionNotifications'
-import { LeaveSessionCommand } from '../../../../application/commands/sessionCommands'
+import { SessionCommandHandlers } from '../../../application/commands/sessionCommandHandlers'
+import { SessionNotifications } from '../../notifications/sessionNotifications'
+import { LeaveSessionCommand } from '../../../application/commands/sessionCommands'
 
 /**
  * Leave command.

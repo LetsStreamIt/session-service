@@ -5,31 +5,31 @@ import { Chat, ChatImpl } from './chat'
 import { User, UserRepository } from './user'
 import { Video, VideoImpl } from './video'
 
-export class RoomId {
-  roomName: string
+export class SessionId {
+  sessionName: string
 
-  constructor(roomName: string) {
-    this.roomName = roomName
+  constructor(sessionName: string) {
+    this.sessionName = sessionName
   }
 }
 
-export class RoomEntry extends Pair<UserRepository, Pair<Chat, Video>> {}
+export class SessionEntry extends Pair<UserRepository, Pair<Chat, Video>> {}
 
-export interface Room extends Entity<RoomId, RoomEntry> {
+export interface Session extends Entity<SessionId, SessionEntry> {
   registerEventHandlers(): void
   isUserJoined(user: User): boolean
   eventBus(): EventBus
 }
 
-export class RoomImpl implements Room {
-  id: RoomId
-  value?: RoomEntry | undefined
+export class SessionImpl implements Session {
+  id: SessionId
+  value?: SessionEntry | undefined
   sessionEventBus: EventBus
 
-  constructor(id: RoomId) {
+  constructor(id: SessionId) {
     this.id = id
     this.sessionEventBus = new EventBusImpl()
-    this.value = new RoomEntry(
+    this.value = new SessionEntry(
       new UserRepository(),
       new Pair(new ChatImpl(this.sessionEventBus), new VideoImpl(this.sessionEventBus))
     )
@@ -73,4 +73,4 @@ export class RoomImpl implements Room {
   }
 }
 
-export class RoomRepository extends Repository<Room> {}
+export class RoomRepository extends Repository<Session> {}

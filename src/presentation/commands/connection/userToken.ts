@@ -2,9 +2,9 @@ import { Server, Socket } from 'socket.io'
 import { commandListener } from '../../utils'
 import { Ack } from '../../../application/session/message'
 import { SessionCommandHandlers } from '../../../application/commands/sessionCommandHandlers'
-import { CommandType } from '../commandTypes'
-import { recvCreateSessionCommand } from './session/createSession'
-import { recvJoinSessionCommand } from './session/joinSession'
+import { CommandType } from '../../../application/commands/commandType'
+import { recvCreateSessionCommand } from '../session/createSession'
+import { recvJoinSessionCommand } from '../session/joinSession'
 
 /**
  * User token command.
