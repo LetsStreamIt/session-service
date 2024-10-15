@@ -1,4 +1,4 @@
-import { TextMessage, NotificationMessage, Notification } from '../../message'
+import { TextMessage, NotificationMessage, Notification } from '../message'
 import { EventBus } from '../events/eventBus'
 import {
   EventType,

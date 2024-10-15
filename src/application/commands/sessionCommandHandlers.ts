@@ -1,4 +1,4 @@
-import { TextMessage } from '../message'
+import { TextMessage } from '../session/message'
 import { getUserFromToken } from './utils'
 import { sha256 } from 'js-sha256'
 import { CreateSessionCommand, JoinSessionCommand, LeaveSessionCommand } from './sessionCommands'

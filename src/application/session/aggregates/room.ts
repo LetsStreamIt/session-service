@@ -1,4 +1,4 @@
-import { Pair, Entity, Repository } from '../../entity'
+import { Pair, Entity, Repository } from '../entity'
 import { EventBus, EventBusImpl } from '../events/eventBus'
 import { EventType, UserJoinedEvent, UserLeftSessionEvent } from '../events/events'
 import { Chat, ChatImpl } from './chat'

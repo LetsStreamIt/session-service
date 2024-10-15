@@ -1,5 +1,5 @@
 import { Server, Socket } from 'socket.io'
-import { Ack } from '../../../../application/message'
+import { Ack } from '../../../../application/session/message'
 import { commandListener } from '../../../utils'
 import { SessionCommandHandlers } from '../../../../application/commands/sessionCommandHandlers'
 import { CommandType } from '../../commandTypes'

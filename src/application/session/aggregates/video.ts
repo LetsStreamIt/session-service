@@ -1,5 +1,4 @@
 import { VideoNotifications } from '../../../presentation/notifications/videoNotifications'
-import { isDeepEqual } from '../../utils'
 import { EventBus } from '../events/eventBus'
 import {
   EventType,
@@ -8,6 +7,7 @@ import {
   VideoPlayedEvent,
   VideoStoppedEvent
 } from '../events/events'
+import { isDeepEqual } from '../utils'
 import { User } from './user'
 
 export enum PlayState {

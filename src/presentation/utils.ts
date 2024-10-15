@@ -1,5 +1,5 @@
 import { Socket, Server } from 'socket.io'
-import { Ack } from '../application/message'
+import { Ack } from '../application/session/message'
 
 /* Command listener util function
  * @param sn
