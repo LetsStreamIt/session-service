@@ -48,13 +48,13 @@ function enableRecvLeaveSessionCommand(
   socket: Socket,
   token: string,
   room: string,
-  roomController: SessionCommandHandlers,
-  roomReactions: SessionNotifications
+  commandHandlers: SessionCommandHandlers,
+  notifications: SessionNotifications
 ) {
   commandListener(
     socket,
     CommandType.LEAVE_ROOM,
-    recvLeaveSessionCommand(io, socket, room, token, roomController, roomReactions)
+    recvLeaveSessionCommand(io, socket, room, token, commandHandlers, notifications)
   )
 }
 
@@ -63,13 +63,13 @@ function enableRecvChatCommands(
   socket: Socket,
   token: string,
   room: string,
-  roomController: SessionCommandHandlers,
-  roomReactions: SessionNotifications
+  commandHandlers: SessionCommandHandlers,
+  notifications: SessionNotifications
 ) {
   commandListener(
     socket,
     CommandType.SEND_MSG,
-    recvSendMessageCommand(io, token, room, roomController, roomReactions)
+    recvSendMessageCommand(io, token, room, commandHandlers, notifications)
   )
 }
 
@@ -78,17 +78,17 @@ function enableRecvVideoCommands(
   socket: Socket,
   token: string,
   room: string,
-  roomController: SessionCommandHandlers,
-  roomReactions: SessionNotifications
+  commandHandlers: SessionCommandHandlers,
+  notifications: SessionNotifications
 ) {
   commandListener(
     socket,
     CommandType.PLAY_VIDEO,
-    recvPlayVideoCommand(io, token, room, roomController, roomReactions)
+    recvPlayVideoCommand(io, token, room, commandHandlers, notifications)
   )
   commandListener(
     socket,
     CommandType.STOP_VIDEO,
-    recvStopVideoCommand(io, token, room, roomController, roomReactions)
+    recvStopVideoCommand(io, token, room, commandHandlers, notifications)
   )
 }

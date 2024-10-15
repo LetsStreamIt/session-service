@@ -18,19 +18,19 @@ import { recvJoinSessionCommand } from './session/joinSession'
 export function recvUserTokenCommand(
   io: Server,
   socket: Socket,
-  roomController: SessionCommandHandlers
+  commandHandlers: SessionCommandHandlers
 ): (message: any, ack: any) => void {
   return (message, ack) => {
     const { token } = message
     commandListener(
       socket,
       CommandType.CREATE_ROOM,
-      recvCreateSessionCommand(io, socket, token, roomController)
+      recvCreateSessionCommand(io, socket, token, commandHandlers)
     )
     commandListener(
       socket,
       CommandType.JOIN_ROOM,
-      recvJoinSessionCommand(io, socket, token, roomController)
+      recvJoinSessionCommand(io, socket, token, commandHandlers)
     )
     ack(Ack.OK)
   }

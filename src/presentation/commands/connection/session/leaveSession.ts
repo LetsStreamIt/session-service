@@ -17,10 +17,10 @@ export function recvLeaveSessionCommand(
   socket: Socket,
   room: string,
   token: string,
-  roomController: SessionCommandHandlers,
-  roomReactions: SessionNotifications
+  commandHandlers: SessionCommandHandlers,
+  notifications: SessionNotifications
 ): () => void {
   return () => {
-    roomController.handleLeaveUserCommand(new LeaveSessionCommand(token, room, roomReactions))
+    commandHandlers.handleLeaveUserCommand(new LeaveSessionCommand(token, room, notifications))
   }
 }
