@@ -2,7 +2,6 @@ import { TextMessage } from '../message'
 import { ChatImpl } from '../room/chat'
 import { RoomRepository, RoomId, RoomImpl, Room, RoomEntry } from '../room/room'
 import { User, UserRepository } from '../room/user'
-import { SessionNotifications } from '../../presentation/notifications/sessionNotifications'
 import { getUserFromToken } from '../userUtils'
 import { VideoImpl } from '../room/video'
 import { sha256 } from 'js-sha256'
@@ -11,6 +10,7 @@ import {
   JoinSessionCommand,
   LeaveSessionCommand,
   PlayVideoCommand,
+  SendMessageCommand,
   StopVideoCommand
 } from './commands'
 
@@ -52,7 +52,6 @@ export class SessionCommandHandlers {
   async handleJoinUserCommand(command: JoinSessionCommand) {
     return new Promise<void>((resolve, reject) => {
       if (!this.isUserJoined(command.token)) {
-        console.log('user not joined')
         const user: User = getUserFromToken(command.token)
         const roomId: RoomId = new RoomId(command.sessionName)
         const room: Room | undefined = this.rooms.find(roomId)
@@ -65,7 +64,6 @@ export class SessionCommandHandlers {
           reject()
         }
       } else {
-        console.log('user joined')
         reject()
       }
     })
@@ -94,19 +92,14 @@ export class SessionCommandHandlers {
     }
   }
 
-  async handleSendMessageCommand(
-    token: string,
-    message: string,
-    roomName: string,
-    notifications: SessionNotifications
-  ): Promise<void> {
+  async handleSendMessageCommand(command: SendMessageCommand): Promise<void> {
     return new Promise((resolve, reject) => {
-      if (message !== '') {
-        const user: User = getUserFromToken(token)
-        const room: Room | undefined = this.rooms.find(new RoomId(roomName))
-        const textMessage: TextMessage = new TextMessage(user, message)
+      if (command.message !== '') {
+        const user: User = getUserFromToken(command.token)
+        const room: Room | undefined = this.rooms.find(new RoomId(command.sessionName))
+        const textMessage: TextMessage = new TextMessage(user, command.message)
         if (room) {
-          room.sendMessage(textMessage, notifications)
+          room.sendMessage(textMessage, command.notifications)
         }
         resolve()
       } else {
