@@ -1,4 +1,4 @@
-import { VideoReactions } from '../../presentation/reactions/videoReactions'
+import { VideoNotifications } from '../../presentation/notifications/videoNotifications'
 import { isDeepEqual } from '../utils'
 import { User } from './user'
 
@@ -13,20 +13,20 @@ export interface VideoState {
 }
 
 export interface Video {
-  userJoined(user: User, videoReactions: VideoReactions): Promise<void>
-  userLeft(user: User, videoReactions: VideoReactions): void
-  playVideo(timestamp: number, videoReactions: VideoReactions): void
-  stopVideo(timestamp: number, videoReactions: VideoReactions): void
+  userJoined(user: User, videoReactions: VideoNotifications): Promise<void>
+  userLeft(user: User, videoReactions: VideoNotifications): void
+  playVideo(timestamp: number, videoReactions: VideoNotifications): void
+  stopVideo(timestamp: number, videoReactions: VideoNotifications): void
 }
 
 export class VideoImpl implements Video {
-  userReactions: Map<User, VideoReactions>
+  userReactions: Map<User, VideoNotifications>
 
   constructor() {
     this.userReactions = new Map()
   }
 
-  async userJoined(user: User, videoReactions: VideoReactions): Promise<void> {
+  async userJoined(user: User, videoReactions: VideoNotifications): Promise<void> {
     return Promise.all(
       Array.from(this.userReactions.values()).map((vr) => vr.retreiveVideoState())
     ).then((videoStates) => {
@@ -40,7 +40,7 @@ export class VideoImpl implements Video {
     })
   }
 
-  userLeft(user: User, videoReactions: VideoReactions): void {
+  userLeft(user: User, videoReactions: VideoNotifications): void {
     for (let key of this.userReactions.keys()) {
       if (isDeepEqual(user.id, key.id)) {
         this.userReactions.delete(key)
@@ -49,11 +49,11 @@ export class VideoImpl implements Video {
     }
   }
 
-  playVideo(timestamp: number, videoReactions: VideoReactions): void {
+  playVideo(timestamp: number, videoReactions: VideoNotifications): void {
     videoReactions.syncronizeRoom({ state: PlayState.PLAYING, timestamp: timestamp })
   }
 
-  stopVideo(timestamp: number, videoReactions: VideoReactions): void {
+  stopVideo(timestamp: number, videoReactions: VideoNotifications): void {
     videoReactions.syncronizeRoom({ state: PlayState.PAUSED, timestamp: timestamp })
   }
 }

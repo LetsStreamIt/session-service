@@ -3,8 +3,8 @@ import { commandListener } from '../../utils'
 import { Ack } from '../../../application/message'
 import { SessionCommandHandlers } from '../../../application/commandHandlers/sessionCommandHandlers'
 import { CommandType } from '../commandTypes'
-import { createRoomCommand } from './room/createRoom'
-import { recvJoinSessionCommand } from './room/joinSession'
+import { recvCreateSessionCommand } from './session/createSession'
+import { recvJoinSessionCommand } from './session/joinSession'
 
 /**
  * User token command.
@@ -25,7 +25,7 @@ export function recvUserTokenCommand(
     commandListener(
       socket,
       CommandType.CREATE_ROOM,
-      createRoomCommand(io, socket, token, roomController)
+      recvCreateSessionCommand(io, socket, token, roomController)
     )
     commandListener(
       socket,

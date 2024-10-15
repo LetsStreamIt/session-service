@@ -21,14 +21,8 @@ export class SessionCommandHandlers {
     this.rooms = new RoomRepository()
   }
 
-  async isUserJoined(token: string): Promise<void> {
-    return new Promise((resolve, reject) => {
-      if (this.rooms.getValues.some((room) => room.isUserJoined(getUserFromToken(token)))) {
-        resolve()
-      } else {
-        reject()
-      }
-    })
+  isUserJoined(token: string): boolean {
+    return this.rooms.getValues.some((room) => room.isUserJoined(getUserFromToken(token)))
   }
 
   async handleCreateRoomCommand(command: CreateSessionCommand): Promise<string> {
@@ -58,6 +52,7 @@ export class SessionCommandHandlers {
   async handleJoinUserCommand(command: JoinSessionCommand) {
     return new Promise<void>((resolve, reject) => {
       if (!this.isUserJoined(command.token)) {
+        console.log('user not joined')
         const user: User = getUserFromToken(command.token)
         const roomId: RoomId = new RoomId(command.sessionName)
         const room: Room | undefined = this.rooms.find(roomId)
@@ -70,6 +65,7 @@ export class SessionCommandHandlers {
           reject()
         }
       } else {
+        console.log('user joined')
         reject()
       }
     })

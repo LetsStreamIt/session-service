@@ -1,4 +1,3 @@
-import { sha256 } from 'js-sha256'
 import { Server, Socket } from 'socket.io'
 import { SessionCommandHandlers } from '../../../../application/commandHandlers/sessionCommandHandlers'
 import { Ack } from '../../../../application/message'
@@ -9,19 +8,19 @@ import { CreateSessionCommand } from '../../../../application/commandHandlers/co
  * @param io
  * @param socket
  * @param token
- * @param roomController
+ * @param commandHandlers
  * @returns
  */
-export function createRoomCommand(
+export function recvCreateSessionCommand(
   io: Server,
   socket: Socket,
   token: string,
-  roomController: SessionCommandHandlers
+  commandHandlers: SessionCommandHandlers
 ): (message: any, ack: any) => void {
   return (message, ack) => {
     const { room } = message
 
-    roomController
+    commandHandlers
       .handleCreateRoomCommand(new CreateSessionCommand(token, room))
       .then((roomName: string) => {
         ack({ ack: Ack.OK, roomName: roomName })

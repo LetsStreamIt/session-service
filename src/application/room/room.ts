@@ -1,4 +1,4 @@
-import { RoomReactions } from '../../presentation/reactions/roomReactions'
+import { SessionNotifications } from '../../presentation/notifications/sessionNotifications'
 import { Entity, Pair, Repository } from '../entity'
 import { Message, MessageContent, TextMessage } from '../message'
 import { Chat } from './chat'
@@ -18,15 +18,15 @@ export class RoomEntry extends Pair<UserRepository, Pair<Chat, Video>> {}
 export interface Room extends Entity<RoomId, RoomEntry> {
   isUserJoined(user: User): boolean
 
-  joinUser(user: User, roomReactions: RoomReactions): boolean
+  joinUser(user: User, roomReactions: SessionNotifications): boolean
 
-  leaveUser(user: User, roomReactions: RoomReactions): boolean
+  leaveUser(user: User, roomReactions: SessionNotifications): boolean
 
-  sendMessage(message: Message<MessageContent>, roomReactions: RoomReactions): void
+  sendMessage(message: Message<MessageContent>, roomReactions: SessionNotifications): void
 
-  playVideo(timestamp: number, roomReactions: RoomReactions): void
+  playVideo(timestamp: number, roomReactions: SessionNotifications): void
 
-  stopVideo(timestamp: number, roomReactions: RoomReactions): void
+  stopVideo(timestamp: number, roomReactions: SessionNotifications): void
 }
 
 export class RoomImpl implements Room {
@@ -46,7 +46,7 @@ export class RoomImpl implements Room {
     return false
   }
 
-  joinUser(user: User, roomReactions: RoomReactions): boolean {
+  joinUser(user: User, roomReactions: SessionNotifications): boolean {
     if (!this.isUserJoined(user)) {
       // Send join command to video and chat
       this.value?.getY.getX.userJoined(user, roomReactions.getChatReactions)
@@ -59,7 +59,7 @@ export class RoomImpl implements Room {
     return false
   }
 
-  leaveUser(user: User, roomReactions: RoomReactions): boolean {
+  leaveUser(user: User, roomReactions: SessionNotifications): boolean {
     if (this.isUserJoined(user)) {
       if (this.value) {
         roomReactions.leaveUserFromRoomAndDisconnect()
@@ -74,15 +74,15 @@ export class RoomImpl implements Room {
     return false
   }
 
-  sendMessage(message: TextMessage, roomReactions: RoomReactions): void {
+  sendMessage(message: TextMessage, roomReactions: SessionNotifications): void {
     this.value?.getY.getX.sendMessage(message, roomReactions.chatReactions)
   }
 
-  playVideo(timestamp: number, roomReactions: RoomReactions): void {
+  playVideo(timestamp: number, roomReactions: SessionNotifications): void {
     this.value?.getY.getY.playVideo(timestamp, roomReactions.videoReactions)
   }
 
-  stopVideo(timestamp: number, roomReactions: RoomReactions): void {
+  stopVideo(timestamp: number, roomReactions: SessionNotifications): void {
     this.value?.getY.getY.stopVideo(timestamp, roomReactions.videoReactions)
   }
 }
