@@ -6,6 +6,6 @@ import { Socket } from 'socket.io'
  * @param socket
  * @returns
  */
-export function disconnectionCommand(socket: Socket): (message: any) => void {
+export function recvDisconnectionCommand(socket: Socket): (message: any) => void {
   return (message) => socket.disconnect()
 }

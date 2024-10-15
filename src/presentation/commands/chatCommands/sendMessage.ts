@@ -1,7 +1,7 @@
 import { Server } from 'socket.io'
 import { Ack } from '../../../application/message'
-import { RoomService } from '../../../application/roomService'
-import { RoomReactions } from '../../reactions/roomReactions'
+import { SessionCommandHandlers } from '../../../application/commandHandlers/sessionCommandHandlers'
+import { SessionNotifications } from '../../notifications/sessionNotifications'
 
 /**
  * Send message command.
@@ -12,17 +12,17 @@ import { RoomReactions } from '../../reactions/roomReactions'
  * @param roomController
  * @returns
  */
-export function sendMessageCommand(
+export function recvSendMessageCommand(
   io: Server,
   token: string,
   room: string,
-  roomController: RoomService,
-  roomReactions: RoomReactions
+  roomController: SessionCommandHandlers,
+  roomReactions: SessionNotifications
 ): (message: any, ack: any) => void {
   return (data, ack) => {
     const { message } = data
     roomController
-      .sendMessage(token, message, room, roomReactions)
+      .handleSendMessageCommand(token, message, room, roomReactions)
       .then(() => ack(Ack.OK))
       .catch(() => ack(Ack.FAILURE))
   }

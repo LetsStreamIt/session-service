@@ -1,4 +1,4 @@
-export enum Commands {
+export enum CommandType {
   CONNECTION = 'connection',
   USER_TOKEN = 'userToken',
   DISCONNECT = 'disconnect',

@@ -2,7 +2,7 @@ import { Server, Socket } from 'socket.io'
 import { NotificationMessage, TextMessage } from '../../application/message'
 import { SerializerImpl } from '../../application/presentation/serialization/messageSerializer'
 
-export class ChatReactions {
+export class ChatNotifications {
   io: Server
   socket: Socket
   room: string

@@ -1,9 +1,9 @@
 import { Server, Socket } from 'socket.io'
-import { userTokenCommand } from './userToken'
+import { recvUserTokenCommand } from './userToken'
 import { commandListener, commandListenerWithVerification } from '../../utils'
-import { RoomService } from '../../../application/roomService'
-import { Commands } from '../commands'
-import { disconnectionCommand } from './disconnect'
+import { SessionCommandHandlers } from '../../../application/commandHandlers/sessionCommandHandlers'
+import { CommandType } from '../commandTypes'
+import { recvDisconnectionCommand } from './disconnect'
 
 /**
  * On connection command.
@@ -13,14 +13,18 @@ import { disconnectionCommand } from './disconnect'
  * @param io
  * @param roomController
  */
-export function connectionCommand(io: Server, roomController: RoomService) {
+export function connectionCommand(io: Server, roomController: SessionCommandHandlers) {
   commandListenerWithVerification(
     io,
-    Commands.CONNECTION,
+    CommandType.CONNECTION,
     () => true,
     (socket: Socket) => {
-      commandListener(socket, Commands.USER_TOKEN, userTokenCommand(io, socket, roomController))
-      commandListener(socket, Commands.DISCONNECT, disconnectionCommand(socket))
+      commandListener(
+        socket,
+        CommandType.USER_TOKEN,
+        recvUserTokenCommand(io, socket, roomController)
+      )
+      commandListener(socket, CommandType.DISCONNECT, recvDisconnectionCommand(socket))
     }
   )
 }

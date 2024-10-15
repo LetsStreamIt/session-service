@@ -1,10 +1,10 @@
 import { Server, Socket } from 'socket.io'
 import { commandListener } from '../../utils'
-import { joinRoomCommand } from './room/joinRoom'
 import { Ack } from '../../../application/message'
-import { RoomService } from '../../../application/roomService'
-import { Commands } from '../commands'
+import { SessionCommandHandlers } from '../../../application/commandHandlers/sessionCommandHandlers'
+import { CommandType } from '../commandTypes'
 import { createRoomCommand } from './room/createRoom'
+import { recvJoinSessionCommand } from './room/joinSession'
 
 /**
  * User token command.
@@ -15,19 +15,23 @@ import { createRoomCommand } from './room/createRoom'
  * @param chatController
  * @returns
  */
-export function userTokenCommand(
+export function recvUserTokenCommand(
   io: Server,
   socket: Socket,
-  roomController: RoomService
+  roomController: SessionCommandHandlers
 ): (message: any, ack: any) => void {
   return (message, ack) => {
     const { token } = message
     commandListener(
       socket,
-      Commands.CREATE_ROOM,
+      CommandType.CREATE_ROOM,
       createRoomCommand(io, socket, token, roomController)
     )
-    commandListener(socket, Commands.JOIN_ROOM, joinRoomCommand(io, socket, token, roomController))
+    commandListener(
+      socket,
+      CommandType.JOIN_ROOM,
+      recvJoinSessionCommand(io, socket, token, roomController)
+    )
     ack(Ack.OK)
   }
 }

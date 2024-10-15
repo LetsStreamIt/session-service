@@ -1,29 +1,30 @@
 import { Server } from 'socket.io'
 import { Ack } from '../../../application/message'
-import { RoomService } from '../../../application/roomService'
-import { RoomReactions } from '../../reactions/roomReactions'
+import { SessionCommandHandlers } from '../../../application/commandHandlers/sessionCommandHandlers'
+import { SessionNotifications } from '../../notifications/sessionNotifications'
+import { PlayVideoCommand, StopVideoCommand } from '../../../application/commandHandlers/commands'
 
 /**
  * Play video command
  * @param io
  * @param token
  * @param room
- * @param roomController
- * @param roomReactions
+ * @param commandHandlers
+ * @param notifications
  * @returns
  */
-export function playVideoCommand(
+export function recvPlayVideoCommand(
   io: Server,
   token: string,
   room: string,
-  roomController: RoomService,
-  roomReactions: RoomReactions
+  commandHandlers: SessionCommandHandlers,
+  notifications: SessionNotifications
 ): (message: any, ack: any) => void {
   return (data, ack) => {
     const { timestamp } = data
 
-    roomController
-      .playVideo(token, timestamp, room, roomReactions)
+    commandHandlers
+      .handlePlayVideoCommand(new PlayVideoCommand(token, room, timestamp, notifications))
       .then(() => ack(Ack.OK))
       .catch(() => ack(Ack.FAILURE))
   }
@@ -34,22 +35,22 @@ export function playVideoCommand(
  * @param io
  * @param token
  * @param room
- * @param roomController
- * @param roomReactions
+ * @param commandHandlers
+ * @param notifications
  * @returns
  */
-export function stopVideoCommand(
+export function recvStopVideoCommand(
   io: Server,
   token: string,
   room: string,
-  roomController: RoomService,
-  roomReactions: RoomReactions
+  commandHandlers: SessionCommandHandlers,
+  notifications: SessionNotifications
 ): (message: any, ack: any) => void {
   return (data, ack) => {
     const { timestamp } = data
 
-    roomController
-      .stopVideo(token, timestamp, room, roomReactions)
+    commandHandlers
+      .handleStopVideoCommand(new StopVideoCommand(token, room, timestamp, notifications))
       .then(() => ack(Ack.OK))
       .catch(() => ack(Ack.FAILURE))
   }

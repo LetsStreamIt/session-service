@@ -12,7 +12,7 @@ export interface VideoState {
   state: PlayState
 }
 
-export class VideoReactions {
+export class VideoNotifications {
   io: Server
   socket: Socket
   room: string

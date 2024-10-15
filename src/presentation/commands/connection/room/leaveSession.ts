@@ -1,0 +1,26 @@
+import { Server, Socket } from 'socket.io'
+import { SessionCommandHandlers } from '../../../../application/commandHandlers/sessionCommandHandlers'
+import { SessionNotifications } from '../../../notifications/sessionNotifications'
+import { LeaveSessionCommand } from '../../../../application/commandHandlers/commands'
+
+/**
+ * Leave command.
+ * Using the token and socket, leaves the user to the specified room.
+ * @param io
+ * @param socket
+ * @param room
+ * @param chatController
+ * @returns
+ */
+export function recvLeaveSessionCommand(
+  io: Server,
+  socket: Socket,
+  room: string,
+  token: string,
+  roomController: SessionCommandHandlers,
+  roomReactions: SessionNotifications
+): () => void {
+  return () => {
+    roomController.handleLeaveUserCommand(new LeaveSessionCommand(token, room, roomReactions))
+  }
+}

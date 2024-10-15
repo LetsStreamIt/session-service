@@ -1,15 +1,8 @@
 import { sha256 } from 'js-sha256'
 import { Server, Socket } from 'socket.io'
-import { RoomService } from '../../../../application/roomService'
+import { SessionCommandHandlers } from '../../../../application/commandHandlers/sessionCommandHandlers'
 import { Ack } from '../../../../application/message'
-
-function isYoutubeVideoIdValid(videoId: string): boolean {
-  return true
-}
-
-function roomNameFromTokenAndVideoId(token: string, videoId: string): string {
-  return sha256(token + videoId)
-}
+import { CreateSessionCommand } from '../../../../application/commandHandlers/commands'
 
 /**
  * Create Room Command
@@ -23,17 +16,18 @@ export function createRoomCommand(
   io: Server,
   socket: Socket,
   token: string,
-  roomController: RoomService
+  roomController: SessionCommandHandlers
 ): (message: any, ack: any) => void {
   return (message, ack) => {
     const { room } = message
 
-    if (isYoutubeVideoIdValid(room)) {
-      const roomName = roomNameFromTokenAndVideoId(token, room)
-      roomController.createRoom(roomName)
-      ack({ ack: Ack.OK, roomName: roomName })
-    } else {
-      ack({ ack: Ack.FAILURE, roomName: '' })
-    }
+    roomController
+      .handleCreateRoomCommand(new CreateSessionCommand(token, room))
+      .then((roomName: string) => {
+        ack({ ack: Ack.OK, roomName: roomName })
+      })
+      .catch(() => {
+        ack({ ack: Ack.FAILURE, roomName: '' })
+      })
   }
 }
