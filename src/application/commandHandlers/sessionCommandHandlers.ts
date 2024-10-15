@@ -49,8 +49,8 @@ export class SessionCommandHandlers {
     })
   }
 
-  async handleJoinUserCommand(command: JoinSessionCommand) {
-    return new Promise<void>((resolve, reject) => {
+  async handleJoinUserCommand(command: JoinSessionCommand): Promise<void> {
+    return new Promise((resolve, reject) => {
       if (!this.isUserJoined(command.token)) {
         const user: User = getUserFromToken(command.token)
         const roomId: RoomId = new RoomId(command.sessionName)

@@ -11,9 +11,9 @@ import { recvDisconnectionCommand } from './disconnect'
  * (1) send the token as first initialization step;
  * (2) disconnect from the namespace.
  * @param io
- * @param roomController
+ * @param commandHandlers
  */
-export function connectionCommand(io: Server, roomController: SessionCommandHandlers) {
+export function connectionCommand(io: Server, commandHandlers: SessionCommandHandlers) {
   commandListenerWithVerification(
     io,
     CommandType.CONNECTION,
@@ -22,7 +22,7 @@ export function connectionCommand(io: Server, roomController: SessionCommandHand
       commandListener(
         socket,
         CommandType.USER_TOKEN,
-        recvUserTokenCommand(io, socket, roomController)
+        recvUserTokenCommand(io, socket, commandHandlers)
       )
       commandListener(socket, CommandType.DISCONNECT, recvDisconnectionCommand(socket))
     }

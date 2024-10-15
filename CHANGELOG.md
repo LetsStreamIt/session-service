@@ -1,3 +1,22 @@
+## [0.9.0](https://github.com/LetsStreamIt/session-service/compare/v0.8.0...v0.9.0) (2024-10-12)
+
+### Features
+
+* create room command ([e856c28](https://github.com/LetsStreamIt/session-service/commit/e856c28736ba83018f83017ce2d5ab28d646d8de))
+
+### Dependency updates
+
+* **deps:** update dependency @types/mocha to v10.0.9 ([a61ec0e](https://github.com/LetsStreamIt/session-service/commit/a61ec0e888dcc95ba720a225fb912487834b5691))
+* **deps:** update dependency @types/node to v20.16.11 ([4343420](https://github.com/LetsStreamIt/session-service/commit/43434203dbdf102708d54bfefbb05d615ebc60a1))
+* **deps:** update dependency express to v4.21.1 ([0f561cd](https://github.com/LetsStreamIt/session-service/commit/0f561cd85360fb835fd665c2004d442466483809))
+* **deps:** update dependency typescript to v5.6.3 ([fdfa598](https://github.com/LetsStreamIt/session-service/commit/fdfa598ef86e6c9a48bec87dd157c2d37d2564ad))
+* **deps:** update typescript-eslint monorepo to v8.8.1 ([a35443f](https://github.com/LetsStreamIt/session-service/commit/a35443fbf5b5c2908850ddcd8eb8236db267c476))
+
+### General maintenance
+
+* join user only if room is created, create room method ([854a29e](https://github.com/LetsStreamIt/session-service/commit/854a29e066774c94c4c967518d5a03f8a5ed764a))
+* remove comments ([4738f60](https://github.com/LetsStreamIt/session-service/commit/4738f609321b2b7488cd57e4f7cb140bf85308cd))
+
 ## [0.8.0](https://github.com/LetsStreamIt/session-service/compare/v0.7.0...v0.8.0) (2024-10-09)
 
 ### Features
