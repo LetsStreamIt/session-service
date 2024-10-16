@@ -1,4 +1,3 @@
-import { Server, Socket } from 'socket.io'
 import { SessionNotifications } from '../../notifications/sessionNotifications'
 import { LeaveSessionCommand } from '../../../application/session/aggregates/session/commands/sessionCommands'
 import { SessionCommandHandlers } from '../../../application/session/aggregates/session/commands/sessionCommandHandlers'
@@ -13,8 +12,6 @@ import { SessionCommandHandlers } from '../../../application/session/aggregates/
  * @returns
  */
 export function recvLeaveSessionCommand(
-  io: Server,
-  socket: Socket,
   room: string,
   token: string,
   commandHandlers: SessionCommandHandlers,

@@ -1,10 +1,15 @@
 import { Server, Socket } from 'socket.io'
 import { commandListener } from '../../utils'
-import { Ack } from '../../../application/session/message'
 import { CommandType } from '../../../application/command/command'
 import { recvCreateSessionCommand } from '../session/createSession'
 import { recvJoinSessionCommand } from '../session/joinSession'
 import { SessionCommandHandlers } from '../../../application/session/aggregates/session/commands/sessionCommandHandlers'
+import {
+  ResponseStatus,
+  TokenStatus,
+  UserTokenResponse,
+  UserTokenResponseContent
+} from '../ack/ack'
 
 /**
  * User token command.
@@ -32,6 +37,10 @@ export function recvUserTokenCommand(
       CommandType.JOIN_ROOM,
       recvJoinSessionCommand(io, socket, token, commandHandlers)
     )
-    ack(Ack.OK)
+    ack(
+      new UserTokenResponse(
+        new UserTokenResponseContent(ResponseStatus.SUCCESS, TokenStatus.TOKEN_VALID)
+      )
+    )
   }
 }

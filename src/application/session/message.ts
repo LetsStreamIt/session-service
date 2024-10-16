@@ -63,13 +63,3 @@ export class ChatUpdate {
     this.messages = messages
   }
 }
-
-export enum Ack {
-  OK = 0,
-  FAILURE = 1
-}
-
-export interface CreateRoomAck {
-  roomName: string
-  ack: Ack
-}

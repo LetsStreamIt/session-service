@@ -1,7 +1,7 @@
 import { Server, Socket } from 'socket.io'
-import { Ack } from '../../../application/session/message'
 import { CreateSessionCommand } from '../../../application/session/aggregates/session/commands/sessionCommands'
 import { SessionCommandHandlers } from '../../../application/session/aggregates/session/commands/sessionCommandHandlers'
+import { CreateSessionResponse } from '../ack/ack'
 
 /**
  * Create Room Command
@@ -22,11 +22,6 @@ export function recvCreateSessionCommand(
 
     commandHandlers
       .handleCreateSessionCommand(new CreateSessionCommand(token, room))
-      .then((sessionName: string) => {
-        ack({ ack: Ack.OK, roomName: sessionName })
-      })
-      .catch(() => {
-        ack({ ack: Ack.FAILURE, roomName: '' })
-      })
+      .then((createSessionResponse: CreateSessionResponse) => ack(createSessionResponse))
   }
 }

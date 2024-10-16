@@ -1,11 +1,10 @@
-import { Server } from 'socket.io'
-import { Ack } from '../../../../application/session/message'
 import { SessionNotifications } from '../../../notifications/sessionNotifications'
 import {
   PlayVideoCommand,
   StopVideoCommand
 } from '../../../../application/session/aggregates/video/commands/videoCommands'
 import { SessionCommandHandlers } from '../../../../application/session/aggregates/session/commands/sessionCommandHandlers'
+import { PlayVideoResponse, ResponseStatus, StopVideoResponse } from '../../ack/ack'
 
 /**
  * Play video command
@@ -17,7 +16,6 @@ import { SessionCommandHandlers } from '../../../../application/session/aggregat
  * @returns
  */
 export function recvPlayVideoCommand(
-  io: Server,
   token: string,
   room: string,
   commandHandlers: SessionCommandHandlers,
@@ -28,8 +26,8 @@ export function recvPlayVideoCommand(
 
     commandHandlers
       .handlePlayVideoCommand(new PlayVideoCommand(token, room, timestamp, notifications))
-      .then(() => ack(Ack.OK))
-      .catch(() => ack(Ack.FAILURE))
+      .then(() => ack(new PlayVideoResponse(ResponseStatus.SUCCESS)))
+      .catch(() => ack(new PlayVideoResponse(ResponseStatus.FAILURE)))
   }
 }
 
@@ -43,7 +41,6 @@ export function recvPlayVideoCommand(
  * @returns
  */
 export function recvStopVideoCommand(
-  io: Server,
   token: string,
   room: string,
   commandHandlers: SessionCommandHandlers,
@@ -54,7 +51,6 @@ export function recvStopVideoCommand(
 
     commandHandlers
       .handleStopVideoCommand(new StopVideoCommand(token, room, timestamp, notifications))
-      .then(() => ack(Ack.OK))
-      .catch(() => ack(Ack.FAILURE))
+      .then((stopVideoResponse: StopVideoResponse) => ack(stopVideoResponse))
   }
 }

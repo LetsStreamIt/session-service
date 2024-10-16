@@ -1,8 +1,7 @@
-import { Server } from 'socket.io'
-import { Ack } from '../../../../application/session/message'
 import { SessionNotifications } from '../../../notifications/sessionNotifications'
 import { SendMessageCommand } from '../../../../application/session/aggregates/chat/commands/chatCommands'
 import { SessionCommandHandlers } from '../../../../application/session/aggregates/session/commands/sessionCommandHandlers'
+import { SendMessageResponse } from '../../ack/ack'
 
 /**
  * Send message command.
@@ -14,7 +13,6 @@ import { SessionCommandHandlers } from '../../../../application/session/aggregat
  * @returns
  */
 export function recvSendMessageCommand(
-  io: Server,
   token: string,
   room: string,
   commandHandlers: SessionCommandHandlers,
@@ -24,7 +22,6 @@ export function recvSendMessageCommand(
     const { message } = data
     commandHandlers
       .handleSendMessageCommand(new SendMessageCommand(token, room, message, notifications))
-      .then(() => ack(Ack.OK))
-      .catch(() => ack(Ack.FAILURE))
+      .then((sendMessageResponse: SendMessageResponse) => ack(sendMessageResponse))
   }
 }

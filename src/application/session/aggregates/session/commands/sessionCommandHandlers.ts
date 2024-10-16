@@ -8,6 +8,16 @@ import { VideoPlayedEvent, VideoStoppedEvent } from '../../video/events/videoEve
 import { UserJoinedEvent, UserLeftSessionEvent } from '../events/sessionEvents'
 import { SessionRepository, SessionId, SessionImpl, SessionEntry, Session } from '../session'
 import { CreateSessionCommand, JoinSessionCommand, LeaveSessionCommand } from './sessionCommands'
+import {
+  CreateSessionResponse,
+  JoinSessionResponse,
+  JoinSessionResponseType,
+  LeaveSessionResponse,
+  PlayVideoResponse,
+  ResponseStatus,
+  SendMessageResponse,
+  StopVideoResponse
+} from '../../../../../presentation/commands/ack/ack'
 
 export class SessionCommandHandlers {
   sessions: SessionRepository
@@ -16,8 +26,8 @@ export class SessionCommandHandlers {
     this.sessions = new SessionRepository()
   }
 
-  async handleCreateSessionCommand(command: CreateSessionCommand): Promise<string> {
-    return new Promise((resolve, reject) => {
+  async handleCreateSessionCommand(command: CreateSessionCommand): Promise<CreateSessionResponse> {
+    return new Promise((resolve) => {
       if (isYoutubeVideoIdValid(command.videoId)) {
         const sessionName: string = sessionNameFromTokenAndVideoId(command.token, command.videoId)
         const sessionId: SessionId = new SessionId(sessionName)
@@ -28,15 +38,15 @@ export class SessionCommandHandlers {
         const timeout = 5_000
         this.deleteSessionAtTimeout(sessionId, timeout)
 
-        resolve(sessionName)
+        resolve(new CreateSessionResponse(ResponseStatus.SUCCESS, sessionName))
       } else {
-        reject()
+        resolve(new CreateSessionResponse(ResponseStatus.FAILURE, ''))
       }
     })
   }
 
-  async handleJoinUserCommand(command: JoinSessionCommand): Promise<void> {
-    return new Promise((resolve, reject) => {
+  async handleJoinUserCommand(command: JoinSessionCommand): Promise<JoinSessionResponse> {
+    return new Promise((resolve) => {
       if (!this.isUserJoined(command.token)) {
         const user: User = getUserFromToken(command.token)
         const sessionId: SessionId = new SessionId(command.sessionName)
@@ -45,17 +55,17 @@ export class SessionCommandHandlers {
         // Resolve the Promise if the session is already existing, reject otherwise
         if (session) {
           session.eventBus().publish(new UserJoinedEvent(user, command.notifications))
-          resolve()
+          resolve(new JoinSessionResponse(JoinSessionResponseType.SUCCESS))
         } else {
-          reject()
+          resolve(new JoinSessionResponse(JoinSessionResponseType.SESSION_NOT_FOUND))
         }
       } else {
-        reject()
+        resolve(new JoinSessionResponse(JoinSessionResponseType.USER_ALREADY_JOINED))
       }
     })
   }
 
-  async handleLeaveUserCommand(command: LeaveSessionCommand): Promise<void> {
+  async handleLeaveUserCommand(command: LeaveSessionCommand): Promise<LeaveSessionResponse> {
     return new Promise((resolve) => {
       const sessionId: SessionId = new SessionId(command.sessionName)
       const user: User = getUserFromToken(command.token)
@@ -64,13 +74,15 @@ export class SessionCommandHandlers {
       if (session) {
         session.eventBus().publish(new UserLeftSessionEvent(user, command.notifications))
         this.deleteSessionWhenAllUserLeft(sessionId)
+        resolve(new LeaveSessionResponse(ResponseStatus.SUCCESS))
+      } else {
+        resolve(new LeaveSessionResponse(ResponseStatus.FAILURE))
       }
-      resolve()
     })
   }
 
-  async handleSendMessageCommand(command: SendMessageCommand): Promise<void> {
-    return new Promise((resolve, reject) => {
+  async handleSendMessageCommand(command: SendMessageCommand): Promise<SendMessageResponse> {
+    return new Promise((resolve) => {
       if (command.message !== '') {
         const user: User = getUserFromToken(command.token)
         const session: Session | undefined = this.sessions.find(new SessionId(command.sessionName))
@@ -78,30 +90,34 @@ export class SessionCommandHandlers {
         if (session) {
           session.eventBus().publish(new MessageSentEvent(textMessage, command.notifications))
         }
-        resolve()
+        resolve(new SendMessageResponse(ResponseStatus.SUCCESS))
       } else {
-        reject()
+        resolve(new SendMessageResponse(ResponseStatus.FAILURE))
       }
     })
   }
 
-  async handlePlayVideoCommand(command: PlayVideoCommand): Promise<void> {
+  async handlePlayVideoCommand(command: PlayVideoCommand): Promise<PlayVideoResponse> {
     return new Promise((resolve) => {
       const session: Session | undefined = this.sessions.find(new SessionId(command.sessionName))
       if (session) {
         session.eventBus().publish(new VideoPlayedEvent(command.timestamp, command.notifications))
+        resolve(new PlayVideoResponse(ResponseStatus.SUCCESS))
+      } else {
+        resolve(new PlayVideoResponse(ResponseStatus.FAILURE))
       }
-      resolve()
     })
   }
 
-  async handleStopVideoCommand(command: StopVideoCommand): Promise<void> {
+  async handleStopVideoCommand(command: StopVideoCommand): Promise<StopVideoResponse> {
     return new Promise((resolve) => {
       const session: Session | undefined = this.sessions.find(new SessionId(command.sessionName))
       if (session) {
         session.eventBus().publish(new VideoStoppedEvent(command.timestamp, command.notifications))
+        resolve(new StopVideoResponse(ResponseStatus.SUCCESS))
+      } else {
+        resolve(new StopVideoResponse(ResponseStatus.FAILURE))
       }
-      resolve()
     })
   }
 
