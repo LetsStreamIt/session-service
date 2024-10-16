@@ -1,5 +1,4 @@
-import { sha256 } from 'js-sha256'
-import { getUserFromToken } from './utils'
+import { getUserFromToken, isYoutubeVideoIdValid, sessionNameFromTokenAndVideoId } from './utils'
 import { TextMessage } from '../../../message'
 import { User } from '../../../user'
 import { SendMessageCommand } from '../../chat/commands/chatCommands'
@@ -11,37 +10,25 @@ import { RoomRepository, SessionId, SessionImpl, SessionEntry, Session } from '.
 import { CreateSessionCommand, JoinSessionCommand, LeaveSessionCommand } from './sessionCommands'
 
 export class SessionCommandHandlers {
-  rooms: RoomRepository
+  sessions: RoomRepository
 
   constructor() {
-    this.rooms = new RoomRepository()
-  }
-
-  isUserJoined(token: string): boolean {
-    return this.rooms.getValues.some((room) => room.isUserJoined(getUserFromToken(token)))
+    this.sessions = new RoomRepository()
   }
 
   async handleCreateRoomCommand(command: CreateSessionCommand): Promise<string> {
     return new Promise((resolve, reject) => {
-      if (this.isYoutubeVideoIdValid(command.videoId)) {
-        const roomName: string = this.roomNameFromTokenAndVideoId(command.token, command.videoId)
+      if (isYoutubeVideoIdValid(command.videoId)) {
+        const sessionName: string = sessionNameFromTokenAndVideoId(command.token, command.videoId)
+        const sessionId: SessionId = new SessionId(sessionName)
+        const session: Session = new SessionImpl(sessionId)
+        this.sessions.add(session)
+        session.registerEventHandlers()
 
-        const roomId: SessionId = new SessionId(roomName)
-        const TIMEOUT = 5_000
+        const timeout = 5_000
+        this.deleteSessionAtTimeout(sessionId, timeout)
 
-        const room: Session = new SessionImpl(roomId)
-        this.rooms.add(room)
-        room.registerEventHandlers()
-
-        setTimeout(() => {
-          const room: Session | undefined = this.rooms.find(roomId)
-          if (room) {
-            if (room.value?.getX.getValues.length == 0) {
-              this.rooms.remove(roomId)
-            }
-          }
-        }, TIMEOUT)
-        resolve(roomName)
+        resolve(sessionName)
       } else {
         reject()
       }
@@ -52,12 +39,12 @@ export class SessionCommandHandlers {
     return new Promise((resolve, reject) => {
       if (!this.isUserJoined(command.token)) {
         const user: User = getUserFromToken(command.token)
-        const roomId: SessionId = new SessionId(command.sessionName)
-        const room: Session | undefined = this.rooms.find(roomId)
+        const sessionId: SessionId = new SessionId(command.sessionName)
+        const session: Session | undefined = this.sessions.find(sessionId)
 
-        // Resolve the Promise if the room is already existing, reject otherwise
-        if (room) {
-          room.eventBus().publish(new UserJoinedEvent(user, command.notifications))
+        // Resolve the Promise if the session is already existing, reject otherwise
+        if (session) {
+          session.eventBus().publish(new UserJoinedEvent(user, command.notifications))
           resolve()
         } else {
           reject()
@@ -70,35 +57,26 @@ export class SessionCommandHandlers {
 
   async handleLeaveUserCommand(command: LeaveSessionCommand): Promise<void> {
     return new Promise((resolve) => {
-      const roomId: SessionId = new SessionId(command.sessionName)
+      const sessionId: SessionId = new SessionId(command.sessionName)
       const user: User = getUserFromToken(command.token)
-      const room: Session | undefined = this.rooms.find(roomId)
+      const session: Session | undefined = this.sessions.find(sessionId)
 
-      if (room) {
-        room.eventBus().publish(new UserLeftSessionEvent(user, command.notifications))
-        this.removeRoomWhenAllUserLeft(roomId)
+      if (session) {
+        session.eventBus().publish(new UserLeftSessionEvent(user, command.notifications))
+        this.removeRoomWhenAllUserLeft(sessionId)
       }
       resolve()
     })
-  }
-
-  private removeRoomWhenAllUserLeft(roomId: SessionId): void {
-    const roomEntry: SessionEntry | undefined = this.rooms.find(roomId)?.value
-    if (roomEntry) {
-      if (roomEntry.getX.getValues.length == 0) {
-        this.rooms.remove(roomId)
-      }
-    }
   }
 
   async handleSendMessageCommand(command: SendMessageCommand): Promise<void> {
     return new Promise((resolve, reject) => {
       if (command.message !== '') {
         const user: User = getUserFromToken(command.token)
-        const room: Session | undefined = this.rooms.find(new SessionId(command.sessionName))
+        const session: Session | undefined = this.sessions.find(new SessionId(command.sessionName))
         const textMessage: TextMessage = new TextMessage(user, command.message)
-        if (room) {
-          room.eventBus().publish(new MessageSentEvent(textMessage, command.notifications))
+        if (session) {
+          session.eventBus().publish(new MessageSentEvent(textMessage, command.notifications))
         }
         resolve()
       } else {
@@ -109,9 +87,9 @@ export class SessionCommandHandlers {
 
   async handlePlayVideoCommand(command: PlayVideoCommand): Promise<void> {
     return new Promise((resolve) => {
-      const room: Session | undefined = this.rooms.find(new SessionId(command.sessionName))
-      if (room) {
-        room.eventBus().publish(new VideoPlayedEvent(command.timestamp, command.notifications))
+      const session: Session | undefined = this.sessions.find(new SessionId(command.sessionName))
+      if (session) {
+        session.eventBus().publish(new VideoPlayedEvent(command.timestamp, command.notifications))
       }
       resolve()
     })
@@ -119,19 +97,35 @@ export class SessionCommandHandlers {
 
   async handleStopVideoCommand(command: StopVideoCommand): Promise<void> {
     return new Promise((resolve) => {
-      const room: Session | undefined = this.rooms.find(new SessionId(command.sessionName))
-      if (room) {
-        room.eventBus().publish(new VideoStoppedEvent(command.timestamp, command.notifications))
+      const session: Session | undefined = this.sessions.find(new SessionId(command.sessionName))
+      if (session) {
+        session.eventBus().publish(new VideoStoppedEvent(command.timestamp, command.notifications))
       }
       resolve()
     })
   }
 
-  private isYoutubeVideoIdValid(videoId: string): boolean {
-    return true
+  private isUserJoined(token: string): boolean {
+    return this.sessions.getValues.some((session) => session.isUserJoined(getUserFromToken(token)))
   }
 
-  private roomNameFromTokenAndVideoId(token: string, videoId: string): string {
-    return sha256(token + videoId)
+  private deleteSessionAtTimeout(sessionId: SessionId, timeout: number) {
+    setTimeout(() => {
+      const session: Session | undefined = this.sessions.find(sessionId)
+      if (session) {
+        if (session.value?.getX.getValues.length == 0) {
+          this.sessions.remove(sessionId)
+        }
+      }
+    }, timeout)
+  }
+
+  private removeRoomWhenAllUserLeft(sessionId: SessionId): void {
+    const sessionEntry: SessionEntry | undefined = this.sessions.find(sessionId)?.value
+    if (sessionEntry) {
+      if (sessionEntry.getX.getValues.length == 0) {
+        this.sessions.remove(sessionId)
+      }
+    }
   }
 }
