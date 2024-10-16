@@ -74,4 +74,4 @@ export class SessionImpl implements Session {
   }
 }
 
-export class RoomRepository extends Repository<Session> {}
+export class SessionRepository extends Repository<Session> {}

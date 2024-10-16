@@ -21,9 +21,9 @@ export function recvCreateSessionCommand(
     const { room } = message
 
     commandHandlers
-      .handleCreateRoomCommand(new CreateSessionCommand(token, room))
-      .then((roomName: string) => {
-        ack({ ack: Ack.OK, roomName: roomName })
+      .handleCreateSessionCommand(new CreateSessionCommand(token, room))
+      .then((sessionName: string) => {
+        ack({ ack: Ack.OK, roomName: sessionName })
       })
       .catch(() => {
         ack({ ack: Ack.FAILURE, roomName: '' })

@@ -6,17 +6,17 @@ import { MessageSentEvent } from '../../chat/events/chatEvents'
 import { PlayVideoCommand, StopVideoCommand } from '../../video/commands/videoCommands'
 import { VideoPlayedEvent, VideoStoppedEvent } from '../../video/events/videoEvents'
 import { UserJoinedEvent, UserLeftSessionEvent } from '../events/sessionEvents'
-import { RoomRepository, SessionId, SessionImpl, SessionEntry, Session } from '../session'
+import { SessionRepository, SessionId, SessionImpl, SessionEntry, Session } from '../session'
 import { CreateSessionCommand, JoinSessionCommand, LeaveSessionCommand } from './sessionCommands'
 
 export class SessionCommandHandlers {
-  sessions: RoomRepository
+  sessions: SessionRepository
 
   constructor() {
-    this.sessions = new RoomRepository()
+    this.sessions = new SessionRepository()
   }
 
-  async handleCreateRoomCommand(command: CreateSessionCommand): Promise<string> {
+  async handleCreateSessionCommand(command: CreateSessionCommand): Promise<string> {
     return new Promise((resolve, reject) => {
       if (isYoutubeVideoIdValid(command.videoId)) {
         const sessionName: string = sessionNameFromTokenAndVideoId(command.token, command.videoId)
@@ -63,7 +63,7 @@ export class SessionCommandHandlers {
 
       if (session) {
         session.eventBus().publish(new UserLeftSessionEvent(user, command.notifications))
-        this.removeRoomWhenAllUserLeft(sessionId)
+        this.deleteSessionWhenAllUserLeft(sessionId)
       }
       resolve()
     })
@@ -120,7 +120,7 @@ export class SessionCommandHandlers {
     }, timeout)
   }
 
-  private removeRoomWhenAllUserLeft(sessionId: SessionId): void {
+  private deleteSessionWhenAllUserLeft(sessionId: SessionId): void {
     const sessionEntry: SessionEntry | undefined = this.sessions.find(sessionId)?.value
     if (sessionEntry) {
       if (sessionEntry.getX.getValues.length == 0) {
