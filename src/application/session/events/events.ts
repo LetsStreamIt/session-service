@@ -1,6 +1,6 @@
 import { SessionNotifications } from '../../../presentation/notifications/sessionNotifications'
 import { TextMessage } from '../message'
-import { User } from '../aggregates/user'
+import { User } from '../user'
 
 export interface SessionEvent {
   type: EventType

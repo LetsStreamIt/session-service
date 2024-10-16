@@ -12,7 +12,7 @@ import {
   SessionImpl,
   SessionEntry
 } from '../session/aggregates/session'
-import { User } from '../session/aggregates/user'
+import { User } from '../session/user'
 import {
   UserJoinedEvent,
   UserLeftSessionEvent,

@@ -8,7 +8,7 @@ import {
   VideoStoppedEvent
 } from '../events/events'
 import { isDeepEqual } from '../utils'
-import { User } from './user'
+import { User } from '../user'
 
 export enum PlayState {
   PAUSED = 'Paused',

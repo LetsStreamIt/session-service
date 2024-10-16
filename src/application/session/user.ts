@@ -1,4 +1,4 @@
-import { Entity, Pair, Repository } from '../entity'
+import { Entity, Pair, Repository } from './entity'
 
 export class User implements Entity<UserId, Pair<string, string>> {
   id: UserId
