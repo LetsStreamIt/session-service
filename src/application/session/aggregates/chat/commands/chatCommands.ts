@@ -1,6 +1,5 @@
-import { CommandType } from './commandType'
-import { SessionNotifications } from '../../presentation/notifications/sessionNotifications'
-import { SessionCommand } from './sessionCommands'
+import { CommandType, SessionCommand } from '../../../../command/command'
+import { SessionNotifications } from '../../../../../presentation/notifications/sessionNotifications'
 
 export class SendMessageCommand implements SessionCommand {
   type: CommandType

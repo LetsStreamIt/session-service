@@ -1,4 +1,4 @@
-import { SessionEvent, EventType } from './events'
+import { SessionEvent, EventType } from './event'
 
 export interface EventBus {
   subscribe<X extends SessionEvent>(

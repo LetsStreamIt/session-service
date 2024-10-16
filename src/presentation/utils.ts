@@ -1,4 +1,4 @@
-import { Socket } from 'socket.io'
+import { Server, Socket } from 'socket.io'
 
 /**
  * Command Listener with default message check.
@@ -7,7 +7,7 @@ import { Socket } from 'socket.io'
  * @param commandCallback
  */
 export function commandListener<X>(
-  socket: Socket,
+  socket: Socket | Server,
   command: string,
   commandCallback: (argv: X, ack: any) => void
 ) {

@@ -1,9 +1,10 @@
-import { Pair, Entity, Repository } from '../entity'
-import { EventBus, EventBusImpl } from '../events/eventBus'
-import { EventType, UserJoinedEvent, UserLeftSessionEvent } from '../events/events'
-import { Chat, ChatImpl } from './chat'
-import { User, UserRepository } from '../user'
-import { Video, VideoImpl } from './video'
+import { Pair, Entity, Repository } from '../../entity'
+import { EventBus, EventBusImpl } from '../../../event/eventBus'
+import { Chat, ChatImpl } from '../chat/chat'
+import { User, UserRepository } from '../../user'
+import { EventType } from '../../../event/event'
+import { Video, VideoImpl } from '../video/video'
+import { UserJoinedEvent, UserLeftSessionEvent } from './events/sessionEvents'
 
 export class SessionId {
   sessionName: string

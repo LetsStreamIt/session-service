@@ -1,8 +1,11 @@
 import { Server } from 'socket.io'
 import { Ack } from '../../../../application/session/message'
-import { SessionCommandHandlers } from '../../../../application/commands/sessionCommandHandlers'
 import { SessionNotifications } from '../../../notifications/sessionNotifications'
-import { PlayVideoCommand, StopVideoCommand } from '../../../../application/commands/videoCommands'
+import {
+  PlayVideoCommand,
+  StopVideoCommand
+} from '../../../../application/session/aggregates/video/commands/videoCommands'
+import { SessionCommandHandlers } from '../../../../application/session/aggregates/session/commands/sessionCommandHandlers'
 
 /**
  * Play video command

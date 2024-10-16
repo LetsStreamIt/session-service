@@ -1,10 +1,5 @@
-import { CommandType } from './commandType'
-import { SessionNotifications } from '../../presentation/notifications/sessionNotifications'
-
-export interface SessionCommand {
-  type: CommandType
-  token: string
-}
+import { CommandType, SessionCommand } from '../../../../command/command'
+import { SessionNotifications } from '../../../../../presentation/notifications/sessionNotifications'
 
 export class CreateSessionCommand implements SessionCommand {
   type: CommandType

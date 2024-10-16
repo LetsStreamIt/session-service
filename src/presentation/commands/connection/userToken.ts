@@ -1,10 +1,10 @@
 import { Server, Socket } from 'socket.io'
 import { commandListener } from '../../utils'
 import { Ack } from '../../../application/session/message'
-import { SessionCommandHandlers } from '../../../application/commands/sessionCommandHandlers'
-import { CommandType } from '../../../application/commands/commandType'
+import { CommandType } from '../../../application/command/command'
 import { recvCreateSessionCommand } from '../session/createSession'
 import { recvJoinSessionCommand } from '../session/joinSession'
+import { SessionCommandHandlers } from '../../../application/session/aggregates/session/commands/sessionCommandHandlers'
 
 /**
  * User token command.

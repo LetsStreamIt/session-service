@@ -1,7 +1,7 @@
 import express from 'express'
 import http from 'http'
 import { Server } from 'socket.io'
-import { registerCommands } from './presentation/defineNamespaces'
+import { registerCommands } from './presentation/registerCommands'
 
 process.env.DEBUG = 'socket.io:*'
 

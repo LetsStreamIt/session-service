@@ -1,14 +1,10 @@
-import { VideoNotifications } from '../../../presentation/notifications/videoNotifications'
-import { EventBus } from '../events/eventBus'
-import {
-  EventType,
-  UserJoinedEvent,
-  UserLeftSessionEvent,
-  VideoPlayedEvent,
-  VideoStoppedEvent
-} from '../events/events'
-import { isDeepEqual } from '../utils'
-import { User } from '../user'
+import { VideoNotifications } from '../../../../presentation/notifications/videoNotifications'
+import { EventType } from '../../../event/event'
+import { EventBus } from '../../../event/eventBus'
+import { User } from '../../user'
+import { isDeepEqual } from '../../utils'
+import { UserJoinedEvent, UserLeftSessionEvent } from '../session/events/sessionEvents'
+import { VideoPlayedEvent, VideoStoppedEvent } from './events/videoEvents'
 
 export enum PlayState {
   PAUSED = 'Paused',

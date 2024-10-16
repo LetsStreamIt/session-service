@@ -1,25 +1,14 @@
-import { TextMessage } from '../session/message'
-import { getUserFromToken } from './utils'
 import { sha256 } from 'js-sha256'
+import { getUserFromToken } from './utils'
+import { TextMessage } from '../../../message'
+import { User } from '../../../user'
+import { SendMessageCommand } from '../../chat/commands/chatCommands'
+import { MessageSentEvent } from '../../chat/events/chatEvents'
+import { PlayVideoCommand, StopVideoCommand } from '../../video/commands/videoCommands'
+import { VideoPlayedEvent, VideoStoppedEvent } from '../../video/events/videoEvents'
+import { UserJoinedEvent, UserLeftSessionEvent } from '../events/sessionEvents'
+import { RoomRepository, SessionId, SessionImpl, SessionEntry, Session } from '../session'
 import { CreateSessionCommand, JoinSessionCommand, LeaveSessionCommand } from './sessionCommands'
-
-import { SendMessageCommand } from './chatCommands'
-import { PlayVideoCommand, StopVideoCommand } from './videoCommands'
-import {
-  RoomRepository,
-  SessionId,
-  Session,
-  SessionImpl,
-  SessionEntry
-} from '../session/aggregates/session'
-import { User } from '../session/user'
-import {
-  UserJoinedEvent,
-  UserLeftSessionEvent,
-  MessageSentEvent,
-  VideoPlayedEvent,
-  VideoStoppedEvent
-} from '../session/events/events'
 
 export class SessionCommandHandlers {
   rooms: RoomRepository

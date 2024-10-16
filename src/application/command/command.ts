@@ -9,3 +9,8 @@ export enum CommandType {
   STOP_VIDEO = 'stopVideo',
   PLAY_VIDEO = 'playVideo'
 }
+
+export interface SessionCommand {
+  type: CommandType
+  token: string
+}
