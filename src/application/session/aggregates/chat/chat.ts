@@ -26,30 +26,33 @@ export class ChatImpl implements Chat {
   private handleUserJoinedEvent: (event: UserJoinedEvent) => Promise<void> = (
     event: UserJoinedEvent
   ) => {
-    return new Promise(() => {
+    return new Promise((resolve) => {
       event.notifications.chatReactions.sendNotificationToRoom(
         new NotificationMessage(event.user, Notification.JOINROOM)
       )
       event.notifications.chatReactions.emitTextMessagesToClient(...this.messages)
+      resolve()
     })
   }
 
   private handleUserLeftEvent: (event: UserLeftSessionEvent) => Promise<void> = (
     event: UserJoinedEvent
   ) => {
-    return new Promise(() => {
+    return new Promise((resolve) => {
       event.notifications.chatReactions.sendNotificationToRoom(
         new NotificationMessage(event.user, Notification.LEAVEROOM)
       )
+      resolve()
     })
   }
 
   private handleMessageSentEvent: (event: MessageSentEvent) => Promise<void> = (
     event: MessageSentEvent
   ) => {
-    return new Promise(() => {
+    return new Promise((resolve) => {
       this.messages.push(event.textMessage)
       event.notifications.chatReactions.sendTextMessagesToRoom(event.textMessage)
+      resolve()
     })
   }
 }

@@ -11,6 +11,7 @@ import { CreateSessionCommand, JoinSessionCommand, LeaveSessionCommand } from '.
 import {
   CreateSessionResponse,
   JoinSessionResponse,
+  JoinSessionResponseContent,
   JoinSessionResponseType,
   LeaveSessionResponse,
   PlayVideoResponse,
@@ -31,7 +32,7 @@ export class SessionCommandHandlers {
       if (isYoutubeVideoIdValid(command.videoId)) {
         const sessionName: string = sessionNameFromTokenAndVideoId(command.token, command.videoId)
         const sessionId: SessionId = new SessionId(sessionName)
-        const session: Session = new SessionImpl(sessionId)
+        const session: Session = new SessionImpl(sessionId, command.videoId)
         this.sessions.add(session)
         session.registerEventHandlers()
 
@@ -54,13 +55,29 @@ export class SessionCommandHandlers {
 
         // Resolve the Promise if the session is already existing, reject otherwise
         if (session) {
-          session.eventBus().publish(new UserJoinedEvent(user, command.notifications))
-          resolve(new JoinSessionResponse(JoinSessionResponseType.SUCCESS))
+          const videoId = session.value?.getY.getY.getVideoRef
+          if (videoId) {
+            console.log('VIDEO iD', videoId)
+            session.eventBus().publish(new UserJoinedEvent(user, command.notifications))
+            resolve(
+              new JoinSessionResponse(
+                new JoinSessionResponseContent(JoinSessionResponseType.SUCCESS, videoId)
+              )
+            )
+          }
         } else {
-          resolve(new JoinSessionResponse(JoinSessionResponseType.SESSION_NOT_FOUND))
+          resolve(
+            new JoinSessionResponse(
+              new JoinSessionResponseContent(JoinSessionResponseType.SESSION_NOT_FOUND, '')
+            )
+          )
         }
       } else {
-        resolve(new JoinSessionResponse(JoinSessionResponseType.USER_ALREADY_JOINED))
+        resolve(
+          new JoinSessionResponse(
+            new JoinSessionResponseContent(JoinSessionResponseType.USER_ALREADY_JOINED, '')
+          )
+        )
       }
     })
   }
@@ -130,6 +147,7 @@ export class SessionCommandHandlers {
       const session: Session | undefined = this.sessions.find(sessionId)
       if (session) {
         if (session.value?.getX.getValues.length == 0) {
+          console.log('DEL ROOM')
           this.sessions.remove(sessionId)
         }
       }

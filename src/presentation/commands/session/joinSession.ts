@@ -30,7 +30,7 @@ export function recvJoinSessionCommand(
     commandHandlers
       .handleJoinUserCommand(new JoinSessionCommand(token, room, notifications))
       .then((joinSessionResponse: JoinSessionResponse) => {
-        if (joinSessionResponse.content == JoinSessionResponseType.SUCCESS) {
+        if (joinSessionResponse.content.responseType == JoinSessionResponseType.SUCCESS) {
           enableRecvLeaveSessionCommand(socket, token, room, commandHandlers, notifications)
           enableRecvChatCommands(socket, token, room, commandHandlers, notifications)
           enableRecvVideoCommands(socket, token, room, commandHandlers, notifications)

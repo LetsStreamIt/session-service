@@ -56,11 +56,21 @@ export class UserTokenResponseContent {
   }
 }
 
-export class JoinSessionResponse implements Response<JoinSessionResponseType> {
-  command: CommandType
-  content: JoinSessionResponseType
+export class JoinSessionResponseContent {
+  responseType: JoinSessionResponseType
+  videoId: string
 
-  constructor(content: JoinSessionResponseType) {
+  constructor(responseType: JoinSessionResponseType, videoId: string) {
+    this.responseType = responseType
+    this.videoId = videoId
+  }
+}
+
+export class JoinSessionResponse implements Response<JoinSessionResponseContent> {
+  command: CommandType
+  content: JoinSessionResponseContent
+
+  constructor(content: JoinSessionResponseContent) {
     this.command = CommandType.JOIN_ROOM
     this.content = content
   }

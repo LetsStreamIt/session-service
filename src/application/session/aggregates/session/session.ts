@@ -27,12 +27,12 @@ export class SessionImpl implements Session {
   value?: SessionEntry | undefined
   sessionEventBus: EventBus
 
-  constructor(id: SessionId) {
+  constructor(id: SessionId, videoRef: string) {
     this.id = id
     this.sessionEventBus = new EventBusImpl()
     this.value = new SessionEntry(
       new UserRepository(),
-      new Pair(new ChatImpl(this.sessionEventBus), new VideoImpl(this.sessionEventBus))
+      new Pair(new ChatImpl(this.sessionEventBus), new VideoImpl(videoRef, this.sessionEventBus))
     )
   }
 
@@ -58,18 +58,20 @@ export class SessionImpl implements Session {
   private handleUserJoinedEvent: (event: UserJoinedEvent) => Promise<void> = (
     event: UserJoinedEvent
   ) => {
-    return new Promise(() => {
+    return new Promise((resolve) => {
       this.value?.getX.add(event.user)
       event.notifications.joinUserToRoom()
+      resolve()
     })
   }
 
   private handleUserLeftEvent: (event: UserLeftSessionEvent) => Promise<void> = (
     event: UserLeftSessionEvent
   ) => {
-    return new Promise(() => {
+    return new Promise((resolve) => {
       event.notifications.leaveUserFromRoomAndDisconnect()
       this.value?.getX.remove(event.user.id)
+      resolve()
     })
   }
 }

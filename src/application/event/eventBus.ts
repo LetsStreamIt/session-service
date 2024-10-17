@@ -25,10 +25,13 @@ export class EventBusImpl implements EventBus {
     this.listeners[eventType].push(listener)
   }
 
-  publish(event: SessionEvent): void {
+  async publish(event: SessionEvent): Promise<void> {
     const eventType = event.type
     if (this.listeners[eventType]) {
-      this.listeners[eventType].forEach((listener) => listener(event))
+      this.listeners[eventType].reduce(
+        (accumulator, listener) => accumulator.then(() => listener(event)),
+        Promise.resolve()
+      )
     }
   }
 }
