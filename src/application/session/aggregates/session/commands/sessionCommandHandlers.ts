@@ -19,12 +19,23 @@ import {
   SendMessageResponse,
   StopVideoResponse
 } from '../../../../../presentation/commands/ack/ack'
+import { EventBus } from '../../../../event/eventBus'
+import { EventType } from '../../../../event/event'
 
 export class SessionCommandHandlers {
   sessions: SessionRepository
 
   constructor() {
     this.sessions = new SessionRepository()
+  }
+
+  private registerEventHandlers(eventBus: EventBus, sessionId: SessionId) {
+    eventBus.subscribe(EventType.UserLeftSession, () => {
+      return new Promise((resolve) => {
+        this.deleteSessionWhenAllUserLeft(sessionId)
+        resolve()
+      })
+    })
   }
 
   async handleCreateSessionCommand(command: CreateSessionCommand): Promise<CreateSessionResponse> {
@@ -35,6 +46,7 @@ export class SessionCommandHandlers {
         const session: Session = new SessionImpl(sessionId, command.videoId)
         this.sessions.add(session)
         session.registerEventHandlers()
+        this.registerEventHandlers(session.eventBus(), sessionId)
 
         const timeout = 5_000
         this.deleteSessionAtTimeout(sessionId, timeout)
@@ -57,7 +69,6 @@ export class SessionCommandHandlers {
         if (session) {
           const videoId = session.value?.getY.getY.getVideoRef
           if (videoId) {
-            console.log('VIDEO iD', videoId)
             session.eventBus().publish(new UserJoinedEvent(user, command.notifications))
             resolve(
               new JoinSessionResponse(
@@ -90,7 +101,6 @@ export class SessionCommandHandlers {
 
       if (session) {
         session.eventBus().publish(new UserLeftSessionEvent(user, command.notifications))
-        this.deleteSessionWhenAllUserLeft(sessionId)
         resolve(new LeaveSessionResponse(ResponseStatus.SUCCESS))
       } else {
         resolve(new LeaveSessionResponse(ResponseStatus.FAILURE))
@@ -147,7 +157,6 @@ export class SessionCommandHandlers {
       const session: Session | undefined = this.sessions.find(sessionId)
       if (session) {
         if (session.value?.getX.getValues.length == 0) {
-          console.log('DEL ROOM')
           this.sessions.remove(sessionId)
         }
       }
