@@ -25,7 +25,7 @@ export class VideoNotifications {
   }
 
   retreiveVideoState(): Promise<VideoState> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.socket.emit(VideoNotificationType.VIDEO_STATE, (response: any) => {
         const videoState = new VideoStateDeserializer().deserialize(JSON.parse(response))
         resolve(videoState)
@@ -34,7 +34,7 @@ export class VideoNotifications {
   }
 
   synchronizeUser(videoState: VideoState): Promise<void> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.socket.emit(
         VideoNotificationType.SYNCHRONIZE,
         new SerializerImpl().serialize(videoState)
@@ -44,10 +44,10 @@ export class VideoNotifications {
   }
 
   syncronizeSession(videoState: VideoState): Promise<void> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.io
         .to(this.sessionName)
-        .emit(VideoNotificationType.VIDEO_STATE, new SerializerImpl().serialize(videoState))
+        .emit(VideoNotificationType.SYNCHRONIZE, new SerializerImpl().serialize(videoState))
       resolve()
     })
   }
