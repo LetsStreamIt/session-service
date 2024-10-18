@@ -9,6 +9,10 @@ export function getUserFromToken(token: string): User {
   return new User(getUserEmailFromToken(token), 'Name', 'Surname')
 }
 
+export function isTokenValid(token: string): boolean {
+  return true
+}
+
 export function isYoutubeVideoIdValid(videoId: string): boolean {
   return true
 }

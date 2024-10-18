@@ -13,6 +13,16 @@ export class CreateSessionCommand implements SessionCommand {
   }
 }
 
+export class UserTokenCommand implements SessionCommand {
+  type: CommandType
+  token: string
+
+  constructor(token: string) {
+    this.type = CommandType.USER_TOKEN
+    this.token = token
+  }
+}
+
 export class JoinSessionCommand implements SessionCommand {
   type: CommandType
   token: string

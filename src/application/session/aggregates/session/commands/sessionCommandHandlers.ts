@@ -1,4 +1,9 @@
-import { getUserFromToken, isYoutubeVideoIdValid, sessionNameFromTokenAndVideoId } from './utils'
+import {
+  getUserFromToken,
+  isTokenValid,
+  isYoutubeVideoIdValid,
+  sessionNameFromTokenAndVideoId
+} from './utils'
 import { TextMessage } from '../../../message'
 import { User } from '../../../user'
 import { SendMessageCommand } from '../../chat/commands/chatCommands'
@@ -7,7 +12,12 @@ import { PlayVideoCommand, StopVideoCommand } from '../../video/commands/videoCo
 import { VideoPlayedEvent, VideoStoppedEvent } from '../../video/events/videoEvents'
 import { UserJoinedEvent, UserLeftSessionEvent } from '../events/sessionEvents'
 import { SessionRepository, SessionId, SessionImpl, SessionEntry, Session } from '../session'
-import { CreateSessionCommand, JoinSessionCommand, LeaveSessionCommand } from './sessionCommands'
+import {
+  CreateSessionCommand,
+  JoinSessionCommand,
+  LeaveSessionCommand,
+  UserTokenCommand
+} from './sessionCommands'
 import {
   CreateSessionResponse,
   JoinSessionResponse,
@@ -17,7 +27,10 @@ import {
   PlayVideoResponse,
   ResponseStatus,
   SendMessageResponse,
-  StopVideoResponse
+  StopVideoResponse,
+  TokenStatus,
+  UserTokenResponse,
+  UserTokenResponseContent
 } from '../../../../../presentation/commands/ack/ack'
 import { EventBus } from '../../../../event/eventBus'
 import { EventType } from '../../../../event/event'
@@ -55,6 +68,20 @@ export class SessionCommandHandlers {
       } else {
         resolve(new CreateSessionResponse(ResponseStatus.FAILURE, ''))
       }
+    })
+  }
+
+  async handleUserTokenCommand(command: UserTokenCommand): Promise<UserTokenResponse> {
+    return new Promise((resolve) => {
+      resolve(
+        isTokenValid(command.token)
+          ? new UserTokenResponse(
+              new UserTokenResponseContent(ResponseStatus.SUCCESS, TokenStatus.TOKEN_VALID)
+            )
+          : new UserTokenResponse(
+              new UserTokenResponseContent(ResponseStatus.FAILURE, TokenStatus.TOKEN_INVALID)
+            )
+      )
     })
   }
 
