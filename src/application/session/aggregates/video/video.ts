@@ -19,22 +19,18 @@ export interface VideoState {
 export interface Video {
   registerEventHandlers(): void
 
-  get getVideoRef(): string
+  get getVideoId(): string
 }
 
 export class VideoImpl implements Video {
   userReactions: Map<User, VideoNotifications>
-  videoRef: string
+  videoId: string
   eventBus: EventBus
 
   constructor(videoRef: string, eventBus: EventBus) {
     this.userReactions = new Map()
-    this.videoRef = videoRef
+    this.videoId = videoRef
     this.eventBus = eventBus
-  }
-
-  get getVideoRef(): string {
-    return this.videoRef
   }
 
   registerEventHandlers(): void {
@@ -42,6 +38,10 @@ export class VideoImpl implements Video {
     this.eventBus.subscribe(EventType.UserLeftSession, this.handleUserLeftEvent)
     this.eventBus.subscribe(EventType.VideoPlayed, this.handleVideoPlayedEvent)
     this.eventBus.subscribe(EventType.VideoStopped, this.handleStopVideoEvent)
+  }
+
+  get getVideoId(): string {
+    return this.videoId
   }
 
   private handleUserJoinedEvent: (event: UserJoinedEvent) => Promise<void> = (

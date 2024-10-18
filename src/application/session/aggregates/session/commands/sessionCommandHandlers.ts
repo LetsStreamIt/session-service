@@ -1,8 +1,8 @@
 import {
   getUserFromToken,
   isTokenValid,
-  isYoutubeVideoIdValid,
-  sessionNameFromTokenAndVideoId
+  sessionNameFromTokenAndVideoId,
+  youtubeVideoIdFromUrl
 } from './utils'
 import { TextMessage } from '../../../message'
 import { User } from '../../../user'
@@ -53,11 +53,11 @@ export class SessionCommandHandlers {
 
   async handleCreateSessionCommand(command: CreateSessionCommand): Promise<CreateSessionResponse> {
     return new Promise((resolve) => {
-      isYoutubeVideoIdValid(command.videoId).then((isValid: boolean) => {
-        if (isValid) {
-          const sessionName: string = sessionNameFromTokenAndVideoId(command.token, command.videoId)
+      youtubeVideoIdFromUrl(command.videoUrl).then((videoId: string | undefined) => {
+        if (videoId) {
+          const sessionName: string = sessionNameFromTokenAndVideoId(command.token, videoId)
           const sessionId: SessionId = new SessionId(sessionName)
-          const session: Session = new SessionImpl(sessionId, command.videoId)
+          const session: Session = new SessionImpl(sessionId, videoId)
           this.sessions.add(session)
           session.registerEventHandlers()
           this.registerEventHandlers(session.eventBus(), sessionId)
@@ -96,7 +96,7 @@ export class SessionCommandHandlers {
 
         // Resolve the Promise if the session is already existing, reject otherwise
         if (session) {
-          const videoId = session.value?.getY.getY.getVideoRef
+          const videoId = session.value?.getY.getY.getVideoId
           if (videoId) {
             session.eventBus().publish(new UserJoinedEvent(user, command.notifications))
             resolve(

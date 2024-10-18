@@ -4,12 +4,12 @@ import { SessionNotifications } from '../../../../../presentation/notifications/
 export class CreateSessionCommand implements SessionCommand {
   type: CommandType
   token: string
-  videoId: string
+  videoUrl: string
 
-  constructor(token: string, videoId: string) {
+  constructor(token: string, videoUrl: string) {
     this.type = CommandType.CREATE_ROOM
     this.token = token
-    this.videoId = videoId
+    this.videoUrl = videoUrl
   }
 }
 

@@ -14,7 +14,7 @@ export function isTokenValid(token: string): boolean {
   return true
 }
 
-export function isYoutubeVideoIdValid(videoId: string): Promise<boolean> {
+export function isYoutubeIdValid(videoId: string): Promise<boolean> {
   return new Promise((resolve) => {
     axios
       .request({
@@ -27,6 +27,18 @@ export function isYoutubeVideoIdValid(videoId: string): Promise<boolean> {
       })
       .then((response: AxiosResponse) => resolve(response.status === 200))
       .catch(() => resolve(false))
+  })
+}
+
+export function youtubeVideoIdFromUrl(url: string): Promise<string | undefined> {
+  return new Promise((resolve) => {
+    const match = url.match(/(?:youtube\.com.*(?:\?|&)v=|youtu\.be\/)([^&]+)/)
+    if (match !== null && match[1]) {
+      const videoId: string = match[1]
+      isYoutubeIdValid(videoId).then((isValid: boolean) => resolve(isValid ? videoId : undefined))
+    } else {
+      resolve(undefined)
+    }
   })
 }
 
