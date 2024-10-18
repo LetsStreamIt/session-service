@@ -53,21 +53,23 @@ export class SessionCommandHandlers {
 
   async handleCreateSessionCommand(command: CreateSessionCommand): Promise<CreateSessionResponse> {
     return new Promise((resolve) => {
-      if (isYoutubeVideoIdValid(command.videoId)) {
-        const sessionName: string = sessionNameFromTokenAndVideoId(command.token, command.videoId)
-        const sessionId: SessionId = new SessionId(sessionName)
-        const session: Session = new SessionImpl(sessionId, command.videoId)
-        this.sessions.add(session)
-        session.registerEventHandlers()
-        this.registerEventHandlers(session.eventBus(), sessionId)
+      isYoutubeVideoIdValid(command.videoId).then((isValid: boolean) => {
+        if (isValid) {
+          const sessionName: string = sessionNameFromTokenAndVideoId(command.token, command.videoId)
+          const sessionId: SessionId = new SessionId(sessionName)
+          const session: Session = new SessionImpl(sessionId, command.videoId)
+          this.sessions.add(session)
+          session.registerEventHandlers()
+          this.registerEventHandlers(session.eventBus(), sessionId)
 
-        const timeout = 5_000
-        this.deleteSessionAtTimeout(sessionId, timeout)
+          const timeout = 5_000
+          this.deleteSessionAtTimeout(sessionId, timeout)
 
-        resolve(new CreateSessionResponse(ResponseStatus.SUCCESS, sessionName))
-      } else {
-        resolve(new CreateSessionResponse(ResponseStatus.FAILURE, ''))
-      }
+          resolve(new CreateSessionResponse(ResponseStatus.SUCCESS, sessionName))
+        } else {
+          resolve(new CreateSessionResponse(ResponseStatus.FAILURE, ''))
+        }
+      })
     })
   }
 
