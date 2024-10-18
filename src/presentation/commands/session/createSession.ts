@@ -4,7 +4,7 @@ import { SessionCommandHandlers } from '../../../application/session/aggregates/
 import { CreateSessionResponse } from '../ack/ack'
 
 /**
- * Create Room Command
+ * Create Session Command
  * @param io
  * @param socket
  * @param token
@@ -18,10 +18,10 @@ export function recvCreateSessionCommand(
   commandHandlers: SessionCommandHandlers
 ): (message: any, ack: any) => void {
   return (message, ack) => {
-    const { room } = message
+    const { videoUrl } = message
 
     commandHandlers
-      .handleCreateSessionCommand(new CreateSessionCommand(token, room))
+      .handleCreateSessionCommand(new CreateSessionCommand(token, videoUrl))
       .then((createSessionResponse: CreateSessionResponse) => ack(createSessionResponse))
   }
 }

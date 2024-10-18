@@ -81,7 +81,7 @@ export class VideoImpl implements Video {
     event: VideoPlayedEvent
   ) => {
     return new Promise((resolve) => {
-      event.notifications.getVideoReactions.syncronizeRoom({
+      event.notifications.getVideoReactions.syncronizeSession({
         state: PlayState.PLAYING,
         timestamp: event.timestamp
       })
@@ -93,7 +93,7 @@ export class VideoImpl implements Video {
     event: VideoStoppedEvent
   ) => {
     return new Promise((resolve) => {
-      event.notifications.getVideoReactions.syncronizeRoom({
+      event.notifications.getVideoReactions.syncronizeSession({
         state: PlayState.PAUSED,
         timestamp: event.timestamp
       })

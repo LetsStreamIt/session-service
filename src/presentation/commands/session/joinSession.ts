@@ -10,7 +10,7 @@ import { SessionCommandHandlers } from '../../../application/session/aggregates/
 import { JoinSessionResponse, JoinSessionResponseType } from '../ack/ack'
 
 /**
- * Join Room Command.
+ * Join Session Command.
  * @param io
  * @param socket
  * @param token
@@ -24,16 +24,16 @@ export function recvJoinSessionCommand(
   commandHandlers: SessionCommandHandlers
 ): (message: any, ack: any) => void {
   return (message, ack) => {
-    const { room } = message
+    const { sessionName } = message
 
-    const notifications: SessionNotifications = new SessionNotifications(io, socket, room)
+    const notifications: SessionNotifications = new SessionNotifications(io, socket, sessionName)
     commandHandlers
-      .handleJoinUserCommand(new JoinSessionCommand(token, room, notifications))
+      .handleJoinUserCommand(new JoinSessionCommand(token, sessionName, notifications))
       .then((joinSessionResponse: JoinSessionResponse) => {
         if (joinSessionResponse.content.responseType == JoinSessionResponseType.SUCCESS) {
-          enableRecvLeaveSessionCommand(socket, token, room, commandHandlers, notifications)
-          enableRecvChatCommands(socket, token, room, commandHandlers, notifications)
-          enableRecvVideoCommands(socket, token, room, commandHandlers, notifications)
+          enableRecvLeaveSessionCommand(socket, token, sessionName, commandHandlers, notifications)
+          enableRecvChatCommands(socket, token, sessionName, commandHandlers, notifications)
+          enableRecvVideoCommands(socket, token, sessionName, commandHandlers, notifications)
         }
         ack(joinSessionResponse)
       })
@@ -43,46 +43,46 @@ export function recvJoinSessionCommand(
 function enableRecvLeaveSessionCommand(
   socket: Socket,
   token: string,
-  room: string,
+  sessionName: string,
   commandHandlers: SessionCommandHandlers,
   notifications: SessionNotifications
 ) {
   commandListener(
     socket,
-    CommandType.LEAVE_ROOM,
-    recvLeaveSessionCommand(room, token, commandHandlers, notifications)
+    CommandType.LEAVE_SESSION,
+    recvLeaveSessionCommand(sessionName, token, commandHandlers, notifications)
   )
 }
 
 function enableRecvChatCommands(
   socket: Socket,
   token: string,
-  room: string,
+  sessionName: string,
   commandHandlers: SessionCommandHandlers,
   notifications: SessionNotifications
 ) {
   commandListener(
     socket,
     CommandType.SEND_MSG,
-    recvSendMessageCommand(token, room, commandHandlers, notifications)
+    recvSendMessageCommand(token, sessionName, commandHandlers, notifications)
   )
 }
 
 function enableRecvVideoCommands(
   socket: Socket,
   token: string,
-  room: string,
+  sessionName: string,
   commandHandlers: SessionCommandHandlers,
   notifications: SessionNotifications
 ) {
   commandListener(
     socket,
     CommandType.PLAY_VIDEO,
-    recvPlayVideoCommand(token, room, commandHandlers, notifications)
+    recvPlayVideoCommand(token, sessionName, commandHandlers, notifications)
   )
   commandListener(
     socket,
     CommandType.STOP_VIDEO,
-    recvStopVideoCommand(token, room, commandHandlers, notifications)
+    recvStopVideoCommand(token, sessionName, commandHandlers, notifications)
   )
 }

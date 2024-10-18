@@ -27,8 +27,8 @@ export class ChatImpl implements Chat {
     event: UserJoinedEvent
   ) => {
     return new Promise((resolve) => {
-      event.notifications.chatReactions.sendNotificationToRoom(
-        new NotificationMessage(event.user, Notification.JOINROOM)
+      event.notifications.chatReactions.sendNotificationToSession(
+        new NotificationMessage(event.user, Notification.JOIN_SESSION)
       )
       event.notifications.chatReactions.emitTextMessagesToClient(...this.messages)
       resolve()
@@ -39,8 +39,8 @@ export class ChatImpl implements Chat {
     event: UserJoinedEvent
   ) => {
     return new Promise((resolve) => {
-      event.notifications.chatReactions.sendNotificationToRoom(
-        new NotificationMessage(event.user, Notification.LEAVEROOM)
+      event.notifications.chatReactions.sendNotificationToSession(
+        new NotificationMessage(event.user, Notification.LEAVE_SESSION)
       )
       resolve()
     })
@@ -51,7 +51,7 @@ export class ChatImpl implements Chat {
   ) => {
     return new Promise((resolve) => {
       this.messages.push(event.textMessage)
-      event.notifications.chatReactions.sendTextMessagesToRoom(event.textMessage)
+      event.notifications.chatReactions.sendTextMessagesToSession(event.textMessage)
       resolve()
     })
   }

@@ -10,14 +10,14 @@ import { PlayVideoResponse, ResponseStatus, StopVideoResponse } from '../../ack/
  * Play video command
  * @param io
  * @param token
- * @param room
+ * @param sessionName
  * @param commandHandlers
  * @param notifications
  * @returns
  */
 export function recvPlayVideoCommand(
   token: string,
-  room: string,
+  sessionName: string,
   commandHandlers: SessionCommandHandlers,
   notifications: SessionNotifications
 ): (message: any, ack: any) => void {
@@ -25,7 +25,7 @@ export function recvPlayVideoCommand(
     const { timestamp } = data
 
     commandHandlers
-      .handlePlayVideoCommand(new PlayVideoCommand(token, room, timestamp, notifications))
+      .handlePlayVideoCommand(new PlayVideoCommand(token, sessionName, timestamp, notifications))
       .then(() => ack(new PlayVideoResponse(ResponseStatus.SUCCESS)))
       .catch(() => ack(new PlayVideoResponse(ResponseStatus.FAILURE)))
   }
@@ -35,14 +35,14 @@ export function recvPlayVideoCommand(
  * Stop video command
  * @param io
  * @param token
- * @param room
+ * @param sessionName
  * @param commandHandlers
  * @param notifications
  * @returns
  */
 export function recvStopVideoCommand(
   token: string,
-  room: string,
+  sessionName: string,
   commandHandlers: SessionCommandHandlers,
   notifications: SessionNotifications
 ): (message: any, ack: any) => void {
@@ -50,7 +50,7 @@ export function recvStopVideoCommand(
     const { timestamp } = data
 
     commandHandlers
-      .handleStopVideoCommand(new StopVideoCommand(token, room, timestamp, notifications))
+      .handleStopVideoCommand(new StopVideoCommand(token, sessionName, timestamp, notifications))
       .then((stopVideoResponse: StopVideoResponse) => ack(stopVideoResponse))
   }
 }

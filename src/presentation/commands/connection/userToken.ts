@@ -10,7 +10,7 @@ import { UserTokenCommand } from '../../../application/session/aggregates/sessio
 /**
  * User token command.
  * After the token is received and validated, it enables the client to send
- * a joinRoom message.
+ * a joinSession message.
  * @param io
  * @param socket
  * @param chatController
@@ -30,12 +30,12 @@ export function recvUserTokenCommand(
         if (userTokenResponse.content.status == ResponseStatus.SUCCESS) {
           commandListener(
             socket,
-            CommandType.CREATE_ROOM,
+            CommandType.CREATE_SESSION,
             recvCreateSessionCommand(io, socket, token, commandHandlers)
           )
           commandListener(
             socket,
-            CommandType.JOIN_ROOM,
+            CommandType.JOIN_SESSION,
             recvJoinSessionCommand(io, socket, token, commandHandlers)
           )
         }

@@ -5,24 +5,24 @@ import { VideoNotifications } from './videoNotifications'
 export class SessionNotifications {
   io: Server
   socket: Socket
-  room: string
+  sessionName: string
   chatReactions: ChatNotifications
   videoReactions: VideoNotifications
 
-  constructor(io: Server, socket: Socket, room: string) {
+  constructor(io: Server, socket: Socket, sessionName: string) {
     this.io = io
     this.socket = socket
-    this.room = room
-    this.chatReactions = new ChatNotifications(io, socket, room)
-    this.videoReactions = new VideoNotifications(io, socket, room)
+    this.sessionName = sessionName
+    this.chatReactions = new ChatNotifications(io, socket, sessionName)
+    this.videoReactions = new VideoNotifications(io, socket, sessionName)
   }
 
-  joinUserToRoom() {
-    this.socket.join(this.room)
+  joinUserToSession() {
+    this.socket.join(this.sessionName)
   }
 
-  leaveUserFromRoomAndDisconnect() {
-    this.socket.leave(this.room)
+  leaveUserFromSessionAndDisconnect() {
+    this.socket.leave(this.sessionName)
     this.socket.disconnect()
   }
 

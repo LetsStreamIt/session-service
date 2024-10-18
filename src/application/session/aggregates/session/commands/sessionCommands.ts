@@ -7,7 +7,7 @@ export class CreateSessionCommand implements SessionCommand {
   videoUrl: string
 
   constructor(token: string, videoUrl: string) {
-    this.type = CommandType.CREATE_ROOM
+    this.type = CommandType.CREATE_SESSION
     this.token = token
     this.videoUrl = videoUrl
   }
@@ -30,7 +30,7 @@ export class JoinSessionCommand implements SessionCommand {
   notifications: SessionNotifications
 
   constructor(token: string, sessionName: string, notifications: SessionNotifications) {
-    this.type = CommandType.JOIN_ROOM
+    this.type = CommandType.JOIN_SESSION
     this.token = token
     this.sessionName = sessionName
     this.notifications = notifications
@@ -44,7 +44,7 @@ export class LeaveSessionCommand implements SessionCommand {
   notifications: SessionNotifications
 
   constructor(token: string, sessionName: string, notifications: SessionNotifications) {
-    this.type = CommandType.LEAVE_ROOM
+    this.type = CommandType.LEAVE_SESSION
     this.token = token
     this.sessionName = sessionName
     this.notifications = notifications

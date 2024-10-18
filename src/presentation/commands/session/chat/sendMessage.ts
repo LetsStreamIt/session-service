@@ -5,23 +5,23 @@ import { SendMessageResponse } from '../../ack/ack'
 
 /**
  * Send message command.
- * Sends a message to the room specified as parameter.
+ * Sends a message to the sessionName specified as parameter.
  * @param io
  * @param token
- * @param room
+ * @param sessionName
  * @param commandHandlers
  * @returns
  */
 export function recvSendMessageCommand(
   token: string,
-  room: string,
+  sessionName: string,
   commandHandlers: SessionCommandHandlers,
   notifications: SessionNotifications
 ): (message: any, ack: any) => void {
   return (data, ack) => {
     const { message } = data
     commandHandlers
-      .handleSendMessageCommand(new SendMessageCommand(token, room, message, notifications))
+      .handleSendMessageCommand(new SendMessageCommand(token, sessionName, message, notifications))
       .then((sendMessageResponse: SendMessageResponse) => ack(sendMessageResponse))
   }
 }

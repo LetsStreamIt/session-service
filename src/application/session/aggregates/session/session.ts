@@ -60,7 +60,7 @@ export class SessionImpl implements Session {
   ) => {
     return new Promise((resolve) => {
       this.value?.getX.add(event.user)
-      event.notifications.joinUserToRoom()
+      event.notifications.joinUserToSession()
       resolve()
     })
   }
@@ -69,7 +69,7 @@ export class SessionImpl implements Session {
     event: UserLeftSessionEvent
   ) => {
     return new Promise((resolve) => {
-      event.notifications.leaveUserFromRoomAndDisconnect()
+      event.notifications.leaveUserFromSessionAndDisconnect()
       this.value?.getX.remove(event.user.id)
       resolve()
     })

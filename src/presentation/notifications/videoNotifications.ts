@@ -15,12 +15,12 @@ export interface VideoState {
 export class VideoNotifications {
   io: Server
   socket: Socket
-  room: string
+  sessionName: string
 
-  constructor(io: Server, socket: Socket, room: string) {
+  constructor(io: Server, socket: Socket, sessionName: string) {
     this.io = io
     this.socket = socket
-    this.room = room
+    this.sessionName = sessionName
   }
 
   retreiveVideoState(): Promise<VideoState> {
@@ -39,9 +39,9 @@ export class VideoNotifications {
     })
   }
 
-  syncronizeRoom(videoState: VideoState): Promise<void> {
+  syncronizeSession(videoState: VideoState): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.io.to(this.room).emit('synchronize', new SerializerImpl().serialize(videoState))
+      this.io.to(this.sessionName).emit('synchronize', new SerializerImpl().serialize(videoState))
       resolve()
     })
   }

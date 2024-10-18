@@ -1,8 +1,8 @@
 import { User } from './user'
 
 export enum Notification {
-  JOINROOM,
-  LEAVEROOM
+  JOIN_SESSION,
+  LEAVE_SESSION
 }
 
 export type MessageContent = Notification | string
