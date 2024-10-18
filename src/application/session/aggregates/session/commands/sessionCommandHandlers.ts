@@ -31,7 +31,7 @@ import {
   TokenStatus,
   UserTokenResponse,
   UserTokenResponseContent
-} from '../../../../../presentation/commands/ack/ack'
+} from '../../../../../presentation/commands/response/response'
 import { EventBus } from '../../../../event/eventBus'
 import { EventType } from '../../../../event/event'
 

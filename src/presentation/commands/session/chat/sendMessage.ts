@@ -1,7 +1,7 @@
 import { SessionNotifications } from '../../../notifications/sessionNotifications'
 import { SendMessageCommand } from '../../../../application/session/aggregates/chat/commands/chatCommands'
 import { SessionCommandHandlers } from '../../../../application/session/aggregates/session/commands/sessionCommandHandlers'
-import { SendMessageResponse } from '../../ack/ack'
+import { SendMessageResponse } from '../../response/response'
 
 /**
  * Send message command.

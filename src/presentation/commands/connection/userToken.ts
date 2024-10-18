@@ -4,7 +4,7 @@ import { CommandType } from '../../../application/command/command'
 import { recvCreateSessionCommand } from '../session/createSession'
 import { recvJoinSessionCommand } from '../session/joinSession'
 import { SessionCommandHandlers } from '../../../application/session/aggregates/session/commands/sessionCommandHandlers'
-import { ResponseStatus, UserTokenResponse } from '../ack/ack'
+import { ResponseStatus, UserTokenResponse } from '../response/response'
 import { UserTokenCommand } from '../../../application/session/aggregates/session/commands/sessionCommands'
 
 /**

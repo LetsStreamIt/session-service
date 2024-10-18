@@ -7,7 +7,7 @@ import { recvSendMessageCommand } from './chat/sendMessage'
 import { recvLeaveSessionCommand } from './leaveSession'
 import { JoinSessionCommand } from '../../../application/session/aggregates/session/commands/sessionCommands'
 import { SessionCommandHandlers } from '../../../application/session/aggregates/session/commands/sessionCommandHandlers'
-import { JoinSessionResponse, JoinSessionResponseType } from '../ack/ack'
+import { JoinSessionResponse, JoinSessionResponseType } from '../response/response'
 
 /**
  * Join Session Command.

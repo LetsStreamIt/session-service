@@ -4,7 +4,7 @@ import {
   StopVideoCommand
 } from '../../../../application/session/aggregates/video/commands/videoCommands'
 import { SessionCommandHandlers } from '../../../../application/session/aggregates/session/commands/sessionCommandHandlers'
-import { PlayVideoResponse, ResponseStatus, StopVideoResponse } from '../../ack/ack'
+import { PlayVideoResponse, ResponseStatus, StopVideoResponse } from '../../response/response'
 
 /**
  * Play video command
