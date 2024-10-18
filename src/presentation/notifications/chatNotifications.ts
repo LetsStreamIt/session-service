@@ -1,6 +1,7 @@
 import { Server, Socket } from 'socket.io'
 import { NotificationMessage, TextMessage } from '../../application/session/message'
 import { SerializerImpl } from '../presentation/serialization/messageSerializer'
+import { ChatNotificationType } from './notification'
 
 export class ChatNotifications {
   io: Server
@@ -16,14 +17,22 @@ export class ChatNotifications {
   sendNotificationToSession(notificationMessage: NotificationMessage) {
     this.io
       .to(this.sessionName)
-      .emit('notificationMessage', new SerializerImpl().serialize(notificationMessage))
+      .emit(
+        ChatNotificationType.NOTIFICATION_MESSAGE,
+        new SerializerImpl().serialize(notificationMessage)
+      )
   }
 
   emitTextMessagesToClient(...textMessages: TextMessage[]) {
-    this.socket.emit('textMessage', new SerializerImpl().serialize(textMessages))
+    this.socket.emit(
+      ChatNotificationType.TEXT_MESSAGE,
+      new SerializerImpl().serialize(textMessages)
+    )
   }
 
   sendTextMessagesToSession(...textMessages: TextMessage[]) {
-    this.io.to(this.sessionName).emit('textMessage', new SerializerImpl().serialize(textMessages))
+    this.io
+      .to(this.sessionName)
+      .emit(ChatNotificationType.TEXT_MESSAGE, new SerializerImpl().serialize(textMessages))
   }
 }
