@@ -1,6 +1,6 @@
-import { TextMessage, NotificationMessage, Notification } from '../../message'
-import { EventBus } from '../../../event/eventBus'
-import { EventType } from '../../../event/event'
+import { TextMessage, NotificationMessage, JoinNotification } from '../../message'
+import { EventBus } from '../../../../domain/event/eventBus'
+import { EventType } from '../../../../domain/event/event'
 import { UserJoinedEvent, UserLeftSessionEvent } from '../session/events/sessionEvents'
 import { MessageSentEvent } from './events/chatEvents'
 
@@ -27,10 +27,10 @@ export class ChatImpl implements Chat {
     event: UserJoinedEvent
   ) => {
     return new Promise((resolve) => {
-      event.notifications.chatReactions.sendNotificationToSession(
-        new NotificationMessage(event.user, Notification.JOIN_SESSION)
+      event.sessionReactions.getChatReactions.sendNotificationToSession(
+        new NotificationMessage(event.user, JoinNotification.JOIN_SESSION)
       )
-      event.notifications.chatReactions.emitTextMessagesToClient(...this.messages)
+      event.sessionReactions.getChatReactions.emitTextMessagesToClient(...this.messages)
       resolve()
     })
   }
@@ -39,8 +39,8 @@ export class ChatImpl implements Chat {
     event: UserJoinedEvent
   ) => {
     return new Promise((resolve) => {
-      event.notifications.chatReactions.sendNotificationToSession(
-        new NotificationMessage(event.user, Notification.LEAVE_SESSION)
+      event.sessionReactions.getChatReactions.sendNotificationToSession(
+        new NotificationMessage(event.user, JoinNotification.LEAVE_SESSION)
       )
       resolve()
     })
@@ -51,7 +51,7 @@ export class ChatImpl implements Chat {
   ) => {
     return new Promise((resolve) => {
       this.messages.push(event.textMessage)
-      event.notifications.chatReactions.sendTextMessagesToSession(event.textMessage)
+      event.sessionReactions.getChatReactions.sendTextMessagesToSession(event.textMessage)
       resolve()
     })
   }

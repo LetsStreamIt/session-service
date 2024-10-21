@@ -1,8 +1,8 @@
-import { SessionNotifications } from '../../presentation/notifications/sessionNotifications'
+import { SessionReactions } from '../reactions/sessionReactions'
 
 export interface SessionEvent {
   type: EventType
-  notifications: SessionNotifications
+  sessionReactions: SessionReactions
 }
 
 export enum EventType {

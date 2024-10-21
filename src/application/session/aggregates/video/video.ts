@@ -1,6 +1,6 @@
-import { VideoNotifications } from '../../../../presentation/notifications/videoNotifications'
-import { EventType } from '../../../event/event'
-import { EventBus } from '../../../event/eventBus'
+import { EventType } from '../../../../domain/event/event'
+import { EventBus } from '../../../../domain/event/eventBus'
+import { VideoReactions } from '../../../../domain/reactions/videoReactions'
 import { User } from '../../user'
 import { isDeepEqual } from '../../utils'
 import { UserJoinedEvent, UserLeftSessionEvent } from '../session/events/sessionEvents'
@@ -23,7 +23,7 @@ export interface Video {
 }
 
 export class VideoImpl implements Video {
-  userReactions: Map<User, VideoNotifications>
+  userReactions: Map<User, VideoReactions>
   videoId: string
   eventBus: EventBus
 
@@ -55,9 +55,9 @@ export class VideoImpl implements Video {
           const timestamps: number[] = videoStates.map((vs) => vs.timestamp)
           const minTimestamp: number = Math.min(...timestamps)
           const videoStateSync: VideoState = videoStates[timestamps.indexOf(minTimestamp)]
-          event.notifications.getVideoReactions.synchronizeUser(videoStateSync)
+          event.sessionReactions.getVideoReactions.synchronizeUser(videoStateSync)
         }
-        this.userReactions.set(event.user, event.notifications.getVideoReactions)
+        this.userReactions.set(event.user, event.sessionReactions.getVideoReactions)
         resolve()
       })
     })
@@ -67,7 +67,7 @@ export class VideoImpl implements Video {
     event: UserLeftSessionEvent
   ) => {
     return new Promise((resolve) => {
-      for (let key of this.userReactions.keys()) {
+      for (const key of this.userReactions.keys()) {
         if (isDeepEqual(event.user.id, key.id)) {
           this.userReactions.delete(key)
           break
@@ -81,7 +81,7 @@ export class VideoImpl implements Video {
     event: VideoPlayedEvent
   ) => {
     return new Promise((resolve) => {
-      event.notifications.getVideoReactions.syncronizeSession({
+      event.sessionReactions.getVideoReactions.syncronizeSession({
         state: PlayState.PLAYING,
         timestamp: event.timestamp
       })
@@ -93,7 +93,7 @@ export class VideoImpl implements Video {
     event: VideoStoppedEvent
   ) => {
     return new Promise((resolve) => {
-      event.notifications.getVideoReactions.syncronizeSession({
+      event.sessionReactions.getVideoReactions.syncronizeSession({
         state: PlayState.PAUSED,
         timestamp: event.timestamp
       })

@@ -1,10 +1,14 @@
-import { SessionNotifications } from '../../../notifications/sessionNotifications'
 import {
   PlayVideoCommand,
   StopVideoCommand
-} from '../../../../application/session/aggregates/video/commands/videoCommands'
-import { SessionCommandHandlers } from '../../../../application/session/aggregates/session/commands/sessionCommandHandlers'
-import { PlayVideoResponse, ResponseStatus, StopVideoResponse } from '../../response/response'
+} from '../../../../../application/session/aggregates/video/commands/videoCommands'
+import { SessionCommandHandlers } from '../../../../../application/session/aggregates/session/commands/sessionCommandHandlers'
+import {
+  PlayVideoResponse,
+  ResponseStatus,
+  StopVideoResponse
+} from '../../../../../domain/command/response'
+import { SessionReactions } from '../../../../../domain/reactions/sessionReactions'
 
 /**
  * Play video command
@@ -12,20 +16,20 @@ import { PlayVideoResponse, ResponseStatus, StopVideoResponse } from '../../resp
  * @param token
  * @param sessionName
  * @param commandHandlers
- * @param notifications
+ * @param sessionReactions
  * @returns
  */
 export function recvPlayVideoCommand(
   token: string,
   sessionName: string,
   commandHandlers: SessionCommandHandlers,
-  notifications: SessionNotifications
+  sessionReactions: SessionReactions
 ): (message: any, ack: any) => void {
   return (data, ack) => {
     const { timestamp } = data
 
     commandHandlers
-      .handlePlayVideoCommand(new PlayVideoCommand(token, sessionName, timestamp, notifications))
+      .handlePlayVideoCommand(new PlayVideoCommand(token, sessionName, timestamp, sessionReactions))
       .then(() => ack(new PlayVideoResponse(ResponseStatus.SUCCESS)))
       .catch(() => ack(new PlayVideoResponse(ResponseStatus.FAILURE)))
   }
@@ -37,20 +41,20 @@ export function recvPlayVideoCommand(
  * @param token
  * @param sessionName
  * @param commandHandlers
- * @param notifications
+ * @param sessionReactions
  * @returns
  */
 export function recvStopVideoCommand(
   token: string,
   sessionName: string,
   commandHandlers: SessionCommandHandlers,
-  notifications: SessionNotifications
+  sessionReactions: SessionReactions
 ): (message: any, ack: any) => void {
   return (data, ack) => {
     const { timestamp } = data
 
     commandHandlers
-      .handleStopVideoCommand(new StopVideoCommand(token, sessionName, timestamp, notifications))
+      .handleStopVideoCommand(new StopVideoCommand(token, sessionName, timestamp, sessionReactions))
       .then((stopVideoResponse: StopVideoResponse) => ack(stopVideoResponse))
   }
 }

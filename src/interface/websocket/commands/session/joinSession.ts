@@ -1,13 +1,14 @@
 import { Server, Socket } from 'socket.io'
 import { commandListener } from '../../utils'
-import { CommandType } from '../../../application/command/command'
-import { SessionNotifications } from '../../notifications/sessionNotifications'
+import { CommandType } from '../../../../domain/command/command'
 import { recvPlayVideoCommand, recvStopVideoCommand } from './video/videoCommands'
 import { recvSendMessageCommand } from './chat/sendMessage'
 import { recvLeaveSessionCommand } from './leaveSession'
-import { JoinSessionCommand } from '../../../application/session/aggregates/session/commands/sessionCommands'
-import { SessionCommandHandlers } from '../../../application/session/aggregates/session/commands/sessionCommandHandlers'
-import { JoinSessionResponse, JoinSessionResponseType } from '../response/response'
+import { JoinSessionCommand } from '../../../../application/session/aggregates/session/commands/sessionCommands'
+import { SessionCommandHandlers } from '../../../../application/session/aggregates/session/commands/sessionCommandHandlers'
+import { JoinSessionResponse, JoinSessionResponseType } from '../../../../domain/command/response'
+import { SessionReactions } from '../../../../domain/reactions/sessionReactions'
+import { WSSessionReactions } from '../../reactions/sessionReactions'
 
 /**
  * Join Session Command.
@@ -26,14 +27,20 @@ export function recvJoinSessionCommand(
   return (message, ack) => {
     const { sessionName } = message
 
-    const notifications: SessionNotifications = new SessionNotifications(io, socket, sessionName)
+    const sessionReactions: SessionReactions = new WSSessionReactions(io, socket, sessionName)
     commandHandlers
-      .handleJoinUserCommand(new JoinSessionCommand(token, sessionName, notifications))
+      .handleJoinUserCommand(new JoinSessionCommand(token, sessionName, sessionReactions))
       .then((joinSessionResponse: JoinSessionResponse) => {
         if (joinSessionResponse.content.responseType == JoinSessionResponseType.SUCCESS) {
-          enableRecvLeaveSessionCommand(socket, token, sessionName, commandHandlers, notifications)
-          enableRecvChatCommands(socket, token, sessionName, commandHandlers, notifications)
-          enableRecvVideoCommands(socket, token, sessionName, commandHandlers, notifications)
+          enableRecvLeaveSessionCommand(
+            socket,
+            token,
+            sessionName,
+            commandHandlers,
+            sessionReactions
+          )
+          enableRecvChatCommands(socket, token, sessionName, commandHandlers, sessionReactions)
+          enableRecvVideoCommands(socket, token, sessionName, commandHandlers, sessionReactions)
         }
         ack(joinSessionResponse)
       })
@@ -45,12 +52,12 @@ function enableRecvLeaveSessionCommand(
   token: string,
   sessionName: string,
   commandHandlers: SessionCommandHandlers,
-  notifications: SessionNotifications
+  sessionReactions: SessionReactions
 ) {
   commandListener(
     socket,
     CommandType.LEAVE_SESSION,
-    recvLeaveSessionCommand(sessionName, token, commandHandlers, notifications)
+    recvLeaveSessionCommand(sessionName, token, commandHandlers, sessionReactions)
   )
 }
 
@@ -59,12 +66,12 @@ function enableRecvChatCommands(
   token: string,
   sessionName: string,
   commandHandlers: SessionCommandHandlers,
-  notifications: SessionNotifications
+  sessionReactions: SessionReactions
 ) {
   commandListener(
     socket,
     CommandType.SEND_MSG,
-    recvSendMessageCommand(token, sessionName, commandHandlers, notifications)
+    recvSendMessageCommand(token, sessionName, commandHandlers, sessionReactions)
   )
 }
 
@@ -73,16 +80,16 @@ function enableRecvVideoCommands(
   token: string,
   sessionName: string,
   commandHandlers: SessionCommandHandlers,
-  notifications: SessionNotifications
+  sessionReactions: SessionReactions
 ) {
   commandListener(
     socket,
     CommandType.PLAY_VIDEO,
-    recvPlayVideoCommand(token, sessionName, commandHandlers, notifications)
+    recvPlayVideoCommand(token, sessionName, commandHandlers, sessionReactions)
   )
   commandListener(
     socket,
     CommandType.STOP_VIDEO,
-    recvStopVideoCommand(token, sessionName, commandHandlers, notifications)
+    recvStopVideoCommand(token, sessionName, commandHandlers, sessionReactions)
   )
 }

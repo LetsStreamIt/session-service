@@ -1,19 +1,10 @@
 import { Server, Socket } from 'socket.io'
-import { VideoStateDeserializer } from '../presentation/deserialization/videoStateDeserializer'
-import { SerializerImpl } from '../presentation/serialization/messageSerializer'
-import { VideoNotificationType } from './notification'
+import { VideoStateDeserializer } from '../../../presentation/deserialization/videoStateDeserializer'
+import { SerializerImpl } from '../../../presentation/serialization/messageSerializer'
+import { VideoReactionType, VideoState } from '../../../domain/reactions/reactions'
+import { VideoReactions } from '../../../domain/reactions/videoReactions'
 
-export enum PlayState {
-  PAUSED = 'Paused',
-  PLAYING = 'Playing'
-}
-
-export interface VideoState {
-  timestamp: number
-  state: PlayState
-}
-
-export class VideoNotifications {
+export class WSVideoReactions implements VideoReactions {
   io: Server
   socket: Socket
   sessionName: string
@@ -26,7 +17,7 @@ export class VideoNotifications {
 
   retreiveVideoState(): Promise<VideoState> {
     return new Promise((resolve) => {
-      this.socket.emit(VideoNotificationType.VIDEO_STATE, (response: any) => {
+      this.socket.emit(VideoReactionType.VIDEO_STATE, (response: any) => {
         const videoState = new VideoStateDeserializer().deserialize(JSON.parse(response))
         resolve(videoState)
       })
@@ -35,10 +26,7 @@ export class VideoNotifications {
 
   synchronizeUser(videoState: VideoState): Promise<void> {
     return new Promise((resolve) => {
-      this.socket.emit(
-        VideoNotificationType.SYNCHRONIZE,
-        new SerializerImpl().serialize(videoState)
-      )
+      this.socket.emit(VideoReactionType.SYNCHRONIZE, new SerializerImpl().serialize(videoState))
       resolve()
     })
   }
@@ -47,7 +35,7 @@ export class VideoNotifications {
     return new Promise((resolve) => {
       this.io
         .to(this.sessionName)
-        .emit(VideoNotificationType.SYNCHRONIZE, new SerializerImpl().serialize(videoState))
+        .emit(VideoReactionType.SYNCHRONIZE, new SerializerImpl().serialize(videoState))
       resolve()
     })
   }

@@ -31,9 +31,9 @@ import {
   TokenStatus,
   UserTokenResponse,
   UserTokenResponseContent
-} from '../../../../../presentation/commands/response/response'
-import { EventBus } from '../../../../event/eventBus'
-import { EventType } from '../../../../event/event'
+} from '../../../../../domain/command/response'
+import { EventBus } from '../../../../../domain/event/eventBus'
+import { EventType } from '../../../../../domain/event/event'
 
 export class SessionCommandHandlers {
   sessions: SessionRepository
@@ -98,7 +98,7 @@ export class SessionCommandHandlers {
         if (session) {
           const videoId = session.value?.getY.getY.getVideoId
           if (videoId) {
-            session.eventBus().publish(new UserJoinedEvent(user, command.notifications))
+            session.eventBus().publish(new UserJoinedEvent(user, command.sessionReactions))
             resolve(
               new JoinSessionResponse(
                 new JoinSessionResponseContent(JoinSessionResponseType.SUCCESS, videoId)
@@ -129,7 +129,7 @@ export class SessionCommandHandlers {
       const session: Session | undefined = this.sessions.find(sessionId)
 
       if (session) {
-        session.eventBus().publish(new UserLeftSessionEvent(user, command.notifications))
+        session.eventBus().publish(new UserLeftSessionEvent(user, command.sessionReactions))
         resolve(new LeaveSessionResponse(ResponseStatus.SUCCESS))
       } else {
         resolve(new LeaveSessionResponse(ResponseStatus.FAILURE))
@@ -144,7 +144,7 @@ export class SessionCommandHandlers {
         const session: Session | undefined = this.sessions.find(new SessionId(command.sessionName))
         const textMessage: TextMessage = new TextMessage(user, command.message)
         if (session) {
-          session.eventBus().publish(new MessageSentEvent(textMessage, command.notifications))
+          session.eventBus().publish(new MessageSentEvent(textMessage, command.sessionReactions))
         }
         resolve(new SendMessageResponse(ResponseStatus.SUCCESS))
       } else {
@@ -157,7 +157,9 @@ export class SessionCommandHandlers {
     return new Promise((resolve) => {
       const session: Session | undefined = this.sessions.find(new SessionId(command.sessionName))
       if (session) {
-        session.eventBus().publish(new VideoPlayedEvent(command.timestamp, command.notifications))
+        session
+          .eventBus()
+          .publish(new VideoPlayedEvent(command.timestamp, command.sessionReactions))
         resolve(new PlayVideoResponse(ResponseStatus.SUCCESS))
       } else {
         resolve(new PlayVideoResponse(ResponseStatus.FAILURE))
@@ -169,7 +171,9 @@ export class SessionCommandHandlers {
     return new Promise((resolve) => {
       const session: Session | undefined = this.sessions.find(new SessionId(command.sessionName))
       if (session) {
-        session.eventBus().publish(new VideoStoppedEvent(command.timestamp, command.notifications))
+        session
+          .eventBus()
+          .publish(new VideoStoppedEvent(command.timestamp, command.sessionReactions))
         resolve(new StopVideoResponse(ResponseStatus.SUCCESS))
       } else {
         resolve(new StopVideoResponse(ResponseStatus.FAILURE))

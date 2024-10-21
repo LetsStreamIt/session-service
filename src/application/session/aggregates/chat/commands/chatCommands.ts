@@ -1,23 +1,23 @@
-import { CommandType, SessionCommand } from '../../../../command/command'
-import { SessionNotifications } from '../../../../../presentation/notifications/sessionNotifications'
+import { CommandType, SessionCommand } from '../../../../../domain/command/command'
+import { SessionReactions } from '../../../../../domain/reactions/sessionReactions'
 
 export class SendMessageCommand implements SessionCommand {
   type: CommandType
   token: string
   sessionName: string
   message: string
-  notifications: SessionNotifications
+  sessionReactions: SessionReactions
 
   constructor(
     token: string,
     sessionName: string,
     message: string,
-    notifications: SessionNotifications
+    sessionReactions: SessionReactions
   ) {
     this.type = CommandType.SEND_MSG
     this.token = token
     this.sessionName = sessionName
     this.message = message
-    this.notifications = notifications
+    this.sessionReactions = sessionReactions
   }
 }

@@ -11,6 +11,7 @@ export function getUserFromToken(token: string): User {
 }
 
 export function isTokenValid(token: string): boolean {
+  console.log(token)
   return true
 }
 

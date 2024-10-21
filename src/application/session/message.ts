@@ -1,11 +1,11 @@
 import { User } from './user'
 
-export enum Notification {
+export enum JoinNotification {
   JOIN_SESSION,
   LEAVE_SESSION
 }
 
-export type MessageContent = Notification | string
+export type MessageContent = JoinNotification | string
 
 export interface Message<X extends MessageContent> {
   readonly content: X
@@ -16,17 +16,17 @@ export interface Message<X extends MessageContent> {
   get getSender(): User
 }
 
-export class NotificationMessage implements Message<Notification> {
-  content: Notification
+export class NotificationMessage implements Message<JoinNotification> {
+  content: JoinNotification
   sender: User
   type = 'notificationMessage'
 
-  constructor(sender: User, notification: Notification) {
+  constructor(sender: User, notification: JoinNotification) {
     this.content = notification
     this.sender = sender
   }
 
-  get getContent(): Notification {
+  get getContent(): JoinNotification {
     return this.content
   }
 
@@ -51,15 +51,5 @@ export class TextMessage implements Message<string> {
 
   get getSender(): User {
     return this.sender
-  }
-}
-
-export class ChatUpdate {
-  readonly notificationMessage: NotificationMessage
-  readonly messages: TextMessage[]
-
-  constructor(notificationMessage: NotificationMessage, messages: TextMessage[]) {
-    this.notificationMessage = notificationMessage
-    this.messages = messages
   }
 }

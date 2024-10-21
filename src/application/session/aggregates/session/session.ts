@@ -1,8 +1,8 @@
 import { Pair, Entity, Repository } from '../../entity'
-import { EventBus, EventBusImpl } from '../../../event/eventBus'
+import { EventBus, EventBusImpl } from '../../../../domain/event/eventBus'
 import { Chat, ChatImpl } from '../chat/chat'
 import { User, UserRepository } from '../../user'
-import { EventType } from '../../../event/event'
+import { EventType } from '../../../../domain/event/event'
 import { Video, VideoImpl } from '../video/video'
 import { UserJoinedEvent, UserLeftSessionEvent } from './events/sessionEvents'
 
@@ -60,7 +60,7 @@ export class SessionImpl implements Session {
   ) => {
     return new Promise((resolve) => {
       this.value?.getX.add(event.user)
-      event.notifications.joinUserToSession()
+      event.sessionReactions.joinUserToSession()
       resolve()
     })
   }
@@ -69,7 +69,7 @@ export class SessionImpl implements Session {
     event: UserLeftSessionEvent
   ) => {
     return new Promise((resolve) => {
-      event.notifications.leaveUserFromSessionAndDisconnect()
+      event.sessionReactions.leaveUserFromSessionAndDisconnect()
       this.value?.getX.remove(event.user.id)
       resolve()
     })

@@ -1,4 +1,4 @@
-import { PlayState, VideoState } from '../../notifications/videoNotifications'
+import { PlayState, VideoState } from '../../domain/reactions/reactions'
 import { AbstractDeserializer } from './deserializer'
 
 class PlayStateDeserializer extends AbstractDeserializer<PlayState> {

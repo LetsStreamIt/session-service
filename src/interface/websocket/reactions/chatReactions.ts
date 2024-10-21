@@ -1,9 +1,10 @@
 import { Server, Socket } from 'socket.io'
-import { NotificationMessage, TextMessage } from '../../application/session/message'
-import { SerializerImpl } from '../presentation/serialization/messageSerializer'
-import { ChatNotificationType } from './notification'
+import { NotificationMessage, TextMessage } from '../../../application/session/message'
+import { SerializerImpl } from '../../../presentation/serialization/messageSerializer'
+import { ChatReactionType } from '../../../domain/reactions/reactions'
+import { ChatReactions } from '../../../domain/reactions/chatReactions'
 
-export class ChatNotifications {
+export class WSChatReactions implements ChatReactions {
   io: Server
   socket: Socket
   sessionName: string
@@ -18,21 +19,18 @@ export class ChatNotifications {
     this.io
       .to(this.sessionName)
       .emit(
-        ChatNotificationType.NOTIFICATION_MESSAGE,
+        ChatReactionType.NOTIFICATION_MESSAGE,
         new SerializerImpl().serialize(notificationMessage)
       )
   }
 
   emitTextMessagesToClient(...textMessages: TextMessage[]) {
-    this.socket.emit(
-      ChatNotificationType.TEXT_MESSAGE,
-      new SerializerImpl().serialize(textMessages)
-    )
+    this.socket.emit(ChatReactionType.TEXT_MESSAGE, new SerializerImpl().serialize(textMessages))
   }
 
   sendTextMessagesToSession(...textMessages: TextMessage[]) {
     this.io
       .to(this.sessionName)
-      .emit(ChatNotificationType.TEXT_MESSAGE, new SerializerImpl().serialize(textMessages))
+      .emit(ChatReactionType.TEXT_MESSAGE, new SerializerImpl().serialize(textMessages))
   }
 }

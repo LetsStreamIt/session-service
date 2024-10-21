@@ -1,7 +1,7 @@
 import express from 'express'
 import http from 'http'
 import { Server } from 'socket.io'
-import { registerCommands } from './presentation/registerCommands'
+import { registerCommands } from './interface/websocket/registerCommands'
 
 process.env.DEBUG = 'socket.io:*'
 
@@ -21,7 +21,7 @@ const server = http.createServer(app)
 // })
 
 // server-side
-export const io: Server = require('socket.io')(server, {
+export const io: Server = new Server(server, {
   cors: {
     origin: ['http://localhost:5173', 'http://localhost:5174'],
     methods: ['GET', 'POST'],
@@ -33,6 +33,6 @@ export const io: Server = require('socket.io')(server, {
 // Define Namespaces
 registerCommands(io)
 
-server.listen(3000, () => {
-  console.log('listening on *:3000')
+server.listen(4000, () => {
+  console.log('listening on *:4000')
 })

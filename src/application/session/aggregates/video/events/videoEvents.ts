@@ -1,26 +1,26 @@
-import { SessionNotifications } from '../../../../../presentation/notifications/sessionNotifications'
-import { SessionEvent, EventType } from '../../../../event/event'
+import { SessionEvent, EventType } from '../../../../../domain/event/event'
+import { SessionReactions } from '../../../../../domain/reactions/sessionReactions'
 
 export class VideoPlayedEvent implements SessionEvent {
   type: EventType
-  notifications: SessionNotifications
+  sessionReactions: SessionReactions
   timestamp: number
 
-  constructor(timestamp: number, notifications: SessionNotifications) {
+  constructor(timestamp: number, sessionReactions: SessionReactions) {
     this.type = EventType.VideoPlayed
-    this.notifications = notifications
+    this.sessionReactions = sessionReactions
     this.timestamp = timestamp
   }
 }
 
 export class VideoStoppedEvent implements SessionEvent {
   type: EventType
-  notifications: SessionNotifications
+  sessionReactions: SessionReactions
   timestamp: number
 
-  constructor(timestamp: number, notifications: SessionNotifications) {
+  constructor(timestamp: number, sessionReactions: SessionReactions) {
     this.type = EventType.VideoStopped
-    this.notifications = notifications
+    this.sessionReactions = sessionReactions
     this.timestamp = timestamp
   }
 }

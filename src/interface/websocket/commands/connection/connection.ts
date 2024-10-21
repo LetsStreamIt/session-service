@@ -1,9 +1,9 @@
 import { Server, Socket } from 'socket.io'
 import { recvUserTokenCommand } from './userToken'
-import { CommandType } from '../../../application/command/command'
+import { CommandType } from '../../../../domain/command/command'
 import { recvDisconnectionCommand } from './disconnect'
 import { commandListener } from '../../utils'
-import { SessionCommandHandlers } from '../../../application/session/aggregates/session/commands/sessionCommandHandlers'
+import { SessionCommandHandlers } from '../../../../application/session/aggregates/session/commands/sessionCommandHandlers'
 
 /**
  * On connection command.

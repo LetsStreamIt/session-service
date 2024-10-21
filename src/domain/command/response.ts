@@ -1,4 +1,4 @@
-import { CommandType } from '../../../application/command/command'
+import { CommandType } from './command'
 
 export interface SessionCommand {
   type: CommandType

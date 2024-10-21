@@ -7,5 +7,5 @@ import { Socket } from 'socket.io'
  * @returns
  */
 export function recvDisconnectionCommand(socket: Socket): (message: any) => void {
-  return (message) => socket.disconnect()
+  return () => socket.disconnect()
 }

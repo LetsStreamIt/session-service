@@ -1,7 +1,7 @@
 import { Server, Socket } from 'socket.io'
-import { CreateSessionCommand } from '../../../application/session/aggregates/session/commands/sessionCommands'
-import { SessionCommandHandlers } from '../../../application/session/aggregates/session/commands/sessionCommandHandlers'
-import { CreateSessionResponse } from '../response/response'
+import { CreateSessionCommand } from '../../../../application/session/aggregates/session/commands/sessionCommands'
+import { SessionCommandHandlers } from '../../../../application/session/aggregates/session/commands/sessionCommandHandlers'
+import { CreateSessionResponse } from '../../../../domain/command/response'
 
 /**
  * Create Session Command
