@@ -1,11 +1,11 @@
 import { CommandType } from './command'
 
-export interface SessionCommand {
+export interface ISessionCommand {
   type: CommandType
   token: string
 }
 
-export interface Response<X> {
+export interface IResponse<X> {
   command: CommandType
   content: X
 }
@@ -56,7 +56,7 @@ export class JoinSessionResponseContent {
   }
 }
 
-export class JoinSessionResponse implements Response<JoinSessionResponseContent> {
+export class JoinSessionResponse implements IResponse<JoinSessionResponseContent> {
   command: CommandType
   content: JoinSessionResponseContent
 
@@ -66,7 +66,7 @@ export class JoinSessionResponse implements Response<JoinSessionResponseContent>
   }
 }
 
-export class CreateSessionResponse implements Response<CreateSessionResponseContent> {
+export class CreateSessionResponse implements IResponse<CreateSessionResponseContent> {
   command: CommandType
   content: CreateSessionResponseContent
 
@@ -76,7 +76,7 @@ export class CreateSessionResponse implements Response<CreateSessionResponseCont
   }
 }
 
-export class PlayVideoResponse implements Response<ResponseStatus> {
+export class PlayVideoResponse implements IResponse<ResponseStatus> {
   command: CommandType
   content: ResponseStatus
 
@@ -86,7 +86,7 @@ export class PlayVideoResponse implements Response<ResponseStatus> {
   }
 }
 
-export class StopVideoResponse implements Response<ResponseStatus> {
+export class StopVideoResponse implements IResponse<ResponseStatus> {
   command: CommandType
   content: ResponseStatus
 
@@ -96,7 +96,7 @@ export class StopVideoResponse implements Response<ResponseStatus> {
   }
 }
 
-export class SendMessageResponse implements Response<ResponseStatus> {
+export class SendMessageResponse implements IResponse<ResponseStatus> {
   command: CommandType
   content: ResponseStatus
 
@@ -106,7 +106,7 @@ export class SendMessageResponse implements Response<ResponseStatus> {
   }
 }
 
-export class UserTokenResponse implements Response<UserTokenResponseContent> {
+export class UserTokenResponse implements IResponse<UserTokenResponseContent> {
   command: CommandType
   content: UserTokenResponseContent
 
@@ -116,7 +116,7 @@ export class UserTokenResponse implements Response<UserTokenResponseContent> {
   }
 }
 
-export class LeaveSessionResponse implements Response<ResponseStatus> {
+export class LeaveSessionResponse implements IResponse<ResponseStatus> {
   command: CommandType
   content: ResponseStatus
 

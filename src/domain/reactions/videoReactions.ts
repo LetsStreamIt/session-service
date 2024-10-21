@@ -8,13 +8,13 @@ export enum PlayState {
   PLAYING = 'Playing'
 }
 
-export interface VideoState {
+export interface IVideoState {
   timestamp: number
   state: PlayState
 }
 
-export interface VideoReactions {
-  retreiveVideoState(): Promise<VideoState>
-  synchronizeUser(videoState: VideoState): Promise<void>
-  syncronizeSession(videoState: VideoState): Promise<void>
+export interface IVideoReactions {
+  retreiveVideoState(): Promise<IVideoState>
+  synchronizeUser(videoState: IVideoState): Promise<void>
+  syncronizeSession(videoState: IVideoState): Promise<void>
 }

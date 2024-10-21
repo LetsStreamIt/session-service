@@ -1,8 +1,8 @@
-import { SessionReactions } from '../reactions/sessionReactions'
+import { ISessionReactions } from '../reactions/sessionReactions'
 
-export interface SessionEvent {
+export interface ISessionEvent {
   type: EventType
-  sessionReactions: SessionReactions
+  sessionReactions: ISessionReactions
 }
 
 export enum EventType {

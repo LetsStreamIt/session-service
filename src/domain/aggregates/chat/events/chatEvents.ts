@@ -1,13 +1,13 @@
-import { SessionEvent, EventType } from '../../../event/event'
-import { SessionReactions } from '../../../reactions/sessionReactions'
+import { ISessionEvent, EventType } from '../../../event/event'
+import { ISessionReactions } from '../../../reactions/sessionReactions'
 import { TextMessage } from '../message'
 
-export class MessageSentEvent implements SessionEvent {
+export class MessageSentEvent implements ISessionEvent {
   type: EventType
-  sessionReactions: SessionReactions
+  sessionReactions: ISessionReactions
   textMessage: TextMessage
 
-  constructor(textMessage: TextMessage, sessionReactions: SessionReactions) {
+  constructor(textMessage: TextMessage, sessionReactions: ISessionReactions) {
     this.type = EventType.MessageSent
     this.sessionReactions = sessionReactions
     this.textMessage = textMessage

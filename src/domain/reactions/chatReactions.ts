@@ -5,7 +5,7 @@ export enum ChatReactionType {
   TEXT_MESSAGE = 'textMessage'
 }
 
-export interface ChatReactions {
+export interface IChatReactions {
   sendNotificationToSession(notificationMessage: NotificationMessage): void
   emitTextMessagesToClient(...textMessages: TextMessage[]): void
   sendTextMessagesToSession(...textMessages: TextMessage[]): void

@@ -1,6 +1,6 @@
-import { SessionService } from '../../../../application/service/sessionService'
+import { SessionService } from '../../../../application/sessionService/sessionService'
 import { LeaveSessionCommand } from '../../../../domain/aggregates/session/commands/sessionCommands'
-import { SessionReactions } from '../../../../domain/reactions/sessionReactions'
+import { ISessionReactions } from '../../../../domain/reactions/sessionReactions'
 
 /**
  * Leave command.
@@ -15,7 +15,7 @@ export function recvLeaveSessionCommand(
   sessionName: string,
   token: string,
   commandHandlers: SessionService,
-  sessionReactions: SessionReactions
+  sessionReactions: ISessionReactions
 ): () => void {
   return () => {
     commandHandlers.handleLeaveSessionCommand(

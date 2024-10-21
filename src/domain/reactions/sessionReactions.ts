@@ -1,12 +1,12 @@
-import { ChatReactions } from './chatReactions'
-import { VideoReactions } from './videoReactions'
+import { IChatReactions } from './chatReactions'
+import { IVideoReactions } from './videoReactions'
 
-export interface SessionReactions {
+export interface ISessionReactions {
   joinUserToSession(): void
 
   leaveUserFromSessionAndDisconnect(): void
 
-  get getChatReactions(): ChatReactions
+  get getChatReactions(): IChatReactions
 
-  get getVideoReactions(): VideoReactions
+  get getVideoReactions(): IVideoReactions
 }

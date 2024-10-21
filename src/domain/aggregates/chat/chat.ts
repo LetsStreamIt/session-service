@@ -1,18 +1,18 @@
 import { TextMessage, NotificationMessage, JoinNotification } from './message'
-import { EventBus } from '../../event/eventBus'
+import { IEventBus } from '../../event/eventBus'
 import { EventType } from '../../event/event'
 import { UserJoinedEvent, UserLeftSessionEvent } from '../session/events/sessionEvents'
 import { MessageSentEvent } from './events/chatEvents'
 
-export interface Chat {
+export interface IChat {
   registerEventHandlers(): void
 }
 
-export class ChatImpl implements Chat {
+export class Chat implements IChat {
   private readonly messages: TextMessage[]
-  private readonly eventBus: EventBus
+  private readonly eventBus: IEventBus
 
-  constructor(eventBus: EventBus) {
+  constructor(eventBus: IEventBus) {
     this.messages = []
     this.eventBus = eventBus
   }

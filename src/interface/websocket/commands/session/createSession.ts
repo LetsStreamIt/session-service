@@ -1,5 +1,5 @@
 import { Server, Socket } from 'socket.io'
-import { SessionService } from '../../../../application/service/sessionService'
+import { SessionService } from '../../../../application/sessionService/sessionService'
 import { CreateSessionCommand } from '../../../../domain/aggregates/session/commands/sessionCommands'
 import { CreateSessionResponse } from '../../../../domain/command/response'
 

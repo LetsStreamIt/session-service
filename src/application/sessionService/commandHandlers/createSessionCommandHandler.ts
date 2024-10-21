@@ -4,15 +4,15 @@ import {
   youtubeVideoIdFromUrl
 } from '../../../domain/aggregates/session/commands/utils'
 import {
-  Session,
+  ISession,
   SessionEntry,
   SessionId,
-  SessionImpl,
+  Session,
   SessionRepository
 } from '../../../domain/aggregates/session/session'
 import { CreateSessionResponse, ResponseStatus } from '../../../domain/command/response'
 import { EventType } from '../../../domain/event/event'
-import { EventBus } from '../../../domain/event/eventBus'
+import { IEventBus } from '../../../domain/event/eventBus'
 
 export async function handleCreateSessionCommand(
   sessions: SessionRepository,
@@ -23,7 +23,7 @@ export async function handleCreateSessionCommand(
       if (videoId) {
         const sessionName: string = sessionNameFromTokenAndVideoId(command.token, videoId)
         const sessionId: SessionId = new SessionId(sessionName)
-        const session: Session = new SessionImpl(sessionId, videoId)
+        const session: ISession = new Session(sessionId, videoId)
         sessions.add(session)
         session.registerEventHandlers()
         registerEventHandlers(sessions, session.eventBus(), sessionId)
@@ -45,7 +45,7 @@ function deleteSessionAtTimeout(
   timeout: number
 ) {
   setTimeout(() => {
-    const session: Session | undefined = sessions.find(sessionId)
+    const session: ISession | undefined = sessions.find(sessionId)
     if (session) {
       if (session.value?.getX.getValues.length == 0) {
         sessions.remove(sessionId)
@@ -56,7 +56,7 @@ function deleteSessionAtTimeout(
 
 function registerEventHandlers(
   sessions: SessionRepository,
-  eventBus: EventBus,
+  eventBus: IEventBus,
   sessionId: SessionId
 ) {
   eventBus.subscribe(EventType.UserLeftSession, () => {

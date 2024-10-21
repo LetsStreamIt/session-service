@@ -1,4 +1,4 @@
-import { SessionService } from '../../../../../application/service/sessionService'
+import { SessionService } from '../../../../../application/sessionService/sessionService'
 import {
   PlayVideoCommand,
   StopVideoCommand
@@ -8,7 +8,7 @@ import {
   ResponseStatus,
   StopVideoResponse
 } from '../../../../../domain/command/response'
-import { SessionReactions } from '../../../../../domain/reactions/sessionReactions'
+import { ISessionReactions } from '../../../../../domain/reactions/sessionReactions'
 
 /**
  * Play video command
@@ -23,7 +23,7 @@ export function recvPlayVideoCommand(
   token: string,
   sessionName: string,
   commandHandlers: SessionService,
-  sessionReactions: SessionReactions
+  sessionReactions: ISessionReactions
 ): (message: any, ack: any) => void {
   return (data, ack) => {
     const { timestamp } = data
@@ -48,7 +48,7 @@ export function recvStopVideoCommand(
   token: string,
   sessionName: string,
   commandHandlers: SessionService,
-  sessionReactions: SessionReactions
+  sessionReactions: ISessionReactions
 ): (message: any, ack: any) => void {
   return (data, ack) => {
     const { timestamp } = data

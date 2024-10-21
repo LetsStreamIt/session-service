@@ -1,16 +1,16 @@
 import { Server, Socket } from 'socket.io'
 import { WSChatReactions } from './chatReactions'
 import { WSVideoReactions } from './videoReactions'
-import { ChatReactions } from '../../../domain/reactions/chatReactions'
-import { SessionReactions } from '../../../domain/reactions/sessionReactions'
-import { VideoReactions } from '../../../domain/reactions/videoReactions'
+import { IChatReactions } from '../../../domain/reactions/chatReactions'
+import { ISessionReactions } from '../../../domain/reactions/sessionReactions'
+import { IVideoReactions } from '../../../domain/reactions/videoReactions'
 
-export class WSSessionReactions implements SessionReactions {
+export class WSSessionReactions implements ISessionReactions {
   io: Server
   socket: Socket
   sessionName: string
-  chatReactions: ChatReactions
-  videoReactions: VideoReactions
+  chatReactions: IChatReactions
+  videoReactions: IVideoReactions
 
   constructor(io: Server, socket: Socket, sessionName: string) {
     this.io = io

@@ -1,7 +1,7 @@
-import { SessionService } from '../../../../../application/service/sessionService'
+import { SessionService } from '../../../../../application/sessionService/sessionService'
 import { SendMessageCommand } from '../../../../../domain/aggregates/chat/commands/chatCommands'
 import { SendMessageResponse } from '../../../../../domain/command/response'
-import { SessionReactions } from '../../../../../domain/reactions/sessionReactions'
+import { ISessionReactions } from '../../../../../domain/reactions/sessionReactions'
 
 /**
  * Send message command.
@@ -16,7 +16,7 @@ export function recvSendMessageCommand(
   token: string,
   sessionName: string,
   commandHandlers: SessionService,
-  sessionReactions: SessionReactions
+  sessionReactions: ISessionReactions
 ): (message: any, ack: any) => void {
   return (data, ack) => {
     const { message } = data

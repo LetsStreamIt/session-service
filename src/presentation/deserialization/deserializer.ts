@@ -1,8 +1,8 @@
-interface Deserializer<X> {
+interface IDeserializer<X> {
   deserialize(json: any): X
 }
 
-export abstract class AbstractDeserializer<X> implements Deserializer<X> {
+export abstract class AbstractDeserializer<X> implements IDeserializer<X> {
   abstract isJsonValid(json: any): boolean
 
   abstract deserializeJson(json: any): X

@@ -1,7 +1,7 @@
 import { LeaveSessionCommand } from '../../../domain/aggregates/session/commands/sessionCommands'
 import { getUserFromToken } from '../../../domain/aggregates/session/commands/utils'
 import { UserLeftSessionEvent } from '../../../domain/aggregates/session/events/sessionEvents'
-import { Session, SessionId, SessionRepository } from '../../../domain/aggregates/session/session'
+import { ISession, SessionId, SessionRepository } from '../../../domain/aggregates/session/session'
 import { LeaveSessionResponse, ResponseStatus } from '../../../domain/command/response'
 import { User } from '../../../domain/user'
 
@@ -12,7 +12,7 @@ export async function handleLeaveSessionCommand(
   return new Promise((resolve) => {
     const sessionId: SessionId = new SessionId(command.sessionName)
     const user: User = getUserFromToken(command.token)
-    const session: Session | undefined = sessions.find(sessionId)
+    const session: ISession | undefined = sessions.find(sessionId)
 
     if (session) {
       session.eventBus().publish(new UserLeftSessionEvent(user, command.sessionReactions))
