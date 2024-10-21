@@ -1,0 +1,8 @@
+{
+    "out": "docs",
+    "includeVersion": true,
+    "exclude": [
+      "**/*.test.ts",  // Optionally exclude test files
+      "**/node_modules/**"
+    ]
+  }
