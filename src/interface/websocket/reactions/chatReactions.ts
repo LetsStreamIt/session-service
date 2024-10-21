@@ -1,7 +1,7 @@
 import { Server, Socket } from 'socket.io'
 import { NotificationMessage, TextMessage } from '../../../domain/aggregates/chat/message'
 import { IChatReactions, ChatReactionType } from '../../../domain/reactions/chatReactions'
-import { SerializerImpl } from '../../../presentation/serialization/messageSerializer'
+import { Serializer } from '../../../presentation/serialization/messageSerializer'
 
 /**
  * WebSocket Chat Reactions
@@ -20,19 +20,16 @@ export class WSChatReactions implements IChatReactions {
   sendNotificationToSession(notificationMessage: NotificationMessage) {
     this.io
       .to(this.sessionName)
-      .emit(
-        ChatReactionType.NOTIFICATION_MESSAGE,
-        new SerializerImpl().serialize(notificationMessage)
-      )
+      .emit(ChatReactionType.NOTIFICATION_MESSAGE, new Serializer().serialize(notificationMessage))
   }
 
   emitTextMessagesToClient(...textMessages: TextMessage[]) {
-    this.socket.emit(ChatReactionType.TEXT_MESSAGE, new SerializerImpl().serialize(textMessages))
+    this.socket.emit(ChatReactionType.TEXT_MESSAGE, new Serializer().serialize(textMessages))
   }
 
   sendTextMessagesToSession(...textMessages: TextMessage[]) {
     this.io
       .to(this.sessionName)
-      .emit(ChatReactionType.TEXT_MESSAGE, new SerializerImpl().serialize(textMessages))
+      .emit(ChatReactionType.TEXT_MESSAGE, new Serializer().serialize(textMessages))
   }
 }

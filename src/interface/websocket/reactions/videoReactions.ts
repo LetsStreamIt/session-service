@@ -1,6 +1,6 @@
 import { Server, Socket } from 'socket.io'
 import { VideoStateDeserializer } from '../../../presentation/deserialization/videoStateDeserializer'
-import { SerializerImpl } from '../../../presentation/serialization/messageSerializer'
+import { Serializer } from '../../../presentation/serialization/messageSerializer'
 import {
   IVideoReactions,
   VideoReactionType,
@@ -32,7 +32,7 @@ export class WSVideoReactions implements IVideoReactions {
 
   synchronizeClient(videoState: IVideoState): Promise<void> {
     return new Promise((resolve) => {
-      this.socket.emit(VideoReactionType.SYNCHRONIZE, new SerializerImpl().serialize(videoState))
+      this.socket.emit(VideoReactionType.SYNCHRONIZE, new Serializer().serialize(videoState))
       resolve()
     })
   }
@@ -41,7 +41,7 @@ export class WSVideoReactions implements IVideoReactions {
     return new Promise((resolve) => {
       this.io
         .to(this.sessionName)
-        .emit(VideoReactionType.SYNCHRONIZE, new SerializerImpl().serialize(videoState))
+        .emit(VideoReactionType.SYNCHRONIZE, new Serializer().serialize(videoState))
       resolve()
     })
   }

@@ -4,8 +4,6 @@ import { CreateSessionResponse } from '../../../../domain/command/response'
 
 /**
  * Receives Create Session Commands
- * @param io Socket IO Server
- * @param socket Socket IO Socket
  * @param token access token
  * @param sessionService Session Servuce
  * @returns

@@ -6,10 +6,10 @@ import { ISessionReactions } from '../../../../../domain/reactions/sessionReacti
 /**
  * Receives Send message commands.
  * Sends an ack back to the client, specified by the Session Service.
- * @param io Socket IO Server
  * @param token access token
  * @param sessionName Session name
  * @param sessionService Session Service
+ * @param sessionReactions Session Reactions
  * @returns
  */
 export function recvSendMessageCommand(
