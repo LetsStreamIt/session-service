@@ -2,6 +2,9 @@ import { NotificationMessage, TextMessage } from '../../domain/aggregates/chat/m
 import { AbstractDeserializer } from './deserializer'
 import { UserDeserializer } from './userDeserializer'
 
+/**
+ * Text Message Deserializer
+ */
 export class TextMessageDeserializer extends AbstractDeserializer<TextMessage> {
   isJsonValid(json: any): boolean {
     return typeof json.sender === 'object' && typeof json.content === 'string'
@@ -12,6 +15,9 @@ export class TextMessageDeserializer extends AbstractDeserializer<TextMessage> {
   }
 }
 
+/**
+ * Notification Message Deserializer
+ */
 export class NotificationMessageDeserializer extends AbstractDeserializer<NotificationMessage> {
   isJsonValid(json: any): boolean {
     return typeof json.sender === 'object' && typeof json.content === 'number'

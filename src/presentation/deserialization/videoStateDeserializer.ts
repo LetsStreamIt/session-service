@@ -1,6 +1,9 @@
 import { PlayState, IVideoState } from '../../domain/reactions/videoReactions'
 import { AbstractDeserializer } from './deserializer'
 
+/**
+ * Play State Deserializer
+ */
 class PlayStateDeserializer extends AbstractDeserializer<PlayState> {
   isJsonValid(json: any): boolean {
     return (Object.values(PlayState) as string[]).includes(json)
@@ -11,6 +14,9 @@ class PlayStateDeserializer extends AbstractDeserializer<PlayState> {
   }
 }
 
+/**
+ * Video State Deserializer
+ */
 export class VideoStateDeserializer extends AbstractDeserializer<IVideoState> {
   isJsonValid(json: any): boolean {
     return typeof json.state === 'string' && typeof json.timestamp === 'number'

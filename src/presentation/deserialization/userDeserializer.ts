@@ -1,6 +1,9 @@
 import { User, UserId } from '../../domain/user'
 import { AbstractDeserializer } from './deserializer'
 
+/**
+ * User Id Deserializer
+ */
 class UserIdDeserializer extends AbstractDeserializer<UserId> {
   isJsonValid(json: any): boolean {
     return typeof json.email === 'string'
@@ -11,6 +14,9 @@ class UserIdDeserializer extends AbstractDeserializer<UserId> {
   }
 }
 
+/**
+ * User Deserializer
+ */
 export class UserDeserializer extends AbstractDeserializer<User> {
   isJsonValid(json: any): boolean {
     return (

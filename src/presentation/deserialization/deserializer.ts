@@ -1,7 +1,17 @@
+/**
+ * Deserializer Interface
+ */
 interface IDeserializer<X> {
+  /**
+   * Deserializes a message
+   * @param json message body
+   */
   deserialize(json: any): X
 }
 
+/**
+ * Abstract deserializer
+ */
 export abstract class AbstractDeserializer<X> implements IDeserializer<X> {
   abstract isJsonValid(json: any): boolean
 
