@@ -29,7 +29,51 @@ import {
   handleStopVideoCommand
 } from './commandHandlers/videoCommandHandlers'
 
-export class SessionService {
+export interface ISessionService {
+  /**
+   * Create Session Command Handler
+   * @param command Create Session Command
+   */
+  handleCreateSessionCommand(command: CreateSessionCommand): Promise<CreateSessionResponse>
+
+  /**
+   * User Token Command Handler
+   * @param command User Token Command
+   */
+  handleUserTokenCommand(command: UserTokenCommand): Promise<UserTokenResponse>
+
+  /**
+   * Join Session Command Handler
+   * @param command Join Session Command
+   */
+  handleJoinSessionCommand(command: JoinSessionCommand): Promise<JoinSessionResponse>
+
+  /**
+   * Leave Session Command Handler
+   * @param command Leave Session Command
+   */
+  handleLeaveSessionCommand(command: LeaveSessionCommand): Promise<LeaveSessionResponse>
+
+  /**
+   * Send Message Command Handler
+   * @param command Send Message Command
+   */
+  handleSendMessageCommand(command: SendMessageCommand): Promise<SendMessageResponse>
+
+  /**
+   * Play Video Command Handler
+   * @param command Play Video Command
+   */
+  handlePlayVideoCommand(command: PlayVideoCommand): Promise<PlayVideoResponse>
+
+  /**
+   * Stop Video Command Handler
+   * @param command Stop Video Command
+   */
+  handleStopVideoCommand(command: StopVideoCommand): Promise<StopVideoResponse>
+}
+
+export class SessionService implements ISessionService {
   sessions: SessionRepository
 
   constructor() {

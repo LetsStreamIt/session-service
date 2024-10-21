@@ -13,6 +13,13 @@ import {
   StopVideoResponse
 } from '../../../domain/command/response'
 
+/**
+ * Play Video Command Handler.
+ * Plays the Video if the Session is existing.
+ * @param sessions Session Repository
+ * @param command Play Video Command
+ * @returns a Play Video Response specifying if the Command has been succesfully executed
+ */
 export async function handlePlayVideoCommand(
   sessions: SessionRepository,
   command: PlayVideoCommand
@@ -20,7 +27,7 @@ export async function handlePlayVideoCommand(
   return new Promise((resolve) => {
     const session: ISession | undefined = sessions.find(new SessionId(command.sessionName))
     if (session) {
-      session.eventBus().publish(new VideoPlayedEvent(command.timestamp, command.sessionReactions))
+      session.eventBus.publish(new VideoPlayedEvent(command.timestamp, command.sessionReactions))
       resolve(new PlayVideoResponse(ResponseStatus.SUCCESS))
     } else {
       resolve(new PlayVideoResponse(ResponseStatus.FAILURE))
@@ -28,6 +35,13 @@ export async function handlePlayVideoCommand(
   })
 }
 
+/**
+ * Stop Video Command Handler.
+ * Stop the Video if the Session is existing.
+ * @param sessions Session Repository
+ * @param command Stop Video Command
+ * @returns a Stop Video Response specifying if the Command has been succesfully executed
+ */
 export async function handleStopVideoCommand(
   sessions: SessionRepository,
   command: StopVideoCommand
@@ -35,7 +49,7 @@ export async function handleStopVideoCommand(
   return new Promise((resolve) => {
     const session: ISession | undefined = sessions.find(new SessionId(command.sessionName))
     if (session) {
-      session.eventBus().publish(new VideoStoppedEvent(command.timestamp, command.sessionReactions))
+      session.eventBus.publish(new VideoStoppedEvent(command.timestamp, command.sessionReactions))
       resolve(new StopVideoResponse(ResponseStatus.SUCCESS))
     } else {
       resolve(new StopVideoResponse(ResponseStatus.FAILURE))

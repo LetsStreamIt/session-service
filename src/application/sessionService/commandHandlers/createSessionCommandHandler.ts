@@ -1,8 +1,5 @@
 import { CreateSessionCommand } from '../../../domain/aggregates/session/commands/sessionCommands'
-import {
-  sessionNameFromTokenAndVideoId,
-  youtubeVideoIdFromUrl
-} from '../../../domain/aggregates/session/commands/utils'
+import { sessionNameFromTokenAndVideoId, youtubeVideoIdFromUrl } from './utils'
 import {
   ISession,
   SessionEntry,
@@ -14,6 +11,14 @@ import { CreateSessionResponse, ResponseStatus } from '../../../domain/command/r
 import { EventType } from '../../../domain/event/event'
 import { IEventBus } from '../../../domain/event/eventBus'
 
+/**
+ * Create Session Command Handler.
+ * Creates a session if the provided URL is a valid Youtube Video URL. The session is automatically
+ * deleted if no user joins it in timeout seconds (5 seconds).
+ * @param sessions Session repository
+ * @param command Create Session command
+ * @returns A Create Session Response to send back to the client if the session is successfully created
+ */
 export async function handleCreateSessionCommand(
   sessions: SessionRepository,
   command: CreateSessionCommand
@@ -26,7 +31,7 @@ export async function handleCreateSessionCommand(
         const session: ISession = new Session(sessionId, videoId)
         sessions.add(session)
         session.registerEventHandlers()
-        registerEventHandlers(sessions, session.eventBus(), sessionId)
+        subscribeToUserLeftSessionEvents(sessions, session.eventBus, sessionId)
 
         const timeout = 5_000
         deleteSessionAtTimeout(sessions, sessionId, timeout)
@@ -39,22 +44,27 @@ export async function handleCreateSessionCommand(
   })
 }
 
+/**
+ * Deletes the Session specified as parameter from the Session Repository if no user is joined after timeout seconds.
+ * @param sessions Session Repository
+ * @param sessionId Session Id
+ * @param timeout Timeout
+ */
 function deleteSessionAtTimeout(
   sessions: SessionRepository,
   sessionId: SessionId,
   timeout: number
 ) {
-  setTimeout(() => {
-    const session: ISession | undefined = sessions.find(sessionId)
-    if (session) {
-      if (session.value?.getX.getValues.length == 0) {
-        sessions.remove(sessionId)
-      }
-    }
-  }, timeout)
+  setTimeout(() => deleteSessionWhenAllUserLeft(sessions, sessionId), timeout)
 }
 
-function registerEventHandlers(
+/**
+ * Subscribe to UserLeftSession events, deleting the Session when all user leave.
+ * @param sessions Session Repository
+ * @param eventBus Event bus
+ * @param sessionId Session Id of the Session to remove
+ */
+function subscribeToUserLeftSessionEvents(
   sessions: SessionRepository,
   eventBus: IEventBus,
   sessionId: SessionId
@@ -67,6 +77,11 @@ function registerEventHandlers(
   })
 }
 
+/**
+ * Delete the Session with SessioId specified as parameter when no user is joined
+ * @param sessions Session Repository
+ * @param sessionId SessioId of the Session to remove
+ */
 function deleteSessionWhenAllUserLeft(sessions: SessionRepository, sessionId: SessionId): void {
   const sessionEntry: SessionEntry | undefined = sessions.find(sessionId)?.value
   if (sessionEntry) {
