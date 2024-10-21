@@ -1,6 +1,5 @@
 {
   "name": "session-service",
-  "version": "0.1.0",
   "description": "Session Service of LetsStreamIt",
   "keywords": [
     "typescript",
@@ -57,7 +56,7 @@
     "semantic-release-preconfigured-conventional-commits": "1.1.111",
     "source-map-support": "^0.5.21",
     "ts-node": "^10.9.1",
-    "typedoc": "^0.26.6",
+    "typedoc": "^0.26.10",
     "typescript": "^5.5.4",
     "typescript-eslint": "^8.0.0"
   },
