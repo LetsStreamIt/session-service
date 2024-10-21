@@ -1,5 +1,8 @@
 import { isDeepEqual } from './utils'
 
+/**
+ * Pair of objects
+ */
 export class Pair<X, Y> {
   private readonly x: X
   private readonly y: Y
@@ -18,6 +21,9 @@ export class Pair<X, Y> {
   }
 }
 
+/**
+ * Entity
+ */
 export class Entity<X, Y> {
   id: X
   value?: Y
@@ -28,6 +34,9 @@ export class Entity<X, Y> {
   }
 }
 
+/**
+ * Repository
+ */
 export class Repository<X extends Entity<Y, Z>, Y = X['id'], Z = X['value']> {
   private values: X[]
 

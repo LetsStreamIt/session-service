@@ -1,6 +1,9 @@
 import { CommandType, ISessionCommand } from '../../../command/command'
 import { ISessionReactions } from '../../../reactions/sessionReactions'
 
+/**
+ * Create Session Command
+ */
 export class CreateSessionCommand implements ISessionCommand {
   type: CommandType
   token: string
@@ -13,6 +16,9 @@ export class CreateSessionCommand implements ISessionCommand {
   }
 }
 
+/**
+ * User Token Command
+ */
 export class UserTokenCommand implements ISessionCommand {
   type: CommandType
   token: string
@@ -23,6 +29,9 @@ export class UserTokenCommand implements ISessionCommand {
   }
 }
 
+/**
+ * Join Session Command
+ */
 export class JoinSessionCommand implements ISessionCommand {
   type: CommandType
   token: string
@@ -37,6 +46,9 @@ export class JoinSessionCommand implements ISessionCommand {
   }
 }
 
+/**
+ * Leave Session Command
+ */
 export class LeaveSessionCommand implements ISessionCommand {
   type: CommandType
   token: string

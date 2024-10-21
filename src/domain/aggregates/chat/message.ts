@@ -1,12 +1,19 @@
 import { User } from '../../user'
 
+/**
+ * Join Notification
+ */
 export enum JoinNotification {
   JOIN_SESSION,
   LEAVE_SESSION
 }
 
+/** Message Content is a Join Notification Message or a string representing the text message */
 export type MessageContent = JoinNotification | string
 
+/**
+ * Message Interface
+ */
 export interface IMessage<X extends MessageContent> {
   readonly content: X
   readonly sender: User
@@ -16,6 +23,9 @@ export interface IMessage<X extends MessageContent> {
   get getSender(): User
 }
 
+/**
+ * Notification Message
+ */
 export class NotificationMessage implements IMessage<JoinNotification> {
   content: JoinNotification
   sender: User
@@ -35,6 +45,9 @@ export class NotificationMessage implements IMessage<JoinNotification> {
   }
 }
 
+/**
+ * Text Message
+ */
 export class TextMessage implements IMessage<string> {
   content: string
   sender: User

@@ -1,5 +1,8 @@
 import { Entity, Pair, Repository } from './entity'
 
+/**
+ * User
+ */
 export class User implements Entity<UserId, Pair<string, string>> {
   id: UserId
   value: Pair<string, string>
@@ -10,6 +13,9 @@ export class User implements Entity<UserId, Pair<string, string>> {
   }
 }
 
+/**
+ * User Id
+ */
 export class UserId {
   email: string
 
@@ -18,4 +24,7 @@ export class UserId {
   }
 }
 
+/**
+ * User Repository
+ */
 export class UserRepository extends Repository<User> {}

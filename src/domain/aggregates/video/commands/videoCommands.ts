@@ -1,6 +1,9 @@
 import { CommandType, ISessionCommand } from '../../../command/command'
 import { ISessionReactions } from '../../../reactions/sessionReactions'
 
+/**
+ * Play Video Command
+ */
 export class PlayVideoCommand implements ISessionCommand {
   type: CommandType
   token: string
@@ -22,6 +25,9 @@ export class PlayVideoCommand implements ISessionCommand {
   }
 }
 
+/**
+ * Stop Video Command
+ */
 export class StopVideoCommand implements ISessionCommand {
   type: CommandType
   token: string

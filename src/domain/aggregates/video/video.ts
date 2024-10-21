@@ -3,22 +3,37 @@ import { IEventBus } from '../../event/eventBus'
 import { IVideoReactions } from '../../reactions/videoReactions'
 import { User } from '../../user'
 import { isDeepEqual } from '../../utils'
-import { UserJoinedEvent, UserLeftSessionEvent } from '../session/events/sessionEvents'
+import { UserJoinedSessionEvent, UserLeftSessionEvent } from '../session/events/sessionEvents'
 import { VideoPlayedEvent, VideoStoppedEvent } from './events/videoEvents'
 
+/**
+ * Play State
+ */
 export enum PlayState {
   PAUSED = 'Paused',
   PLAYING = 'Playing'
 }
 
+/**
+ * Video State
+ */
 export interface VideoState {
   timestamp: number
   state: PlayState
 }
 
+/**
+ * Video Aggregate Interface
+ */
 export interface IVideo {
+  /**
+   * Register Event Handlers for Events triggered by the Session Service.
+   */
   registerEventHandlers(): void
 
+  /**
+   * Returns the Video Id of the video associated to the aggregate.
+   */
   get getVideoId(): string
 }
 
@@ -44,8 +59,17 @@ export class Video implements IVideo {
     return this.videoId
   }
 
-  private handleUserJoinedEvent: (event: UserJoinedEvent) => Promise<void> = (
-    event: UserJoinedEvent
+  /**
+   * User Joined Session Event Handler.
+   * Uses the interface layer reaction to synchronize the joined User:
+   * 1. The Video State of each connected User to the Session is retreived
+   * 2. The minimum timestamp across all Video States is selected as the timestamp of the joined User
+   * 3. A message is sent to the joined User to synchronize the video timestamp.
+   * @param event User Joined Session Event
+   * @returns void Promise
+   */
+  private handleUserJoinedEvent: (event: UserJoinedSessionEvent) => Promise<void> = (
+    event: UserJoinedSessionEvent
   ) => {
     return new Promise((resolve) => {
       return Promise.all(
@@ -55,7 +79,7 @@ export class Video implements IVideo {
           const timestamps: number[] = videoStates.map((vs) => vs.timestamp)
           const minTimestamp: number = Math.min(...timestamps)
           const videoStateSync: VideoState = videoStates[timestamps.indexOf(minTimestamp)]
-          event.sessionReactions.getVideoReactions.synchronizeUser(videoStateSync)
+          event.sessionReactions.getVideoReactions.synchronizeClient(videoStateSync)
         }
         this.userReactions.set(event.user, event.sessionReactions.getVideoReactions)
         resolve()
@@ -63,6 +87,12 @@ export class Video implements IVideo {
     })
   }
 
+  /**
+   * User Left Session Event Handler.
+   * Removes the User Reactions from the list.
+   * @param event User Left Session Event
+   * @returns void Promise
+   */
   private handleUserLeftEvent: (event: UserLeftSessionEvent) => Promise<void> = (
     event: UserLeftSessionEvent
   ) => {
@@ -77,6 +107,13 @@ export class Video implements IVideo {
     })
   }
 
+  /**
+   * Video Played Event Handler.
+   * Synchronizes each User's client connected to the Session, by setting the video in play mode
+   * and setting each client timestamp with respect to the User who executed the command.
+   * @param event Video Play Event
+   * @returns void Promise
+   */
   private handleVideoPlayedEvent: (event: VideoPlayedEvent) => Promise<void> = (
     event: VideoPlayedEvent
   ) => {
@@ -89,6 +126,13 @@ export class Video implements IVideo {
     })
   }
 
+  /**
+   * Video Stopped Event Handler.
+   * Synchronizes each User's client connected to the Session, by setting the video in stop mode
+   * and setting each client timestamp with respect to the User who executed the command.
+   * @param event Video Stopped Event
+   * @returns void Promise
+   */
   private handleStopVideoEvent: (event: VideoStoppedEvent) => Promise<void> = (
     event: VideoStoppedEvent
   ) => {

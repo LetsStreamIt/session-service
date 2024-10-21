@@ -2,6 +2,9 @@ import { ISessionEvent, EventType } from '../../../event/event'
 import { ISessionReactions } from '../../../reactions/sessionReactions'
 import { User } from '../../../user'
 
+/**
+ * Session Created Event
+ */
 export class SessionCreatedEvent implements ISessionEvent {
   type: EventType
   sessionReactions: ISessionReactions
@@ -14,7 +17,10 @@ export class SessionCreatedEvent implements ISessionEvent {
   }
 }
 
-export class UserJoinedEvent implements ISessionEvent {
+/**
+ * User Joined Session Event
+ */
+export class UserJoinedSessionEvent implements ISessionEvent {
   type: EventType
   sessionReactions: ISessionReactions
   user: User
@@ -26,6 +32,9 @@ export class UserJoinedEvent implements ISessionEvent {
   }
 }
 
+/**
+ * User Left Session Event
+ */
 export class UserLeftSessionEvent implements ISessionEvent {
   type: EventType
   sessionReactions: ISessionReactions

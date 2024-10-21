@@ -1,10 +1,16 @@
 import { TextMessage, NotificationMessage, JoinNotification } from './message'
 import { IEventBus } from '../../event/eventBus'
 import { EventType } from '../../event/event'
-import { UserJoinedEvent, UserLeftSessionEvent } from '../session/events/sessionEvents'
+import { UserJoinedSessionEvent, UserLeftSessionEvent } from '../session/events/sessionEvents'
 import { MessageSentEvent } from './events/chatEvents'
 
+/**
+ * Chat Aggregate.
+ */
 export interface IChat {
+  /**
+   * Registers Event Handlers for Events emitted by the Session Service.
+   */
   registerEventHandlers(): void
 }
 
@@ -23,8 +29,15 @@ export class Chat implements IChat {
     this.eventBus.subscribe(EventType.MessageSent, this.handleMessageSentEvent)
   }
 
-  private handleUserJoinedEvent: (event: UserJoinedEvent) => Promise<void> = (
-    event: UserJoinedEvent
+  /**
+   * User Joined Event Handler.
+   * - Sends a message to the Session Chat specifying the user join
+   * - Updates the client Chat with the current messages sent so far in the Session
+   * @param event User Joined Event
+   * @returns Promise resolved when all messages are emitted
+   */
+  private handleUserJoinedEvent: (event: UserJoinedSessionEvent) => Promise<void> = (
+    event: UserJoinedSessionEvent
   ) => {
     return new Promise((resolve) => {
       event.sessionReactions.getChatReactions.sendNotificationToSession(
@@ -35,8 +48,14 @@ export class Chat implements IChat {
     })
   }
 
+  /**
+   * User Left Event Handler.
+   * Sends a message to the Session Chat specifying the user exit
+   * @param event User Left Session Event
+   * @returns Promise resolved when all messages are emitted
+   */
   private handleUserLeftEvent: (event: UserLeftSessionEvent) => Promise<void> = (
-    event: UserJoinedEvent
+    event: UserJoinedSessionEvent
   ) => {
     return new Promise((resolve) => {
       event.sessionReactions.getChatReactions.sendNotificationToSession(
@@ -46,6 +65,12 @@ export class Chat implements IChat {
     })
   }
 
+  /**
+   * Message Sent Event Handler.
+   * Sends a message to all Users connected in the Session.
+   * @param event Message Sent Event
+   * @returns Promise completed when messages are emitted to the Session
+   */
   private handleMessageSentEvent: (event: MessageSentEvent) => Promise<void> = (
     event: MessageSentEvent
   ) => {

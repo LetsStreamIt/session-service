@@ -1,6 +1,9 @@
 import { CommandType, ISessionCommand } from '../../../command/command'
 import { ISessionReactions } from '../../../reactions/sessionReactions'
 
+/**
+ * Send Message Command.
+ */
 export class SendMessageCommand implements ISessionCommand {
   type: CommandType
   token: string

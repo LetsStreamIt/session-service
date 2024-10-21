@@ -4,8 +4,11 @@ import { IChat, Chat } from '../chat/chat'
 import { User, UserRepository } from '../../user'
 import { EventType } from '../../event/event'
 import { IVideo, Video } from '../video/video'
-import { UserJoinedEvent, UserLeftSessionEvent } from './events/sessionEvents'
+import { UserJoinedSessionEvent, UserLeftSessionEvent } from './events/sessionEvents'
 
+/**
+ * Session Id
+ */
 export class SessionId {
   sessionName: string
 
@@ -17,9 +20,21 @@ export class SessionId {
 export class SessionEntry extends Pair<UserRepository, Pair<IChat, IVideo>> {}
 
 export interface ISession extends Entity<SessionId, SessionEntry> {
+  /**
+   * Register Event Handlers for Events Emitted by the Session Service
+   */
   registerEventHandlers(): void
+
+  /**
+   * Checks if the specified User is Joined to the Session
+   * @param user
+   */
   isUserJoined(user: User): boolean
-  eventBus(): IEventBus
+
+  /**
+   * Retreives the Event Bus
+   */
+  get eventBus(): IEventBus
 }
 
 export class Session implements ISession {
@@ -51,12 +66,19 @@ export class Session implements ISession {
     return false
   }
 
-  eventBus(): IEventBus {
+  get eventBus(): IEventBus {
     return this.sessionEventBus
   }
 
-  private handleUserJoinedEvent: (event: UserJoinedEvent) => Promise<void> = (
-    event: UserJoinedEvent
+  /**
+   * User Joined Session Event Handler.
+   * - Adds the User to the list of connected Users inside the Session
+   * - Triggers respective reaction specified by the inteface layer
+   * @param event User Joined Session Event
+   * @returns Promise resolved whenever reaction is triggered.
+   */
+  private handleUserJoinedEvent: (event: UserJoinedSessionEvent) => Promise<void> = (
+    event: UserJoinedSessionEvent
   ) => {
     return new Promise((resolve) => {
       this.value?.getX.add(event.user)
@@ -65,12 +87,19 @@ export class Session implements ISession {
     })
   }
 
+  /**
+   * User Left Session Event Handler.
+   * - Removes the User from the list of connected Users of the Session
+   * - Triggers respective reaction specified by the inteface layer
+   * @param event User Left Session Event
+   * @returns Promise resolved whenever reaction is triggered.
+   */
   private handleUserLeftEvent: (event: UserLeftSessionEvent) => Promise<void> = (
     event: UserLeftSessionEvent
   ) => {
     return new Promise((resolve) => {
-      event.sessionReactions.leaveUserFromSessionAndDisconnect()
       this.value?.getX.remove(event.user.id)
+      event.sessionReactions.leaveUserFromSessionAndDisconnect()
       resolve()
     })
   }

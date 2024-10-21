@@ -1,6 +1,9 @@
 import { ISessionEvent, EventType } from '../../../event/event'
 import { ISessionReactions } from '../../../reactions/sessionReactions'
 
+/**
+ * Video Played Event
+ */
 export class VideoPlayedEvent implements ISessionEvent {
   type: EventType
   sessionReactions: ISessionReactions
@@ -13,6 +16,9 @@ export class VideoPlayedEvent implements ISessionEvent {
   }
 }
 
+/**
+ * Video Stopped Event
+ */
 export class VideoStoppedEvent implements ISessionEvent {
   type: EventType
   sessionReactions: ISessionReactions

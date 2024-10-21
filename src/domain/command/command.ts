@@ -1,3 +1,6 @@
+/**
+ * Command Type
+ */
 export enum CommandType {
   CONNECTION = 'connection',
   USER_TOKEN = 'userToken',
@@ -10,6 +13,9 @@ export enum CommandType {
   PLAY_VIDEO = 'playVideo'
 }
 
+/**
+ * Session Command Interface
+ */
 export interface ISessionCommand {
   type: CommandType
   token: string
