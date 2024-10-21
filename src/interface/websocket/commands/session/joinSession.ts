@@ -29,7 +29,7 @@ export function recvJoinSessionCommand(
 
     const sessionReactions: SessionReactions = new WSSessionReactions(io, socket, sessionName)
     commandHandlers
-      .handleJoinUserCommand(new JoinSessionCommand(token, sessionName, sessionReactions))
+      .handleJoinSessionCommand(new JoinSessionCommand(token, sessionName, sessionReactions))
       .then((joinSessionResponse: JoinSessionResponse) => {
         if (joinSessionResponse.content.responseType == JoinSessionResponseType.SUCCESS) {
           enableRecvLeaveSessionCommand(

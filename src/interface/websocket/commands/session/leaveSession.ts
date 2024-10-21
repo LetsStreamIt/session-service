@@ -18,7 +18,7 @@ export function recvLeaveSessionCommand(
   sessionReactions: SessionReactions
 ): () => void {
   return () => {
-    commandHandlers.handleLeaveUserCommand(
+    commandHandlers.handleLeaveSessionCommand(
       new LeaveSessionCommand(token, sessionName, sessionReactions)
     )
   }
