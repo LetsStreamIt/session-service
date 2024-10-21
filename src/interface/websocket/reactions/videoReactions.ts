@@ -7,6 +7,9 @@ import {
   IVideoState
 } from '../../../domain/reactions/videoReactions'
 
+/**
+ * WebSocket Video Reactions
+ */
 export class WSVideoReactions implements IVideoReactions {
   io: Server
   socket: Socket
@@ -27,7 +30,7 @@ export class WSVideoReactions implements IVideoReactions {
     })
   }
 
-  synchronizeUser(videoState: IVideoState): Promise<void> {
+  synchronizeClient(videoState: IVideoState): Promise<void> {
     return new Promise((resolve) => {
       this.socket.emit(VideoReactionType.SYNCHRONIZE, new SerializerImpl().serialize(videoState))
       resolve()

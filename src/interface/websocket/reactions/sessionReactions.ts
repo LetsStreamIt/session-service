@@ -5,6 +5,9 @@ import { IChatReactions } from '../../../domain/reactions/chatReactions'
 import { ISessionReactions } from '../../../domain/reactions/sessionReactions'
 import { IVideoReactions } from '../../../domain/reactions/videoReactions'
 
+/**
+ * WebSocket Session Reactions
+ */
 export class WSSessionReactions implements ISessionReactions {
   io: Server
   socket: Socket

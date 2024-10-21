@@ -3,6 +3,9 @@ import { NotificationMessage, TextMessage } from '../../../domain/aggregates/cha
 import { IChatReactions, ChatReactionType } from '../../../domain/reactions/chatReactions'
 import { SerializerImpl } from '../../../presentation/serialization/messageSerializer'
 
+/**
+ * WebSocket Chat Reactions
+ */
 export class WSChatReactions implements IChatReactions {
   io: Server
   socket: Socket

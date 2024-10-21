@@ -1,26 +1,23 @@
-import { Server, Socket } from 'socket.io'
-import { SessionService } from '../../../../application/sessionService/sessionService'
+import { ISessionService } from '../../../../application/sessionService/sessionService'
 import { CreateSessionCommand } from '../../../../domain/aggregates/session/commands/sessionCommands'
 import { CreateSessionResponse } from '../../../../domain/command/response'
 
 /**
- * Create Session Command
- * @param io
- * @param socket
- * @param token
- * @param commandHandlers
+ * Receives Create Session Commands
+ * @param io Socket IO Server
+ * @param socket Socket IO Socket
+ * @param token access token
+ * @param sessionService Session Servuce
  * @returns
  */
 export function recvCreateSessionCommand(
-  io: Server,
-  socket: Socket,
   token: string,
-  commandHandlers: SessionService
+  sessionService: ISessionService
 ): (message: any, ack: any) => void {
   return (message, ack) => {
     const { videoUrl } = message
 
-    commandHandlers
+    sessionService
       .handleCreateSessionCommand(new CreateSessionCommand(token, videoUrl))
       .then((createSessionResponse: CreateSessionResponse) => ack(createSessionResponse))
   }

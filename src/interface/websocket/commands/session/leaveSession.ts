@@ -1,24 +1,23 @@
-import { SessionService } from '../../../../application/sessionService/sessionService'
+import { ISessionService } from '../../../../application/sessionService/sessionService'
 import { LeaveSessionCommand } from '../../../../domain/aggregates/session/commands/sessionCommands'
 import { ISessionReactions } from '../../../../domain/reactions/sessionReactions'
 
 /**
- * Leave command.
- * Using the token and socket, leaves the user to the specified session.
- * @param io
- * @param socket
- * @param sessionName
- * @param chatController
+ * Receives Leave Session Commands.
+ * @param sessionName Session name
+ * @param token access token
+ * @param sessionService Session Servuce
+ * @param sessionReactions Session Reactions
  * @returns
  */
 export function recvLeaveSessionCommand(
   sessionName: string,
   token: string,
-  commandHandlers: SessionService,
+  sessionService: ISessionService,
   sessionReactions: ISessionReactions
 ): () => void {
   return () => {
-    commandHandlers.handleLeaveSessionCommand(
+    sessionService.handleLeaveSessionCommand(
       new LeaveSessionCommand(token, sessionName, sessionReactions)
     )
   }

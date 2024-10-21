@@ -1,9 +1,8 @@
 import { Socket } from 'socket.io'
 
 /**
- * Diconnection command.
- * Disconnects a socketIO socket
- * @param socket
+ * Disconnects a socketIO socket.
+ * @param socket Socket IO socket
  * @returns
  */
 export function recvDisconnectionCommand(socket: Socket): (message: any) => void {
