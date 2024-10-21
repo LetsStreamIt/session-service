@@ -90,15 +90,17 @@ export class SessionService {
 
   async handleUserTokenCommand(command: UserTokenCommand): Promise<UserTokenResponse> {
     return new Promise((resolve) => {
-      resolve(
-        isTokenValid(command.token)
-          ? new UserTokenResponse(
-              new UserTokenResponseContent(ResponseStatus.SUCCESS, TokenStatus.TOKEN_VALID)
-            )
-          : new UserTokenResponse(
-              new UserTokenResponseContent(ResponseStatus.FAILURE, TokenStatus.TOKEN_INVALID)
-            )
-      )
+      isTokenValid(command.token).then((valid: boolean) => {
+        resolve(
+          valid
+            ? new UserTokenResponse(
+                new UserTokenResponseContent(ResponseStatus.SUCCESS, TokenStatus.TOKEN_VALID)
+              )
+            : new UserTokenResponse(
+                new UserTokenResponseContent(ResponseStatus.FAILURE, TokenStatus.TOKEN_INVALID)
+              )
+        )
+      })
     })
   }
 

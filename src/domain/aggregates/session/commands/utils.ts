@@ -10,9 +10,22 @@ export function getUserFromToken(token: string): User {
   return new User(getUserEmailFromToken(token), 'Name', 'Surname')
 }
 
-export function isTokenValid(token: string): boolean {
-  console.log(token)
-  return true
+export function isTokenValid(token: string): Promise<boolean> {
+  return new Promise((resolve) => {
+    axios
+      .post(
+        'http://localhost:3000/api/auth/validate',
+        {},
+        {
+          headers: {
+            authorization: `Bearer ${token}`
+          }
+        }
+      )
+      .then((response) => {
+        resolve(response.status === 200)
+      })
+  })
 }
 
 export function isYoutubeIdValid(videoId: string): Promise<boolean> {
