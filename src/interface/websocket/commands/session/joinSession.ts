@@ -1,11 +1,11 @@
 import { Server, Socket } from 'socket.io'
 import { commandListener } from '../../utils'
 import { WSSessionReactions } from '../../reactions/sessionReactions'
-import { SessionService } from '../../../../application/service/sessionService'
+import { SessionService } from '../../../../application/sessionService/sessionService'
 import { JoinSessionCommand } from '../../../../domain/aggregates/session/commands/sessionCommands'
 import { CommandType } from '../../../../domain/command/command'
 import { JoinSessionResponse, JoinSessionResponseType } from '../../../../domain/command/response'
-import { SessionReactions } from '../../../../domain/reactions/sessionReactions'
+import { ISessionReactions } from '../../../../domain/reactions/sessionReactions'
 import { recvSendMessageCommand } from './chat/sendMessage'
 import { recvLeaveSessionCommand } from './leaveSession'
 import { recvPlayVideoCommand, recvStopVideoCommand } from './video/videoCommands'
@@ -27,7 +27,7 @@ export function recvJoinSessionCommand(
   return (message, ack) => {
     const { sessionName } = message
 
-    const sessionReactions: SessionReactions = new WSSessionReactions(io, socket, sessionName)
+    const sessionReactions: ISessionReactions = new WSSessionReactions(io, socket, sessionName)
     commandHandlers
       .handleJoinSessionCommand(new JoinSessionCommand(token, sessionName, sessionReactions))
       .then((joinSessionResponse: JoinSessionResponse) => {
@@ -52,7 +52,7 @@ function enableRecvLeaveSessionCommand(
   token: string,
   sessionName: string,
   commandHandlers: SessionService,
-  sessionReactions: SessionReactions
+  sessionReactions: ISessionReactions
 ) {
   commandListener(
     socket,
@@ -66,7 +66,7 @@ function enableRecvChatCommands(
   token: string,
   sessionName: string,
   commandHandlers: SessionService,
-  sessionReactions: SessionReactions
+  sessionReactions: ISessionReactions
 ) {
   commandListener(
     socket,
@@ -80,7 +80,7 @@ function enableRecvVideoCommands(
   token: string,
   sessionName: string,
   commandHandlers: SessionService,
-  sessionReactions: SessionReactions
+  sessionReactions: ISessionReactions
 ) {
   commandListener(
     socket,

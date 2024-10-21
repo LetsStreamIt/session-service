@@ -2,7 +2,7 @@ import { SendMessageCommand } from '../../../domain/aggregates/chat/commands/cha
 import { MessageSentEvent } from '../../../domain/aggregates/chat/events/chatEvents'
 import { TextMessage } from '../../../domain/aggregates/chat/message'
 import { getUserFromToken } from '../../../domain/aggregates/session/commands/utils'
-import { Session, SessionId, SessionRepository } from '../../../domain/aggregates/session/session'
+import { ISession, SessionId, SessionRepository } from '../../../domain/aggregates/session/session'
 import { SendMessageResponse, ResponseStatus } from '../../../domain/command/response'
 import { User } from '../../../domain/user'
 
@@ -13,7 +13,7 @@ export async function handleSendMessageCommand(
   return new Promise((resolve) => {
     if (command.message !== '') {
       const user: User = getUserFromToken(command.token)
-      const session: Session | undefined = sessions.find(new SessionId(command.sessionName))
+      const session: ISession | undefined = sessions.find(new SessionId(command.sessionName))
       const textMessage: TextMessage = new TextMessage(user, command.message)
       if (session) {
         session.eventBus().publish(new MessageSentEvent(textMessage, command.sessionReactions))

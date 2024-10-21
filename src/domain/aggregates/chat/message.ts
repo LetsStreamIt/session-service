@@ -7,7 +7,7 @@ export enum JoinNotification {
 
 export type MessageContent = JoinNotification | string
 
-export interface Message<X extends MessageContent> {
+export interface IMessage<X extends MessageContent> {
   readonly content: X
   readonly sender: User
 
@@ -16,7 +16,7 @@ export interface Message<X extends MessageContent> {
   get getSender(): User
 }
 
-export class NotificationMessage implements Message<JoinNotification> {
+export class NotificationMessage implements IMessage<JoinNotification> {
   content: JoinNotification
   sender: User
   type = 'notificationMessage'
@@ -35,7 +35,7 @@ export class NotificationMessage implements Message<JoinNotification> {
   }
 }
 
-export class TextMessage implements Message<string> {
+export class TextMessage implements IMessage<string> {
   content: string
   sender: User
   type = 'textMessage'

@@ -1,9 +1,9 @@
 import { Pair, Entity, Repository } from '../../entity'
-import { EventBus, EventBusImpl } from '../../event/eventBus'
-import { Chat, ChatImpl } from '../chat/chat'
+import { IEventBus, EventBus } from '../../event/eventBus'
+import { IChat, Chat } from '../chat/chat'
 import { User, UserRepository } from '../../user'
 import { EventType } from '../../event/event'
-import { Video, VideoImpl } from '../video/video'
+import { IVideo, Video } from '../video/video'
 import { UserJoinedEvent, UserLeftSessionEvent } from './events/sessionEvents'
 
 export class SessionId {
@@ -14,25 +14,25 @@ export class SessionId {
   }
 }
 
-export class SessionEntry extends Pair<UserRepository, Pair<Chat, Video>> {}
+export class SessionEntry extends Pair<UserRepository, Pair<IChat, IVideo>> {}
 
-export interface Session extends Entity<SessionId, SessionEntry> {
+export interface ISession extends Entity<SessionId, SessionEntry> {
   registerEventHandlers(): void
   isUserJoined(user: User): boolean
-  eventBus(): EventBus
+  eventBus(): IEventBus
 }
 
-export class SessionImpl implements Session {
+export class Session implements ISession {
   id: SessionId
   value?: SessionEntry | undefined
-  sessionEventBus: EventBus
+  sessionEventBus: IEventBus
 
   constructor(id: SessionId, videoRef: string) {
     this.id = id
-    this.sessionEventBus = new EventBusImpl()
+    this.sessionEventBus = new EventBus()
     this.value = new SessionEntry(
       new UserRepository(),
-      new Pair(new ChatImpl(this.sessionEventBus), new VideoImpl(videoRef, this.sessionEventBus))
+      new Pair(new Chat(this.sessionEventBus), new Video(videoRef, this.sessionEventBus))
     )
   }
 
@@ -51,7 +51,7 @@ export class SessionImpl implements Session {
     return false
   }
 
-  eventBus(): EventBus {
+  eventBus(): IEventBus {
     return this.sessionEventBus
   }
 
@@ -76,4 +76,4 @@ export class SessionImpl implements Session {
   }
 }
 
-export class SessionRepository extends Repository<Session> {}
+export class SessionRepository extends Repository<ISession> {}

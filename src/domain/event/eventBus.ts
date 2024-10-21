@@ -1,21 +1,21 @@
-import { SessionEvent, EventType } from './event'
+import { ISessionEvent, EventType } from './event'
 
-export interface EventBus {
-  subscribe<X extends SessionEvent>(
+export interface IEventBus {
+  subscribe<X extends ISessionEvent>(
     eventType: EventType,
     listener: (event: X) => Promise<void>
   ): void
-  publish(event: SessionEvent): void
+  publish(event: ISessionEvent): void
 }
 
-export class EventBusImpl implements EventBus {
+export class EventBus implements IEventBus {
   listeners: Record<string, ((event: any) => Promise<void>)[]>
 
   constructor() {
     this.listeners = {}
   }
 
-  subscribe<X extends SessionEvent>(
+  subscribe<X extends ISessionEvent>(
     eventType: EventType,
     listener: (event: X) => Promise<void>
   ): void {
@@ -25,7 +25,7 @@ export class EventBusImpl implements EventBus {
     this.listeners[eventType].push(listener)
   }
 
-  async publish(event: SessionEvent): Promise<void> {
+  async publish(event: ISessionEvent): Promise<void> {
     const eventType = event.type
     if (this.listeners[eventType]) {
       this.listeners[eventType].reduce(

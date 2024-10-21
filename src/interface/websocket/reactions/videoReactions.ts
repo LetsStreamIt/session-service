@@ -2,12 +2,12 @@ import { Server, Socket } from 'socket.io'
 import { VideoStateDeserializer } from '../../../presentation/deserialization/videoStateDeserializer'
 import { SerializerImpl } from '../../../presentation/serialization/messageSerializer'
 import {
-  VideoReactions,
+  IVideoReactions,
   VideoReactionType,
-  VideoState
+  IVideoState
 } from '../../../domain/reactions/videoReactions'
 
-export class WSVideoReactions implements VideoReactions {
+export class WSVideoReactions implements IVideoReactions {
   io: Server
   socket: Socket
   sessionName: string
@@ -18,7 +18,7 @@ export class WSVideoReactions implements VideoReactions {
     this.sessionName = sessionName
   }
 
-  retreiveVideoState(): Promise<VideoState> {
+  retreiveVideoState(): Promise<IVideoState> {
     return new Promise((resolve) => {
       this.socket.emit(VideoReactionType.VIDEO_STATE, (response: any) => {
         const videoState = new VideoStateDeserializer().deserialize(JSON.parse(response))
@@ -27,14 +27,14 @@ export class WSVideoReactions implements VideoReactions {
     })
   }
 
-  synchronizeUser(videoState: VideoState): Promise<void> {
+  synchronizeUser(videoState: IVideoState): Promise<void> {
     return new Promise((resolve) => {
       this.socket.emit(VideoReactionType.SYNCHRONIZE, new SerializerImpl().serialize(videoState))
       resolve()
     })
   }
 
-  syncronizeSession(videoState: VideoState): Promise<void> {
+  syncronizeSession(videoState: IVideoState): Promise<void> {
     return new Promise((resolve) => {
       this.io
         .to(this.sessionName)

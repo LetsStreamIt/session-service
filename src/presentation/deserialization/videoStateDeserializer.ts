@@ -1,4 +1,4 @@
-import { PlayState, VideoState } from '../../domain/reactions/videoReactions'
+import { PlayState, IVideoState } from '../../domain/reactions/videoReactions'
 import { AbstractDeserializer } from './deserializer'
 
 class PlayStateDeserializer extends AbstractDeserializer<PlayState> {
@@ -11,12 +11,12 @@ class PlayStateDeserializer extends AbstractDeserializer<PlayState> {
   }
 }
 
-export class VideoStateDeserializer extends AbstractDeserializer<VideoState> {
+export class VideoStateDeserializer extends AbstractDeserializer<IVideoState> {
   isJsonValid(json: any): boolean {
     return typeof json.state === 'string' && typeof json.timestamp === 'number'
   }
 
-  deserializeJson(json: any): VideoState {
+  deserializeJson(json: any): IVideoState {
     return { state: new PlayStateDeserializer().deserialize(json.state), timestamp: json.timestamp }
   }
 }

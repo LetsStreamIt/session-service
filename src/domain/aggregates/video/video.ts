@@ -1,6 +1,6 @@
 import { EventType } from '../../event/event'
-import { EventBus } from '../../event/eventBus'
-import { VideoReactions } from '../../reactions/videoReactions'
+import { IEventBus } from '../../event/eventBus'
+import { IVideoReactions } from '../../reactions/videoReactions'
 import { User } from '../../user'
 import { isDeepEqual } from '../../utils'
 import { UserJoinedEvent, UserLeftSessionEvent } from '../session/events/sessionEvents'
@@ -16,18 +16,18 @@ export interface VideoState {
   state: PlayState
 }
 
-export interface Video {
+export interface IVideo {
   registerEventHandlers(): void
 
   get getVideoId(): string
 }
 
-export class VideoImpl implements Video {
-  userReactions: Map<User, VideoReactions>
+export class Video implements IVideo {
+  userReactions: Map<User, IVideoReactions>
   videoId: string
-  eventBus: EventBus
+  eventBus: IEventBus
 
-  constructor(videoRef: string, eventBus: EventBus) {
+  constructor(videoRef: string, eventBus: IEventBus) {
     this.userReactions = new Map()
     this.videoId = videoRef
     this.eventBus = eventBus

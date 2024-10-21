@@ -1,7 +1,7 @@
-import { CommandType, SessionCommand } from '../../../command/command'
-import { SessionReactions } from '../../../reactions/sessionReactions'
+import { CommandType, ISessionCommand } from '../../../command/command'
+import { ISessionReactions } from '../../../reactions/sessionReactions'
 
-export class CreateSessionCommand implements SessionCommand {
+export class CreateSessionCommand implements ISessionCommand {
   type: CommandType
   token: string
   videoUrl: string
@@ -13,7 +13,7 @@ export class CreateSessionCommand implements SessionCommand {
   }
 }
 
-export class UserTokenCommand implements SessionCommand {
+export class UserTokenCommand implements ISessionCommand {
   type: CommandType
   token: string
 
@@ -23,13 +23,13 @@ export class UserTokenCommand implements SessionCommand {
   }
 }
 
-export class JoinSessionCommand implements SessionCommand {
+export class JoinSessionCommand implements ISessionCommand {
   type: CommandType
   token: string
   sessionName: string
-  sessionReactions: SessionReactions
+  sessionReactions: ISessionReactions
 
-  constructor(token: string, sessionName: string, sessionReactions: SessionReactions) {
+  constructor(token: string, sessionName: string, sessionReactions: ISessionReactions) {
     this.type = CommandType.JOIN_SESSION
     this.token = token
     this.sessionName = sessionName
@@ -37,13 +37,13 @@ export class JoinSessionCommand implements SessionCommand {
   }
 }
 
-export class LeaveSessionCommand implements SessionCommand {
+export class LeaveSessionCommand implements ISessionCommand {
   type: CommandType
   token: string
   sessionName: string
-  sessionReactions: SessionReactions
+  sessionReactions: ISessionReactions
 
-  constructor(token: string, sessionName: string, sessionReactions: SessionReactions) {
+  constructor(token: string, sessionName: string, sessionReactions: ISessionReactions) {
     this.type = CommandType.LEAVE_SESSION
     this.token = token
     this.sessionName = sessionName

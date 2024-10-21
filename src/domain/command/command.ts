@@ -10,7 +10,7 @@ export enum CommandType {
   PLAY_VIDEO = 'playVideo'
 }
 
-export interface SessionCommand {
+export interface ISessionCommand {
   type: CommandType
   token: string
 }

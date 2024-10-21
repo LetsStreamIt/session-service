@@ -1,18 +1,18 @@
-import { CommandType, SessionCommand } from '../../../command/command'
-import { SessionReactions } from '../../../reactions/sessionReactions'
+import { CommandType, ISessionCommand } from '../../../command/command'
+import { ISessionReactions } from '../../../reactions/sessionReactions'
 
-export class PlayVideoCommand implements SessionCommand {
+export class PlayVideoCommand implements ISessionCommand {
   type: CommandType
   token: string
   sessionName: string
   timestamp: number
-  sessionReactions: SessionReactions
+  sessionReactions: ISessionReactions
 
   constructor(
     token: string,
     sessionName: string,
     timestamp: number,
-    sessionReactions: SessionReactions
+    sessionReactions: ISessionReactions
   ) {
     this.type = CommandType.PLAY_VIDEO
     this.token = token
@@ -22,18 +22,18 @@ export class PlayVideoCommand implements SessionCommand {
   }
 }
 
-export class StopVideoCommand implements SessionCommand {
+export class StopVideoCommand implements ISessionCommand {
   type: CommandType
   token: string
   sessionName: string
   timestamp: number
-  sessionReactions: SessionReactions
+  sessionReactions: ISessionReactions
 
   constructor(
     token: string,
     sessionName: string,
     timestamp: number,
-    sessionReactions: SessionReactions
+    sessionReactions: ISessionReactions
   ) {
     this.type = CommandType.STOP_VIDEO
     this.token = token

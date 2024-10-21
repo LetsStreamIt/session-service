@@ -1,7 +1,7 @@
 import { JoinSessionCommand } from '../../../domain/aggregates/session/commands/sessionCommands'
 import { getUserFromToken } from '../../../domain/aggregates/session/commands/utils'
 import { UserJoinedEvent } from '../../../domain/aggregates/session/events/sessionEvents'
-import { SessionRepository, SessionId, Session } from '../../../domain/aggregates/session/session'
+import { SessionRepository, SessionId, ISession } from '../../../domain/aggregates/session/session'
 import {
   JoinSessionResponse,
   JoinSessionResponseContent,
@@ -21,7 +21,7 @@ export async function handleJoinSessionCommand(
     if (!isUserJoined(sessions, command.token)) {
       const user: User = getUserFromToken(command.token)
       const sessionId: SessionId = new SessionId(command.sessionName)
-      const session: Session | undefined = sessions.find(sessionId)
+      const session: ISession | undefined = sessions.find(sessionId)
 
       // Resolve the Promise if the session is already existing, reject otherwise
       if (session) {

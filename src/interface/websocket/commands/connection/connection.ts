@@ -2,7 +2,7 @@ import { Server, Socket } from 'socket.io'
 import { recvUserTokenCommand } from './userToken'
 import { recvDisconnectionCommand } from './disconnect'
 import { commandListener } from '../../utils'
-import { SessionService } from '../../../../application/service/sessionService'
+import { SessionService } from '../../../../application/sessionService/sessionService'
 import { CommandType } from '../../../../domain/command/command'
 
 /**
