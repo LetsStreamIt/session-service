@@ -1,5 +1,5 @@
-import { LeaveSessionCommand } from '../../../../application/session/aggregates/session/commands/sessionCommands'
-import { SessionCommandHandlers } from '../../../../application/session/aggregates/session/commands/sessionCommandHandlers'
+import { SessionService } from '../../../../application/service/sessionService'
+import { LeaveSessionCommand } from '../../../../domain/aggregates/session/commands/sessionCommands'
 import { SessionReactions } from '../../../../domain/reactions/sessionReactions'
 
 /**
@@ -14,7 +14,7 @@ import { SessionReactions } from '../../../../domain/reactions/sessionReactions'
 export function recvLeaveSessionCommand(
   sessionName: string,
   token: string,
-  commandHandlers: SessionCommandHandlers,
+  commandHandlers: SessionService,
   sessionReactions: SessionReactions
 ): () => void {
   return () => {

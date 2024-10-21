@@ -1,14 +1,14 @@
 import { Server, Socket } from 'socket.io'
 import { commandListener } from '../../utils'
+import { WSSessionReactions } from '../../reactions/sessionReactions'
+import { SessionService } from '../../../../application/service/sessionService'
+import { JoinSessionCommand } from '../../../../domain/aggregates/session/commands/sessionCommands'
 import { CommandType } from '../../../../domain/command/command'
-import { recvPlayVideoCommand, recvStopVideoCommand } from './video/videoCommands'
-import { recvSendMessageCommand } from './chat/sendMessage'
-import { recvLeaveSessionCommand } from './leaveSession'
-import { JoinSessionCommand } from '../../../../application/session/aggregates/session/commands/sessionCommands'
-import { SessionCommandHandlers } from '../../../../application/session/aggregates/session/commands/sessionCommandHandlers'
 import { JoinSessionResponse, JoinSessionResponseType } from '../../../../domain/command/response'
 import { SessionReactions } from '../../../../domain/reactions/sessionReactions'
-import { WSSessionReactions } from '../../reactions/sessionReactions'
+import { recvSendMessageCommand } from './chat/sendMessage'
+import { recvLeaveSessionCommand } from './leaveSession'
+import { recvPlayVideoCommand, recvStopVideoCommand } from './video/videoCommands'
 
 /**
  * Join Session Command.
@@ -22,7 +22,7 @@ export function recvJoinSessionCommand(
   io: Server,
   socket: Socket,
   token: string,
-  commandHandlers: SessionCommandHandlers
+  commandHandlers: SessionService
 ): (message: any, ack: any) => void {
   return (message, ack) => {
     const { sessionName } = message
@@ -51,7 +51,7 @@ function enableRecvLeaveSessionCommand(
   socket: Socket,
   token: string,
   sessionName: string,
-  commandHandlers: SessionCommandHandlers,
+  commandHandlers: SessionService,
   sessionReactions: SessionReactions
 ) {
   commandListener(
@@ -65,7 +65,7 @@ function enableRecvChatCommands(
   socket: Socket,
   token: string,
   sessionName: string,
-  commandHandlers: SessionCommandHandlers,
+  commandHandlers: SessionService,
   sessionReactions: SessionReactions
 ) {
   commandListener(
@@ -79,7 +79,7 @@ function enableRecvVideoCommands(
   socket: Socket,
   token: string,
   sessionName: string,
-  commandHandlers: SessionCommandHandlers,
+  commandHandlers: SessionService,
   sessionReactions: SessionReactions
 ) {
   commandListener(

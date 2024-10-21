@@ -1,8 +1,7 @@
 import { Server, Socket } from 'socket.io'
-import { NotificationMessage, TextMessage } from '../../../application/session/message'
+import { NotificationMessage, TextMessage } from '../../../domain/aggregates/chat/message'
+import { ChatReactions, ChatReactionType } from '../../../domain/reactions/chatReactions'
 import { SerializerImpl } from '../../../presentation/serialization/messageSerializer'
-import { ChatReactionType } from '../../../domain/reactions/reactions'
-import { ChatReactions } from '../../../domain/reactions/chatReactions'
 
 export class WSChatReactions implements ChatReactions {
   io: Server

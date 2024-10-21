@@ -1,6 +1,6 @@
-import { TextMessage, NotificationMessage, JoinNotification } from '../../message'
-import { EventBus } from '../../../../domain/event/eventBus'
-import { EventType } from '../../../../domain/event/event'
+import { TextMessage, NotificationMessage, JoinNotification } from './message'
+import { EventBus } from '../../event/eventBus'
+import { EventType } from '../../event/event'
 import { UserJoinedEvent, UserLeftSessionEvent } from '../session/events/sessionEvents'
 import { MessageSentEvent } from './events/chatEvents'
 

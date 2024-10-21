@@ -1,11 +1,11 @@
 import { Server, Socket } from 'socket.io'
 import { commandListener } from '../../utils'
-import { CommandType } from '../../../../domain/command/command'
 import { recvCreateSessionCommand } from '../session/createSession'
 import { recvJoinSessionCommand } from '../session/joinSession'
-import { SessionCommandHandlers } from '../../../../application/session/aggregates/session/commands/sessionCommandHandlers'
+import { SessionService } from '../../../../application/service/sessionService'
 import { ResponseStatus, UserTokenResponse } from '../../../../domain/command/response'
-import { UserTokenCommand } from '../../../../application/session/aggregates/session/commands/sessionCommands'
+import { CommandType } from '../../../../domain/command/command'
+import { UserTokenCommand } from '../../../../domain/aggregates/session/commands/sessionCommands'
 
 /**
  * User token command.
@@ -19,7 +19,7 @@ import { UserTokenCommand } from '../../../../application/session/aggregates/ses
 export function recvUserTokenCommand(
   io: Server,
   socket: Socket,
-  commandHandlers: SessionCommandHandlers
+  commandHandlers: SessionService
 ): (message: any, ack: any) => void {
   return (message, ack) => {
     const { token } = message

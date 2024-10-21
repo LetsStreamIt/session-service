@@ -1,6 +1,6 @@
 import { Server, Socket } from 'socket.io'
-import { CreateSessionCommand } from '../../../../application/session/aggregates/session/commands/sessionCommands'
-import { SessionCommandHandlers } from '../../../../application/session/aggregates/session/commands/sessionCommandHandlers'
+import { SessionService } from '../../../../application/service/sessionService'
+import { CreateSessionCommand } from '../../../../domain/aggregates/session/commands/sessionCommands'
 import { CreateSessionResponse } from '../../../../domain/command/response'
 
 /**
@@ -15,7 +15,7 @@ export function recvCreateSessionCommand(
   io: Server,
   socket: Socket,
   token: string,
-  commandHandlers: SessionCommandHandlers
+  commandHandlers: SessionService
 ): (message: any, ack: any) => void {
   return (message, ack) => {
     const { videoUrl } = message

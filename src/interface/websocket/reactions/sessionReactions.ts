@@ -1,9 +1,9 @@
 import { Server, Socket } from 'socket.io'
 import { WSChatReactions } from './chatReactions'
+import { WSVideoReactions } from './videoReactions'
 import { ChatReactions } from '../../../domain/reactions/chatReactions'
 import { SessionReactions } from '../../../domain/reactions/sessionReactions'
 import { VideoReactions } from '../../../domain/reactions/videoReactions'
-import { WSVideoReactions } from './videoReactions'
 
 export class WSSessionReactions implements SessionReactions {
   io: Server

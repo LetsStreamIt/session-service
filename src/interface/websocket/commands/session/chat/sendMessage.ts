@@ -1,5 +1,5 @@
-import { SendMessageCommand } from '../../../../../application/session/aggregates/chat/commands/chatCommands'
-import { SessionCommandHandlers } from '../../../../../application/session/aggregates/session/commands/sessionCommandHandlers'
+import { SessionService } from '../../../../../application/service/sessionService'
+import { SendMessageCommand } from '../../../../../domain/aggregates/chat/commands/chatCommands'
 import { SendMessageResponse } from '../../../../../domain/command/response'
 import { SessionReactions } from '../../../../../domain/reactions/sessionReactions'
 
@@ -15,7 +15,7 @@ import { SessionReactions } from '../../../../../domain/reactions/sessionReactio
 export function recvSendMessageCommand(
   token: string,
   sessionName: string,
-  commandHandlers: SessionCommandHandlers,
+  commandHandlers: SessionService,
   sessionReactions: SessionReactions
 ): (message: any, ack: any) => void {
   return (data, ack) => {

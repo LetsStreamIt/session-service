@@ -1,4 +1,4 @@
-import { UserId, User } from '../../application/session/user'
+import { User, UserId } from '../../domain/user'
 import { AbstractDeserializer } from './deserializer'
 
 class UserIdDeserializer extends AbstractDeserializer<UserId> {

@@ -1,5 +1,5 @@
-import { SessionEvent, EventType } from '../../../../../domain/event/event'
-import { SessionReactions } from '../../../../../domain/reactions/sessionReactions'
+import { SessionEvent, EventType } from '../../../event/event'
+import { SessionReactions } from '../../../reactions/sessionReactions'
 import { User } from '../../../user'
 
 export class SessionCreatedEvent implements SessionEvent {

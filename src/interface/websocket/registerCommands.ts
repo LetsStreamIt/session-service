@@ -1,7 +1,7 @@
 import { Server } from 'socket.io'
 import { connectionCommand } from './commands/connection/connection'
-import { SessionCommandHandlers } from '../../application/session/aggregates/session/commands/sessionCommandHandlers'
+import { SessionService } from '../../application/service/sessionService'
 
 export async function registerCommands(io: Server) {
-  connectionCommand(io, new SessionCommandHandlers())
+  connectionCommand(io, new SessionService())
 }

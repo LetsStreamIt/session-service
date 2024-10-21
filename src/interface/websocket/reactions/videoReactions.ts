@@ -1,8 +1,11 @@
 import { Server, Socket } from 'socket.io'
 import { VideoStateDeserializer } from '../../../presentation/deserialization/videoStateDeserializer'
 import { SerializerImpl } from '../../../presentation/serialization/messageSerializer'
-import { VideoReactionType, VideoState } from '../../../domain/reactions/reactions'
-import { VideoReactions } from '../../../domain/reactions/videoReactions'
+import {
+  VideoReactions,
+  VideoReactionType,
+  VideoState
+} from '../../../domain/reactions/videoReactions'
 
 export class WSVideoReactions implements VideoReactions {
   io: Server

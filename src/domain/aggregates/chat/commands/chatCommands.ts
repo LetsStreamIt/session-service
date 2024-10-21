@@ -1,5 +1,5 @@
-import { CommandType, SessionCommand } from '../../../../../domain/command/command'
-import { SessionReactions } from '../../../../../domain/reactions/sessionReactions'
+import { CommandType, SessionCommand } from '../../../command/command'
+import { SessionReactions } from '../../../reactions/sessionReactions'
 
 export class SendMessageCommand implements SessionCommand {
   type: CommandType

@@ -1,8 +1,8 @@
 import { Pair, Entity, Repository } from '../../entity'
-import { EventBus, EventBusImpl } from '../../../../domain/event/eventBus'
+import { EventBus, EventBusImpl } from '../../event/eventBus'
 import { Chat, ChatImpl } from '../chat/chat'
 import { User, UserRepository } from '../../user'
-import { EventType } from '../../../../domain/event/event'
+import { EventType } from '../../event/event'
 import { Video, VideoImpl } from '../video/video'
 import { UserJoinedEvent, UserLeftSessionEvent } from './events/sessionEvents'
 

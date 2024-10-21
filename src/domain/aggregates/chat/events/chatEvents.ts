@@ -1,6 +1,6 @@
-import { SessionEvent, EventType } from '../../../../../domain/event/event'
-import { SessionReactions } from '../../../../../domain/reactions/sessionReactions'
-import { TextMessage } from '../../../message'
+import { SessionEvent, EventType } from '../../../event/event'
+import { SessionReactions } from '../../../reactions/sessionReactions'
+import { TextMessage } from '../message'
 
 export class MessageSentEvent implements SessionEvent {
   type: EventType

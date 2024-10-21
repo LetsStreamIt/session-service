@@ -1,4 +1,4 @@
-import { PlayState, VideoState } from '../../domain/reactions/reactions'
+import { PlayState, VideoState } from '../../domain/reactions/videoReactions'
 import { AbstractDeserializer } from './deserializer'
 
 class PlayStateDeserializer extends AbstractDeserializer<PlayState> {

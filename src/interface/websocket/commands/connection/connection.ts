@@ -1,9 +1,9 @@
 import { Server, Socket } from 'socket.io'
 import { recvUserTokenCommand } from './userToken'
-import { CommandType } from '../../../../domain/command/command'
 import { recvDisconnectionCommand } from './disconnect'
 import { commandListener } from '../../utils'
-import { SessionCommandHandlers } from '../../../../application/session/aggregates/session/commands/sessionCommandHandlers'
+import { SessionService } from '../../../../application/service/sessionService'
+import { CommandType } from '../../../../domain/command/command'
 
 /**
  * On connection command.
@@ -13,7 +13,7 @@ import { SessionCommandHandlers } from '../../../../application/session/aggregat
  * @param io
  * @param commandHandlers
  */
-export function connectionCommand(io: Server, commandHandlers: SessionCommandHandlers) {
+export function connectionCommand(io: Server, commandHandlers: SessionService) {
   commandListener(io, CommandType.CONNECTION, (socket: Socket) => {
     commandListener(
       socket,

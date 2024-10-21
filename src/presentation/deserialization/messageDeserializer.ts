@@ -1,4 +1,4 @@
-import { TextMessage, NotificationMessage } from '../../application/session/message'
+import { NotificationMessage, TextMessage } from '../../domain/aggregates/chat/message'
 import { AbstractDeserializer } from './deserializer'
 import { UserDeserializer } from './userDeserializer'
 

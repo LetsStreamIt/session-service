@@ -3,39 +3,54 @@ import {
   isTokenValid,
   sessionNameFromTokenAndVideoId,
   youtubeVideoIdFromUrl
-} from './utils'
-import { TextMessage } from '../../../message'
-import { User } from '../../../user'
-import { SendMessageCommand } from '../../chat/commands/chatCommands'
-import { MessageSentEvent } from '../../chat/events/chatEvents'
-import { PlayVideoCommand, StopVideoCommand } from '../../video/commands/videoCommands'
-import { VideoPlayedEvent, VideoStoppedEvent } from '../../video/events/videoEvents'
-import { UserJoinedEvent, UserLeftSessionEvent } from '../events/sessionEvents'
-import { SessionRepository, SessionId, SessionImpl, SessionEntry, Session } from '../session'
+} from '../../domain/aggregates/session/commands/utils'
+import { TextMessage } from '../../domain/aggregates/chat/message'
+import { User } from '../../domain/user'
+import { SendMessageCommand } from '../../domain/aggregates/chat/commands/chatCommands'
+import { MessageSentEvent } from '../../domain/aggregates/chat/events/chatEvents'
 import {
   CreateSessionCommand,
+  UserTokenCommand,
   JoinSessionCommand,
-  LeaveSessionCommand,
-  UserTokenCommand
-} from './sessionCommands'
+  LeaveSessionCommand
+} from '../../domain/aggregates/session/commands/sessionCommands'
+import {
+  UserJoinedEvent,
+  UserLeftSessionEvent
+} from '../../domain/aggregates/session/events/sessionEvents'
+import {
+  SessionRepository,
+  SessionId,
+  SessionImpl,
+  SessionEntry,
+  Session
+} from '../../domain/aggregates/session/session'
+import {
+  PlayVideoCommand,
+  StopVideoCommand
+} from '../../domain/aggregates/video/commands/videoCommands'
+import {
+  VideoPlayedEvent,
+  VideoStoppedEvent
+} from '../../domain/aggregates/video/events/videoEvents'
 import {
   CreateSessionResponse,
+  ResponseStatus,
+  UserTokenResponse,
+  UserTokenResponseContent,
+  TokenStatus,
   JoinSessionResponse,
   JoinSessionResponseContent,
   JoinSessionResponseType,
   LeaveSessionResponse,
-  PlayVideoResponse,
-  ResponseStatus,
   SendMessageResponse,
-  StopVideoResponse,
-  TokenStatus,
-  UserTokenResponse,
-  UserTokenResponseContent
-} from '../../../../../domain/command/response'
-import { EventBus } from '../../../../../domain/event/eventBus'
-import { EventType } from '../../../../../domain/event/event'
+  PlayVideoResponse,
+  StopVideoResponse
+} from '../../domain/command/response'
+import { EventType } from '../../domain/event/event'
+import { EventBus } from '../../domain/event/eventBus'
 
-export class SessionCommandHandlers {
+export class SessionService {
   sessions: SessionRepository
 
   constructor() {
