@@ -9,6 +9,7 @@ import { ISessionReactions } from '../../../../domain/reactions/sessionReactions
 import { recvSendMessageCommand } from './chat/sendMessage'
 import { recvLeaveSessionCommand } from './leaveSession'
 import { recvPlayVideoCommand, recvStopVideoCommand } from './video/videoCommands'
+import { User } from '../../../../domain/user'
 
 /**
  * Receives Join Session Commands
@@ -17,14 +18,14 @@ import { recvPlayVideoCommand, recvStopVideoCommand } from './video/videoCommand
  *    as well as Chat/Video Commands.
  * @param io Socket IO Server
  * @param socket Socket IO Socket
- * @param token access token
+ * @param user access user
  * @param sessionService Session Servuce
  * @returns
  */
 export function recvJoinSessionCommand(
   io: Server,
   socket: Socket,
-  token: string,
+  user: User,
   sessionService: ISessionService
 ): (message: any, ack: any) => void {
   return (message, ack) => {
@@ -32,18 +33,12 @@ export function recvJoinSessionCommand(
 
     const sessionReactions: ISessionReactions = new WSSessionReactions(io, socket, sessionName)
     sessionService
-      .handleJoinSessionCommand(new JoinSessionCommand(token, sessionName, sessionReactions))
+      .handleJoinSessionCommand(new JoinSessionCommand(user, sessionName, sessionReactions))
       .then((joinSessionResponse: JoinSessionResponse) => {
         if (joinSessionResponse.content.responseType == JoinSessionResponseType.SUCCESS) {
-          enableRecvLeaveSessionCommand(
-            socket,
-            token,
-            sessionName,
-            sessionService,
-            sessionReactions
-          )
-          enableRecvChatCommands(socket, token, sessionName, sessionService, sessionReactions)
-          enableRecvVideoCommands(socket, token, sessionName, sessionService, sessionReactions)
+          enableRecvLeaveSessionCommand(socket, user, sessionName, sessionService, sessionReactions)
+          enableRecvChatCommands(socket, user, sessionName, sessionService, sessionReactions)
+          enableRecvVideoCommands(socket, user, sessionName, sessionService, sessionReactions)
         }
         ack(joinSessionResponse)
       })
@@ -54,14 +49,14 @@ export function recvJoinSessionCommand(
  * Enables receive Leave Session Commands
  * @param io Socket IO Server
  * @param socket Socket IO Socket
- * @param token access token
+ * @param user access user
  * @param sessionService Session Servuce
  * @param sessionReactions Session Reactions
  * @returns
  */
 function enableRecvLeaveSessionCommand(
   socket: Socket,
-  token: string,
+  user: User,
   sessionName: string,
   sessionService: ISessionService,
   sessionReactions: ISessionReactions
@@ -69,14 +64,14 @@ function enableRecvLeaveSessionCommand(
   commandListener(
     socket,
     CommandType.LEAVE_SESSION,
-    recvLeaveSessionCommand(sessionName, token, sessionService, sessionReactions)
+    recvLeaveSessionCommand(sessionName, user, sessionService, sessionReactions)
   )
 }
 
 /**
  * Enables receive Chat Commands
  * @param socket Socket IO Socket
- * @param token access token
+ * @param user access user
  * @param sessionName Session name
  * @param sessionService Session Servuce
  * @param sessionReactions Session Reactions
@@ -84,7 +79,7 @@ function enableRecvLeaveSessionCommand(
  */
 function enableRecvChatCommands(
   socket: Socket,
-  token: string,
+  user: User,
   sessionName: string,
   sessionService: ISessionService,
   sessionReactions: ISessionReactions
@@ -92,14 +87,14 @@ function enableRecvChatCommands(
   commandListener(
     socket,
     CommandType.SEND_MSG,
-    recvSendMessageCommand(token, sessionName, sessionService, sessionReactions)
+    recvSendMessageCommand(user, sessionName, sessionService, sessionReactions)
   )
 }
 
 /**
  * Enables receive Video Commands
  * @param socket Socket IO Socket
- * @param token access token
+ * @param user access user
  * @param sessionName Session name
  * @param sessionService Session Servuce
  * @param sessionReactions Session Reactions
@@ -107,7 +102,7 @@ function enableRecvChatCommands(
  */
 function enableRecvVideoCommands(
   socket: Socket,
-  token: string,
+  user: User,
   sessionName: string,
   sessionService: ISessionService,
   sessionReactions: ISessionReactions
@@ -115,11 +110,11 @@ function enableRecvVideoCommands(
   commandListener(
     socket,
     CommandType.PLAY_VIDEO,
-    recvPlayVideoCommand(token, sessionName, sessionService, sessionReactions)
+    recvPlayVideoCommand(user, sessionName, sessionService, sessionReactions)
   )
   commandListener(
     socket,
     CommandType.STOP_VIDEO,
-    recvStopVideoCommand(token, sessionName, sessionService, sessionReactions)
+    recvStopVideoCommand(user, sessionName, sessionService, sessionReactions)
   )
 }

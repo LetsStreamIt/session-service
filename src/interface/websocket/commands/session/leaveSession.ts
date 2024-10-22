@@ -1,24 +1,25 @@
 import { ISessionService } from '../../../../application/sessionService/sessionService'
 import { LeaveSessionCommand } from '../../../../domain/aggregates/session/commands/sessionCommands'
 import { ISessionReactions } from '../../../../domain/reactions/sessionReactions'
+import { User } from '../../../../domain/user'
 
 /**
  * Receives Leave Session Commands.
  * @param sessionName Session name
- * @param token access token
+ * @param user access user
  * @param sessionService Session Servuce
  * @param sessionReactions Session Reactions
  * @returns
  */
 export function recvLeaveSessionCommand(
   sessionName: string,
-  token: string,
+  user: User,
   sessionService: ISessionService,
   sessionReactions: ISessionReactions
 ): () => void {
   return () => {
     sessionService.handleLeaveSessionCommand(
-      new LeaveSessionCommand(token, sessionName, sessionReactions)
+      new LeaveSessionCommand(user, sessionName, sessionReactions)
     )
   }
 }

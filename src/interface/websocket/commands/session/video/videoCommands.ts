@@ -5,18 +5,19 @@ import {
 } from '../../../../../domain/aggregates/video/commands/videoCommands'
 import { PlayVideoResponse, StopVideoResponse } from '../../../../../domain/command/response'
 import { ISessionReactions } from '../../../../../domain/reactions/sessionReactions'
+import { User } from '../../../../../domain/user'
 
 /**
  * Receives Play Video commands.
  * Sends an ack back to the client, specifying a Response dictated by the Session Service.
- * @param token access token
+ * @param user access user
  * @param sessionName Session name
  * @param sessionService Session Service
  * @param sessionReactions Session Reactions
  * @returns
  */
 export function recvPlayVideoCommand(
-  token: string,
+  user: User,
   sessionName: string,
   sessionService: ISessionService,
   sessionReactions: ISessionReactions
@@ -25,7 +26,7 @@ export function recvPlayVideoCommand(
     const { timestamp } = data
 
     sessionService
-      .handlePlayVideoCommand(new PlayVideoCommand(token, sessionName, timestamp, sessionReactions))
+      .handlePlayVideoCommand(new PlayVideoCommand(user, sessionName, timestamp, sessionReactions))
       .then((playVideoResponse: PlayVideoResponse) => ack(playVideoResponse))
   }
 }
@@ -33,14 +34,14 @@ export function recvPlayVideoCommand(
 /**
  * Receives Stop Video commands.
  * Sends an ack back to the client, specifying a Response dictated by the Session Service.
- * @param token access token
+ * @param user access user
  * @param sessionName Session name
  * @param sessionService Session Service
  * @param sessionReactions Session Reactions
  * @returns
  */
 export function recvStopVideoCommand(
-  token: string,
+  user: User,
   sessionName: string,
   sessionService: ISessionService,
   sessionReactions: ISessionReactions
@@ -49,7 +50,7 @@ export function recvStopVideoCommand(
     const { timestamp } = data
 
     sessionService
-      .handleStopVideoCommand(new StopVideoCommand(token, sessionName, timestamp, sessionReactions))
+      .handleStopVideoCommand(new StopVideoCommand(user, sessionName, timestamp, sessionReactions))
       .then((stopVideoResponse: StopVideoResponse) => ack(stopVideoResponse))
   }
 }

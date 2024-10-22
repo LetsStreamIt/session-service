@@ -27,11 +27,14 @@ export function recvUserTokenCommand(
     sessionService
       .handleUserTokenCommand(new UserTokenCommand(token))
       .then((userTokenResponse: UserTokenResponse) => {
-        if (userTokenResponse.content.status == ResponseStatus.SUCCESS) {
+        if (
+          userTokenResponse.content.status == ResponseStatus.SUCCESS &&
+          userTokenResponse.content.user
+        ) {
           commandListener(
             socket,
             CommandType.CREATE_SESSION,
-            recvCreateSessionCommand(token, sessionService)
+            recvCreateSessionCommand(userTokenResponse.content.user, sessionService)
           )
           commandListener(
             socket,

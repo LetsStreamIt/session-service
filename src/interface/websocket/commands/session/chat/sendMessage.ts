@@ -2,18 +2,19 @@ import { ISessionService } from '../../../../../application/sessionService/sessi
 import { SendMessageCommand } from '../../../../../domain/aggregates/chat/commands/chatCommands'
 import { SendMessageResponse } from '../../../../../domain/command/response'
 import { ISessionReactions } from '../../../../../domain/reactions/sessionReactions'
+import { User } from '../../../../../domain/user'
 
 /**
  * Receives Send message commands.
  * Sends an ack back to the client, specified by the Session Service.
- * @param token access token
+ * @param user User
  * @param sessionName Session name
  * @param sessionService Session Service
  * @param sessionReactions Session Reactions
  * @returns
  */
 export function recvSendMessageCommand(
-  token: string,
+  user: User,
   sessionName: string,
   sessionService: ISessionService,
   sessionReactions: ISessionReactions
@@ -22,7 +23,7 @@ export function recvSendMessageCommand(
     const { message } = data
     sessionService
       .handleSendMessageCommand(
-        new SendMessageCommand(token, sessionName, message, sessionReactions)
+        new SendMessageCommand(user, sessionName, message, sessionReactions)
       )
       .then((sendMessageResponse: SendMessageResponse) => ack(sendMessageResponse))
   }
