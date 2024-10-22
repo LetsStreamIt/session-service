@@ -51,5 +51,6 @@ function isTokenValid(token: string): Promise<boolean> {
       .then((response) => {
         resolve(response.status === 200)
       })
+      .catch(() => resolve(false))
   })
 }

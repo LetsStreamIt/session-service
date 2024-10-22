@@ -1,11 +1,10 @@
 import { Server, Socket } from 'socket.io'
-import { VideoStateDeserializer } from '../../../presentation/deserialization/videoStateDeserializer'
-import { Serializer } from '../../../presentation/serialization/messageSerializer'
 import {
   IVideoReactions,
   VideoReactionType,
   IVideoState
 } from '../../../domain/reactions/videoReactions'
+import { VideoState } from '../../../domain/aggregates/video/video'
 
 /**
  * WebSocket Video Reactions
@@ -23,8 +22,7 @@ export class WSVideoReactions implements IVideoReactions {
 
   retreiveVideoState(): Promise<IVideoState> {
     return new Promise((resolve) => {
-      this.socket.emit(VideoReactionType.VIDEO_STATE, (response: any) => {
-        const videoState = new VideoStateDeserializer().deserialize(JSON.parse(response))
+      this.socket.emit(VideoReactionType.VIDEO_STATE, (videoState: VideoState) => {
         resolve(videoState)
       })
     })
@@ -32,16 +30,14 @@ export class WSVideoReactions implements IVideoReactions {
 
   synchronizeClient(videoState: IVideoState): Promise<void> {
     return new Promise((resolve) => {
-      this.socket.emit(VideoReactionType.SYNCHRONIZE, new Serializer().serialize(videoState))
+      this.socket.emit(VideoReactionType.SYNCHRONIZE, videoState)
       resolve()
     })
   }
 
   syncronizeSession(videoState: IVideoState): Promise<void> {
     return new Promise((resolve) => {
-      this.io
-        .to(this.sessionName)
-        .emit(VideoReactionType.SYNCHRONIZE, new Serializer().serialize(videoState))
+      this.io.to(this.sessionName).emit(VideoReactionType.SYNCHRONIZE, videoState)
       resolve()
     })
   }
