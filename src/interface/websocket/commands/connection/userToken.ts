@@ -39,7 +39,7 @@ export function recvUserTokenCommand(
           commandListener(
             socket,
             CommandType.JOIN_SESSION,
-            recvJoinSessionCommand(io, socket, token, sessionService)
+            recvJoinSessionCommand(io, socket, userTokenResponse.content.user, sessionService)
           )
         }
         ack(userTokenResponse)

@@ -11,7 +11,7 @@ import { User } from '../../../domain/user'
 /**
  * Checks if user is joined.
  * @param sessions Session repository
- * @param token token
+ * @param user User
  * @returns true if joined, false otherwise
  */
 function isUserJoined(sessions: SessionRepository, user: User): boolean {

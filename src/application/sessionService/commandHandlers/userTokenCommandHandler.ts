@@ -25,11 +25,13 @@ export async function handleUserTokenCommand(
             resolve(new UserTokenResponse(ResponseStatus.SUCCESS, TokenStatus.TOKEN_VALID, user))
           })
           .catch(() =>
-            resolve(new UserTokenResponse(ResponseStatus.FAILURE, TokenStatus.TOKEN_VALID))
+            resolve(
+              new UserTokenResponse(ResponseStatus.FAILURE, TokenStatus.TOKEN_VALID, undefined)
+            )
           )
       })
       .catch(() =>
-        resolve(new UserTokenResponse(ResponseStatus.FAILURE, TokenStatus.TOKEN_INVALID))
+        resolve(new UserTokenResponse(ResponseStatus.FAILURE, TokenStatus.TOKEN_INVALID, undefined))
       )
   })
 }
