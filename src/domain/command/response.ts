@@ -1,3 +1,4 @@
+import { User } from '../user'
 import { CommandType } from './command'
 
 /**
@@ -51,10 +52,12 @@ export class CreateSessionResponseContent {
  */
 export class UserTokenResponseContent {
   status: ResponseStatus
+  user?: User
   tokenStatus: TokenStatus
 
-  constructor(status: ResponseStatus, tokenStatus: TokenStatus) {
+  constructor(status: ResponseStatus, tokenStatus: TokenStatus, user?: User) {
     this.status = status
+    this.user = user
     this.tokenStatus = tokenStatus
   }
 }
@@ -144,9 +147,9 @@ export class UserTokenResponse implements IResponse<UserTokenResponseContent> {
   command: CommandType
   content: UserTokenResponseContent
 
-  constructor(content: UserTokenResponseContent) {
+  constructor(status: ResponseStatus, tokenStatus: TokenStatus, user?: User) {
     this.command = CommandType.USER_TOKEN
-    this.content = content
+    this.content = new UserTokenResponseContent(status, tokenStatus, user)
   }
 }
 

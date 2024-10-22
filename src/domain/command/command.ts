@@ -18,5 +18,4 @@ export enum CommandType {
  */
 export interface ISessionCommand {
   type: CommandType
-  token: string
 }

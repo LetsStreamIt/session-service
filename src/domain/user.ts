@@ -1,15 +1,15 @@
-import { Entity, Pair, Repository } from './entity'
+import { Entity, Repository } from './entity'
 
 /**
  * User
  */
-export class User implements Entity<UserId, Pair<string, string>> {
+export class User implements Entity<UserId, string> {
   id: UserId
-  value: Pair<string, string>
+  value: string
 
-  constructor(id: UserId, name: string, surname: string) {
+  constructor(id: UserId, username: string) {
     this.id = id
-    this.value = new Pair(name, surname)
+    this.value = username
   }
 }
 
