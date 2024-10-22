@@ -36,7 +36,7 @@ export enum TokenStatus {
 /**
  * Create Session Response Content
  */
-class CreateSessionResponseContent {
+export class CreateSessionResponseContent {
   status: ResponseStatus
   sessionName: string
 

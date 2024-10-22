@@ -1,7 +1,7 @@
 /**
  * Deserializer Interface
  */
-interface IDeserializer<X> {
+export interface IDeserializer<X> {
   /**
    * Deserializes a message
    * @param json message body
