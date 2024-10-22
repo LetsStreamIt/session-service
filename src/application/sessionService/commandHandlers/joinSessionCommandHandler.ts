@@ -1,5 +1,4 @@
 import { JoinSessionCommand } from '../../../domain/aggregates/session/commands/sessionCommands'
-import { userFromToken } from './utils'
 import { UserJoinedSessionEvent } from '../../../domain/aggregates/session/events/sessionEvents'
 import { SessionRepository, SessionId, ISession } from '../../../domain/aggregates/session/session'
 import {
@@ -15,8 +14,8 @@ import { User } from '../../../domain/user'
  * @param token token
  * @returns true if joined, false otherwise
  */
-function isUserJoined(sessions: SessionRepository, token: string): boolean {
-  return sessions.getValues.some((session) => session.isUserJoined(userFromToken(token)))
+function isUserJoined(sessions: SessionRepository, user: User): boolean {
+  return sessions.getValues.some((session) => session.isUserJoined(user))
 }
 
 /**
@@ -32,8 +31,7 @@ export async function handleJoinSessionCommand(
   command: JoinSessionCommand
 ): Promise<JoinSessionResponse> {
   return new Promise((resolve) => {
-    if (!isUserJoined(sessions, command.token)) {
-      const user: User = userFromToken(command.token)
+    if (!isUserJoined(sessions, command.user)) {
       const sessionId: SessionId = new SessionId(command.sessionName)
       const session: ISession | undefined = sessions.find(sessionId)
 
@@ -41,7 +39,9 @@ export async function handleJoinSessionCommand(
       if (session) {
         const videoId = session.value?.getY.getY.getVideoId
         if (videoId) {
-          session.eventBus.publish(new UserJoinedSessionEvent(user, command.sessionReactions))
+          session.eventBus.publish(
+            new UserJoinedSessionEvent(command.user, command.sessionReactions)
+          )
           resolve(
             new JoinSessionResponse(
               new JoinSessionResponseContent(JoinSessionResponseType.SUCCESS, videoId)

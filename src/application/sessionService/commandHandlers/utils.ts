@@ -1,23 +1,17 @@
 import { sha256 } from 'js-sha256'
-import { User, UserId } from '../../../domain/user'
 import axios, { AxiosResponse } from 'axios'
 
-/**
- * User Id From token.
- * @param token access token
- * @returns User Id
- */
-export function userIdFromToken(token: string): UserId {
-  return new UserId(token)
-}
-
-/**
- * User from token.
- * @param token token
- * @returns User from access token
- */
-export function userFromToken(token: string): User {
-  return new User(userIdFromToken(token), 'Name', 'Surname')
+export function httpGet(
+  hostname: string,
+  port: string,
+  url: string,
+  token: string
+): Promise<AxiosResponse> {
+  return axios.get(`http://${hostname}:${port}${url}`, {
+    headers: {
+      authorization: `Bearer ${token}`
+    }
+  })
 }
 
 /**
@@ -59,11 +53,11 @@ export function youtubeVideoIdFromUrl(url: string): Promise<string | undefined> 
 }
 
 /**
- * Produces a Session name by combining the token and Youtube Video id and applying SHA256.
- * @param token access token
+ * Produces a Session name by combining the User email and Youtube Video id and applying SHA256.
+ * @param email User email
  * @param videoId Youtube Video Id
  * @returns Session name
  */
-export function sessionNameFromTokenAndVideoId(token: string, videoId: string): string {
-  return sha256(token + videoId)
+export function sessionNameFromTokenAndVideoId(email: string, videoId: string): string {
+  return sha256(email + videoId)
 }

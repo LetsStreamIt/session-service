@@ -1,5 +1,8 @@
 import { CreateSessionCommand } from '../../../domain/aggregates/session/commands/sessionCommands'
-import { sessionNameFromTokenAndVideoId, youtubeVideoIdFromUrl } from './utils'
+import {
+  sessionNameFromTokenAndVideoId as sessionNameFromEmailAndVideoId,
+  youtubeVideoIdFromUrl
+} from './utils'
 import {
   ISession,
   SessionEntry,
@@ -26,7 +29,7 @@ export async function handleCreateSessionCommand(
   return new Promise((resolve) => {
     youtubeVideoIdFromUrl(command.videoUrl).then((videoId: string | undefined) => {
       if (videoId) {
-        const sessionName: string = sessionNameFromTokenAndVideoId(command.token, videoId)
+        const sessionName: string = sessionNameFromEmailAndVideoId(command.user.id.email, videoId)
         const sessionId: SessionId = new SessionId(sessionName)
         const session: ISession = new Session(sessionId, videoId)
         sessions.add(session)

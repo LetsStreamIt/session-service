@@ -1,11 +1,8 @@
-import axios from 'axios'
+import { AxiosResponse } from 'axios'
 import { UserTokenCommand } from '../../../domain/aggregates/session/commands/sessionCommands'
-import {
-  UserTokenResponse,
-  UserTokenResponseContent,
-  ResponseStatus,
-  TokenStatus
-} from '../../../domain/command/response'
+import { UserTokenResponse, ResponseStatus, TokenStatus } from '../../../domain/command/response'
+import { httpGet } from './utils'
+import { User, UserId } from '../../../domain/user'
 
 /**
  * User Token Command Handler.
@@ -17,40 +14,22 @@ export async function handleUserTokenCommand(
   command: UserTokenCommand
 ): Promise<UserTokenResponse> {
   return new Promise((resolve) => {
-    isTokenValid(command.token).then((valid: boolean) => {
-      resolve(
-        valid
-          ? new UserTokenResponse(
-              new UserTokenResponseContent(ResponseStatus.SUCCESS, TokenStatus.TOKEN_VALID)
+    httpGet('localhost', '3000', '/api/auth/data', command.token)
+      .then((userAuthData: AxiosResponse) => {
+        httpGet('localhost', '8080', `/users/${userAuthData.data.data.email}`, command.token)
+          .then((userInfo: AxiosResponse) => {
+            const user: User = new User(
+              new UserId(userAuthData.data.data.email),
+              userInfo.data.username
             )
-          : new UserTokenResponse(
-              new UserTokenResponseContent(ResponseStatus.FAILURE, TokenStatus.TOKEN_INVALID)
-            )
-      )
-    })
-  })
-}
-
-/**
- * Checks if the provided access token is valid by querying the `auth-service`.
- * @param token Access token
- * @returns Promise resolved true if the token is valid, false otherwise
- */
-function isTokenValid(token: string): Promise<boolean> {
-  return new Promise((resolve) => {
-    axios
-      .post(
-        'http://localhost:3000/api/auth/validate',
-        {},
-        {
-          headers: {
-            authorization: `Bearer ${token}`
-          }
-        }
-      )
-      .then((response) => {
-        resolve(response.status === 200)
+            resolve(new UserTokenResponse(ResponseStatus.SUCCESS, TokenStatus.TOKEN_VALID, user))
+          })
+          .catch(() =>
+            resolve(new UserTokenResponse(ResponseStatus.FAILURE, TokenStatus.TOKEN_VALID))
+          )
       })
-      .catch(() => resolve(false))
+      .catch(() =>
+        resolve(new UserTokenResponse(ResponseStatus.FAILURE, TokenStatus.TOKEN_INVALID))
+      )
   })
 }
