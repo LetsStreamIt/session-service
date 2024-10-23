@@ -35,11 +35,11 @@ export interface IVideoReactions {
    * Synchronizes the client
    * @param videoState Video State
    */
-  synchronizeClient(videoState: IVideoState): Promise<void>
+  synchronizeClient(videoState: IVideoState): void
 
   /**
    * Syncrhonizes the session
    * @param videoState
    */
-  syncronizeSession(videoState: IVideoState): Promise<void>
+  syncronizeSession(videoState: IVideoState): void
 }
