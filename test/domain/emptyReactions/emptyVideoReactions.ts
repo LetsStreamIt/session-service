@@ -4,10 +4,10 @@ export class EmptyVideoReactions implements IVideoReactions {
   retreiveVideoState(): Promise<IVideoState> {
     throw new Error('Method should not be used for testing.')
   }
-  synchronizeClient(videoState: IVideoState): Promise<void> {
+  synchronizeClient(videoState: IVideoState): void {
     throw new Error('Method should not be used for testing.')
   }
-  syncronizeSession(videoState: IVideoState): Promise<void> {
+  syncronizeSession(videoState: IVideoState): void {
     throw new Error('Method should not be used for testing.')
   }
 }
