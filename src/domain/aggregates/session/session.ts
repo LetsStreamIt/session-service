@@ -55,10 +55,6 @@ export class Session extends Entity<SessionId, SessionEntry> {
     this.eventBus = eventBus
   }
 
-  get getId(): SessionId {
-    throw new Error('Method not implemented.')
-  }
-
   get getUsers(): UserRepository {
     return this.value.getX
   }
