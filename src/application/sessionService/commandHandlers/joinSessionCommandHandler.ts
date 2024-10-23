@@ -1,6 +1,6 @@
 import { JoinSessionCommand } from '../../../domain/aggregates/session/commands/sessionCommands'
 import { UserJoinedSessionEvent } from '../../../domain/aggregates/session/events/sessionEvents'
-import { SessionRepository, SessionId, ISession } from '../../../domain/aggregates/session/session'
+import { SessionRepository, SessionId, Session } from '../../../domain/aggregates/session/session'
 import {
   JoinSessionResponse,
   JoinSessionResponseContent,
@@ -33,13 +33,13 @@ export async function handleJoinSessionCommand(
   return new Promise((resolve) => {
     if (!isUserJoined(sessions, command.user)) {
       const sessionId: SessionId = new SessionId(command.sessionName)
-      const session: ISession | undefined = sessions.find(sessionId)
+      const session: Session | undefined = sessions.find(sessionId)
 
       // Resolve the Promise if the session is already existing, reject otherwise
       if (session) {
-        const videoId = session.value?.getY.getY.getVideoId
+        const videoId = session.getVideo.getVideoId
         if (videoId) {
-          session.eventBus.publish(
+          session.getEventBus.publish(
             new UserJoinedSessionEvent(command.user, command.sessionReactions)
           )
           resolve(

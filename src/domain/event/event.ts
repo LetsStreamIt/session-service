@@ -4,8 +4,8 @@ import { ISessionReactions } from '../reactions/sessionReactions'
  * Session Event Interface
  */
 export interface ISessionEvent {
-  type: EventType
-  sessionReactions: ISessionReactions
+  get getType(): EventType
+  get getSessionReactions(): ISessionReactions
 }
 
 /**

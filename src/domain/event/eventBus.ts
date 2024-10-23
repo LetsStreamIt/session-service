@@ -42,7 +42,7 @@ export class EventBus implements IEventBus {
   }
 
   async publish(event: ISessionEvent): Promise<void> {
-    const eventType = event.type
+    const eventType = event.getType
     if (this.listeners[eventType]) {
       this.listeners[eventType].reduce(
         (accumulator, listener) => accumulator.then(() => listener(event)),

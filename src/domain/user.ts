@@ -3,13 +3,9 @@ import { Entity, Repository } from './entity'
 /**
  * User
  */
-export class User implements Entity<UserId, string> {
-  id: UserId
-  value: string
-
-  constructor(id: UserId, username: string) {
-    this.id = id
-    this.value = username
+export class User extends Entity<UserId, string> {
+  get getUsername(): string {
+    return this.value
   }
 }
 
@@ -17,14 +13,18 @@ export class User implements Entity<UserId, string> {
  * User Id
  */
 export class UserId {
-  email: string
+  private readonly email: string
 
   constructor(email: string) {
     this.email = email
+  }
+
+  get getEmail(): string {
+    return this.email
   }
 }
 
 /**
  * User Repository
  */
-export class UserRepository extends Repository<User> {}
+export class UserRepository extends Repository<User, UserId, string> {}

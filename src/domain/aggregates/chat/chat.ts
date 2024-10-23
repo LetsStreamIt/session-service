@@ -40,10 +40,10 @@ export class Chat implements IChat {
     event: UserJoinedSessionEvent
   ) => {
     return new Promise((resolve) => {
-      event.sessionReactions.getChatReactions.sendNotificationToSession(
-        new NotificationMessage(event.user, JoinNotification.JOIN_SESSION)
+      event.getSessionReactions.getChatReactions.sendNotificationToSession(
+        new NotificationMessage(event.getUser, JoinNotification.JOIN_SESSION)
       )
-      event.sessionReactions.getChatReactions.emitTextMessagesToClient(...this.messages)
+      event.getSessionReactions.getChatReactions.emitTextMessagesToClient(...this.messages)
       resolve()
     })
   }
@@ -55,11 +55,11 @@ export class Chat implements IChat {
    * @returns Promise resolved when all messages are emitted
    */
   private handleUserLeftEvent: (event: UserLeftSessionEvent) => Promise<void> = (
-    event: UserJoinedSessionEvent
+    event: UserLeftSessionEvent
   ) => {
     return new Promise((resolve) => {
-      event.sessionReactions.getChatReactions.sendNotificationToSession(
-        new NotificationMessage(event.user, JoinNotification.LEAVE_SESSION)
+      event.getSessionReactions.getChatReactions.sendNotificationToSession(
+        new NotificationMessage(event.getUser, JoinNotification.LEAVE_SESSION)
       )
       resolve()
     })
@@ -75,8 +75,8 @@ export class Chat implements IChat {
     event: MessageSentEvent
   ) => {
     return new Promise((resolve) => {
-      this.messages.push(event.textMessage)
-      event.sessionReactions.getChatReactions.sendTextMessagesToSession(event.textMessage)
+      this.messages.push(event.getTextMessage)
+      event.getSessionReactions.getChatReactions.sendTextMessagesToSession(event.getTextMessage)
       resolve()
     })
   }

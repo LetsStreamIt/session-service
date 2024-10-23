@@ -3,13 +3,7 @@ import {
   sessionNameFromTokenAndVideoId as sessionNameFromEmailAndVideoId,
   youtubeVideoIdFromUrl
 } from './utils'
-import {
-  ISession,
-  SessionEntry,
-  SessionId,
-  Session,
-  SessionRepository
-} from '../../../domain/aggregates/session/session'
+import { SessionId, Session, SessionRepository } from '../../../domain/aggregates/session/session'
 import { CreateSessionResponse, ResponseStatus } from '../../../domain/command/response'
 import { EventType } from '../../../domain/event/event'
 import { IEventBus } from '../../../domain/event/eventBus'
@@ -29,12 +23,15 @@ export async function handleCreateSessionCommand(
   return new Promise((resolve) => {
     youtubeVideoIdFromUrl(command.videoUrl).then((videoId: string | undefined) => {
       if (videoId) {
-        const sessionName: string = sessionNameFromEmailAndVideoId(command.user.id.email, videoId)
+        const sessionName: string = sessionNameFromEmailAndVideoId(
+          command.user.getId.getEmail,
+          videoId
+        )
         const sessionId: SessionId = new SessionId(sessionName)
-        const session: ISession = new Session(sessionId, videoId)
+        const session: Session = new Session(sessionId, videoId)
         sessions.add(session)
         session.registerEventHandlers()
-        subscribeToUserLeftSessionEvents(sessions, session.eventBus, sessionId)
+        subscribeToUserLeftSessionEvents(sessions, session.getEventBus, sessionId)
 
         const timeout = 5_000
         deleteSessionAtTimeout(sessions, sessionId, timeout)
@@ -86,9 +83,9 @@ function subscribeToUserLeftSessionEvents(
  * @param sessionId SessioId of the Session to remove
  */
 function deleteSessionWhenAllUserLeft(sessions: SessionRepository, sessionId: SessionId): void {
-  const sessionEntry: SessionEntry | undefined = sessions.find(sessionId)?.value
-  if (sessionEntry) {
-    if (sessionEntry.getX.getValues.length == 0) {
+  const session: Session | undefined = sessions.find(sessionId)
+  if (session) {
+    if (session.getUsers.getValues.length == 0) {
       sessions.remove(sessionId)
     }
   }

@@ -73,15 +73,17 @@ export class Video implements IVideo {
   ) => {
     return new Promise((resolve) => {
       return Promise.all(
-        Array.from(this.userReactions.values()).map((vr) => vr.retreiveVideoState())
+        Array.from(this.userReactions.values()).map((videoReactions) =>
+          videoReactions.retreiveVideoState()
+        )
       ).then((videoStates) => {
         if (videoStates.length > 0) {
-          const timestamps: number[] = videoStates.map((vs) => vs.timestamp)
+          const timestamps: number[] = videoStates.map((videoState) => videoState.timestamp)
           const minTimestamp: number = Math.min(...timestamps)
           const videoStateSync: VideoState = videoStates[timestamps.indexOf(minTimestamp)]
-          event.sessionReactions.getVideoReactions.synchronizeClient(videoStateSync)
+          event.getSessionReactions.getVideoReactions.synchronizeClient(videoStateSync)
         }
-        this.userReactions.set(event.user, event.sessionReactions.getVideoReactions)
+        this.userReactions.set(event.getUser, event.getSessionReactions.getVideoReactions)
         resolve()
       })
     })
@@ -98,7 +100,7 @@ export class Video implements IVideo {
   ) => {
     return new Promise((resolve) => {
       for (const key of this.userReactions.keys()) {
-        if (isDeepEqual(event.user.id, key.id)) {
+        if (isDeepEqual(event.getUser.getId, key.getId)) {
           this.userReactions.delete(key)
           break
         }
@@ -118,9 +120,9 @@ export class Video implements IVideo {
     event: VideoPlayedEvent
   ) => {
     return new Promise((resolve) => {
-      event.sessionReactions.getVideoReactions.syncronizeSession({
+      event.getSessionReactions.getVideoReactions.syncronizeSession({
         state: PlayState.PLAYING,
-        timestamp: event.timestamp
+        timestamp: event.getTimestamp
       })
       resolve()
     })
@@ -137,9 +139,9 @@ export class Video implements IVideo {
     event: VideoStoppedEvent
   ) => {
     return new Promise((resolve) => {
-      event.sessionReactions.getVideoReactions.syncronizeSession({
+      event.getSessionReactions.getVideoReactions.syncronizeSession({
         state: PlayState.PAUSED,
-        timestamp: event.timestamp
+        timestamp: event.getTimestamp
       })
       resolve()
     })
