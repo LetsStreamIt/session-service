@@ -1,9 +1,9 @@
 import { expect } from 'chai'
 import { User, UserId, UserRepository } from '../../src/domain/user'
 
-describe("a user repository", () => {
+describe("user repository", () => {
 
-    const uId: UserId = new UserId("test@example.com")
+    const uId: UserId = new UserId("test@email.com")
     const user: User = new User(uId, "testUsername")
     let userRepository: UserRepository
 
