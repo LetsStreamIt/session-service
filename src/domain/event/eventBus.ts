@@ -25,7 +25,7 @@ export interface IEventBus {
  * Event Bus Implementation
  */
 export class EventBus implements IEventBus {
-  listeners: Record<string, ((event: any) => Promise<void>)[]>
+  private readonly listeners: Record<string, ((event: any) => Promise<void>)[]>
 
   constructor() {
     this.listeners = {}
