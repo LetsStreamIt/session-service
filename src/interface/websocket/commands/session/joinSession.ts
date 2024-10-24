@@ -8,6 +8,7 @@ import { ISessionReactions } from '../../../../domain/reactions/sessionReactions
 import { acceptSendMessageCommand } from './chat/sendMessage'
 import { acceptPlayVideoCommand, acceptStopVideoCommand } from './video/videoCommands'
 import { User } from '../../../../domain/user'
+import { acceptLeaveSessionCommand } from './leaveSession'
 
 /**
  * Accept Join Session Commands
@@ -32,6 +33,7 @@ export function acceptJoinSessionCommand(
       .handleJoinSessionCommand(new JoinSessionCommand(user, sessionName, sessionReactions))
       .then((joinSessionResponse: JoinSessionResponse) => {
         if (joinSessionResponse.content.responseType == JoinSessionResponseType.SUCCESS) {
+          acceptLeaveSessionCommand(socket, user, sessionName, sessionService, sessionReactions)
           acceptChatCommands(socket, user, sessionName, sessionService, sessionReactions)
           acceptVideoCommands(socket, user, sessionName, sessionService, sessionReactions)
         }
