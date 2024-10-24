@@ -3,6 +3,7 @@ import { UserTokenCommand } from '../../../domain/aggregates/session/commands/se
 import { UserTokenResponse, ResponseStatus, TokenStatus } from '../../../domain/command/response'
 import { httpGet } from './utils'
 import { User, UserId } from '../../../domain/user'
+import { standardConfig } from '../../../config'
 
 /**
  * User Token Command Handler.
@@ -14,9 +15,19 @@ export async function handleUserTokenCommand(
   command: UserTokenCommand
 ): Promise<UserTokenResponse> {
   return new Promise((resolve) => {
-    httpGet('localhost', '3000', '/api/auth/data', command.token)
+    httpGet(
+      standardConfig.AUTH_SERVICE_HOSTNAME,
+      standardConfig.AUTH_SERVICE_PORT,
+      '/api/auth/data',
+      command.token
+    )
       .then((userAuthData: AxiosResponse) => {
-        httpGet('localhost', '8080', `/users/${userAuthData.data.data.email}`, command.token)
+        httpGet(
+          standardConfig.PROFILE_SERVICE_HOSTNAME,
+          standardConfig.PROFILE_SERVICE_PORT,
+          `/users/${userAuthData.data.data.email}`,
+          command.token
+        )
           .then((userInfo: AxiosResponse) => {
             const user: User = new User(
               new UserId(userAuthData.data.data.email),

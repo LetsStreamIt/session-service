@@ -2,14 +2,17 @@ import express from 'express'
 import http from 'http'
 import { Server } from 'socket.io'
 import { registerCommands } from './interface/websocket/registerCommands'
+import { standardConfig } from './config'
 
-process.env.DEBUG = 'socket.io:*'
 const app = express()
 const server = http.createServer(app)
 
 export const io: Server = new Server(server, {
   cors: {
-    origin: ['http://localhost:5173', 'http://localhost:5174'],
+    origin: (origin: string | undefined, callback: (error: any, allow: boolean) => void) => {
+      // Allow all origins
+      callback(null, true)
+    },
     methods: ['GET', 'POST'],
     allowedHeaders: ['my-custom-header'],
     credentials: true
@@ -19,7 +22,7 @@ export const io: Server = new Server(server, {
 // Define Namespaces
 registerCommands(io)
 
-const port = process.env.PORT
+const port = standardConfig.LOCAL_PORT
 
 server.listen(port, () => {
   console.log(`listening on *:${port}`)
