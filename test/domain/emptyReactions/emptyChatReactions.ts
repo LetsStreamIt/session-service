@@ -2,13 +2,13 @@ import { NotificationMessage, TextMessage } from '../../../src/domain/aggregates
 import { IChatReactions } from '../../../src/domain/reactions/chatReactions'
 
 export class EmptyChatReactions implements IChatReactions {
-  sendNotificationToSession(notificationMessage: NotificationMessage): void {
+  sendNotificationToSession(_notificationMessage: NotificationMessage): void {
     throw new Error('Method should not be used for testing.')
   }
-  emitTextMessagesToClient(...textMessages: TextMessage[]): void {
+  emitTextMessagesToClient(..._textMessages: TextMessage[]): void {
     throw new Error('Method should not be used for testing.')
   }
-  sendTextMessagesToSession(...textMessages: TextMessage[]): void {
+  sendTextMessagesToSession(..._textMessages: TextMessage[]): void {
     throw new Error('Method should not be used for testing.')
   }
 }
