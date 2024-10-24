@@ -4,7 +4,6 @@ import { Server } from 'socket.io'
 import { registerCommands } from './interface/websocket/registerCommands'
 
 process.env.DEBUG = 'socket.io:*'
-
 const app = express()
 const server = http.createServer(app)
 
@@ -20,6 +19,8 @@ export const io: Server = new Server(server, {
 // Define Namespaces
 registerCommands(io)
 
-server.listen(4000, () => {
-  console.log('listening on *:4000')
+const port = process.env.PORT
+
+server.listen(port, () => {
+  console.log(`listening on *:${port}`)
 })

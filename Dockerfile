@@ -15,8 +15,5 @@ RUN npm ci && npm cache clean --force
 # Copy the entire source code into the container
 COPY . .
 
-# Document the port that may need to be published
-EXPOSE 5000
-
 # Start the application
-CMD ["node", "src/server.js"]
+CMD ["npm", "run", "serve"]
