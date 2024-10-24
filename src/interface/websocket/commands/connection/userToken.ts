@@ -1,29 +1,26 @@
 import { Server, Socket } from 'socket.io'
-import { commandListener } from '../../utils'
-import { recvCreateSessionCommand } from '../session/createSession'
-import { recvJoinSessionCommand } from '../session/joinSession'
+import { acceptCreateSessionCommand } from '../session/createSession'
+import { acceptJoinSessionCommand } from '../session/joinSession'
 import { ISessionService } from '../../../../application/sessionService/sessionService'
 import { ResponseStatus, UserTokenResponse } from '../../../../domain/command/response'
-import { CommandType } from '../../../../domain/command/command'
 import { UserTokenCommand } from '../../../../domain/aggregates/session/commands/sessionCommands'
+import { CommandType } from '../../../../domain/command/command'
 
 /**
- * Enables receive User token command.
+ * Accept User token command.
  * If an access token message is received and accepted from Session Service,
  * enables the client to send Create Session Commands or Join Commands.
  * @param io Socket IO Server
  * @param socket Socket IO Socket
  * @param sessionService Session Service
- * @returns
  */
-export function recvUserTokenCommand(
+export function acceptUserTokenCommand(
   io: Server,
   socket: Socket,
   sessionService: ISessionService
-): (message: any, ack: any) => void {
-  return (message, ack) => {
+) {
+  socket.on(CommandType.USER_TOKEN, (message, ack) => {
     const { token } = message
-
     sessionService
       .handleUserTokenCommand(new UserTokenCommand(token))
       .then((userTokenResponse: UserTokenResponse) => {
@@ -31,18 +28,10 @@ export function recvUserTokenCommand(
           userTokenResponse.content.status == ResponseStatus.SUCCESS &&
           userTokenResponse.content.user
         ) {
-          commandListener(
-            socket,
-            CommandType.CREATE_SESSION,
-            recvCreateSessionCommand(userTokenResponse.content.user, sessionService)
-          )
-          commandListener(
-            socket,
-            CommandType.JOIN_SESSION,
-            recvJoinSessionCommand(io, socket, userTokenResponse.content.user, sessionService)
-          )
+          acceptCreateSessionCommand(socket, userTokenResponse.content.user, sessionService)
+          acceptJoinSessionCommand(io, socket, userTokenResponse.content.user, sessionService)
         }
         ack(userTokenResponse)
       })
-  }
+  })
 }

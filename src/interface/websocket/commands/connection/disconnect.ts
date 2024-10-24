@@ -1,10 +1,10 @@
 import { Socket } from 'socket.io'
+import { CommandType } from '../../../../domain/command/command'
 
 /**
- * Disconnects a socketIO socket.
+ * Accept disconnection commands of a socketIO socket.
  * @param socket Socket IO socket
- * @returns
  */
-export function recvDisconnectionCommand(socket: Socket): (message: any) => void {
-  return () => socket.disconnect()
+export function acceptDisconnectionCommand(socket: Socket) {
+  socket.on(CommandType.DISCONNECT, () => socket.disconnect())
 }

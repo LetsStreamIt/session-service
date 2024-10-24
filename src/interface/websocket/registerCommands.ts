@@ -1,5 +1,5 @@
 import { Server } from 'socket.io'
-import { recvConnectionCommand } from './commands/connection/connection'
+import { acceptConnectionCommand } from './commands/connection/connection'
 import { SessionService } from '../../application/sessionService/sessionService'
 
 /**
@@ -7,5 +7,5 @@ import { SessionService } from '../../application/sessionService/sessionService'
  * @param io Socket IO Server
  */
 export async function registerCommands(io: Server) {
-  recvConnectionCommand(io, new SessionService())
+  acceptConnectionCommand(io, new SessionService())
 }

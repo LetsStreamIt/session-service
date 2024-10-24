@@ -1,23 +1,25 @@
+import { Socket } from 'socket.io'
 import { ISessionService } from '../../../../application/sessionService/sessionService'
 import { CreateSessionCommand } from '../../../../domain/aggregates/session/commands/sessionCommands'
 import { CreateSessionResponse } from '../../../../domain/command/response'
 import { User } from '../../../../domain/user'
+import { CommandType } from '../../../../domain/command/command'
 
 /**
- * Receives Create Session Commands
+ * Accepts Create Session Commands
+ * @param socket Socket IO socket
  * @param user User
  * @param sessionService Session Servuce
- * @returns
  */
-export function recvCreateSessionCommand(
+export function acceptCreateSessionCommand(
+  socket: Socket,
   user: User,
   sessionService: ISessionService
-): (message: any, ack: any) => void {
-  return (message, ack) => {
+) {
+  socket.on(CommandType.CREATE_SESSION, (message, ack) => {
     const { videoUrl } = message
-
     sessionService
       .handleCreateSessionCommand(new CreateSessionCommand(user, videoUrl))
       .then((createSessionResponse: CreateSessionResponse) => ack(createSessionResponse))
-  }
+  })
 }
