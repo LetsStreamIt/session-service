@@ -14,13 +14,14 @@ import { commonAfter, commonBefore } from './socketIoTestUtils'
 describe('create session message', () => {
   let io: Server, serverSocket: ServerSocket, clientSocket: ClientSocket
   const sessionService: ISessionService = new SessionService()
-  // const wsReactions: ISessionReactions = new WSSessionReactions()
+  const user: User = new User(new UserId('testUser@email.com'), 'testUsername')
 
   before((done) => {
     commonBefore().then(([ioServer, cSocket, sSocket]) => {
       io = ioServer
       serverSocket = sSocket
       clientSocket = cSocket
+      acceptCreateSessionCommand(serverSocket, user, sessionService)
       done()
     })
   })
@@ -28,9 +29,6 @@ describe('create session message', () => {
   after(() => commonAfter(io, clientSocket))
 
   it('should create a session if the provided URL is valid Youtube Video', (done) => {
-    const user: User = new User(new UserId('testUser@email.com'), 'testUsername')
-    acceptCreateSessionCommand(serverSocket, user, sessionService)
-
     const validYoutubeUrl: string = 'https://www.youtube.com/watch?v=M7lc1UVf-VE'
     clientSocket.emit(
       CommandType.CREATE_SESSION,
@@ -43,9 +41,6 @@ describe('create session message', () => {
   })
 
   it('should not create a session if the provided URL is not a Youtube Video', (done) => {
-    const user: User = new User(new UserId('testUser@email.com'), 'testUsername')
-    acceptCreateSessionCommand(serverSocket, user, sessionService)
-
     const invalidYoutubeUrl: string = 'thisIsAnInvalidUrl'
     clientSocket.emit(
       CommandType.CREATE_SESSION,
