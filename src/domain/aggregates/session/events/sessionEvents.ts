@@ -1,6 +1,6 @@
-import { ISessionEvent, EventType } from '../../../event/event'
-import { ISessionReactions } from '../../../reactions/sessionReactions'
-import { User } from '../../../user'
+import { ISessionEvent, EventType } from '../../../common/event/event'
+import { ISessionReactions } from '../../../common/reactions/sessionReactions'
+import { User } from '../../../common/user'
 
 /**
  * Session Created Event

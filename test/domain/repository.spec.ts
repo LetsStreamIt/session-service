@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { User, UserId, UserRepository } from '../../src/domain/user'
+import { User, UserId, UserRepository } from '../../src/domain/common/user'
 
 describe('user repository', () => {
   const uId: UserId = new UserId('test@email.com')

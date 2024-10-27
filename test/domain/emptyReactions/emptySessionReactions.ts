@@ -1,6 +1,6 @@
-import { IChatReactions } from '../../../src/domain/reactions/chatReactions'
-import { ISessionReactions } from '../../../src/domain/reactions/sessionReactions'
-import { IVideoReactions } from '../../../src/domain/reactions/videoReactions'
+import { IChatReactions } from '../../../src/domain/common/reactions/chatReactions'
+import { ISessionReactions } from '../../../src/domain/common/reactions/sessionReactions'
+import { IVideoReactions } from '../../../src/domain/common/reactions/videoReactions'
 
 export class EmptySessionReactions implements ISessionReactions {
   private readonly chatReactions: IChatReactions

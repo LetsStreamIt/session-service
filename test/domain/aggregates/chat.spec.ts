@@ -3,20 +3,21 @@ import {
   NotificationMessage,
   TextMessage
 } from '../../../src/domain/aggregates/chat/message'
-import { IChatReactions } from '../../../src/domain/reactions/chatReactions'
-import { IVideoReactions } from '../../../src/domain/reactions/videoReactions'
-import { User, UserId } from '../../../src/domain/user'
-import { IChat, Chat } from '../../../src/domain/aggregates/chat/chat'
-import { EventBus, IEventBus } from '../../../src/domain/event/eventBus'
+
 import {
   UserJoinedSessionEvent,
   UserLeftSessionEvent
 } from '../../../src/domain/aggregates/session/events/sessionEvents'
+import { EventBus, IEventBus } from '../../../src/domain/common/event/eventBus'
+import { IChat, Chat } from '../../../src/domain/aggregates/chat/chat'
 import { EmptySessionReactions } from '../emptyReactions/emptySessionReactions'
 import { expect } from 'chai'
 import { EmptyVideoReactions } from '../emptyReactions/emptyVideoReactions'
 import { EmptyChatReactions } from '../emptyReactions/emptyChatReactions'
 import { MessageSentEvent } from '../../../src/domain/aggregates/chat/events/chatEvents'
+import { IVideoReactions } from '../../../src/domain/common/reactions/videoReactions'
+import { IChatReactions } from '../../../src/domain/common/reactions/chatReactions'
+import { User, UserId } from '../../../src/domain/common/user'
 
 describe('chat aggregate', () => {
   const user: User = new User(new UserId('user@email.com'), 'username')
@@ -30,7 +31,7 @@ describe('chat aggregate', () => {
 
   it('should emit a chat notification to the session when a user joins', (done) => {
     const chatReactions: IChatReactions = {
-      sendNotificationToSession: function (notificationMessage: NotificationMessage): void {
+      emitNotificationToSession: function (notificationMessage: NotificationMessage): void {
         expect(notificationMessage.getSender).to.be.equal(user)
         expect(notificationMessage.getContent).to.be.equal(JoinNotification.JOIN_SESSION)
         done()
@@ -38,7 +39,7 @@ describe('chat aggregate', () => {
       emitTextMessagesToClient: function (..._textMessages: TextMessage[]): void {
         throw new Error('Method should not be used for testing.')
       },
-      sendTextMessagesToSession: function (..._textMessages: TextMessage[]): void {
+      emitTextMessagesToSession: function (..._textMessages: TextMessage[]): void {
         throw new Error('Method should not be used for testing.')
       }
     }
@@ -53,7 +54,7 @@ describe('chat aggregate', () => {
 
   it('should emit a chat notification to the session when a user leaves', (done) => {
     const chatReactions: IChatReactions = {
-      sendNotificationToSession: function (notificationMessage: NotificationMessage): void {
+      emitNotificationToSession: function (notificationMessage: NotificationMessage): void {
         expect(notificationMessage.getSender).to.be.equal(user)
         expect(notificationMessage.getContent).to.be.equal(JoinNotification.LEAVE_SESSION)
         done()
@@ -61,7 +62,7 @@ describe('chat aggregate', () => {
       emitTextMessagesToClient: function (..._textMessages: TextMessage[]): void {
         throw new Error('Method should not be used for testing.')
       },
-      sendTextMessagesToSession: function (..._textMessages: TextMessage[]): void {
+      emitTextMessagesToSession: function (..._textMessages: TextMessage[]): void {
         throw new Error('Method should not be used for testing.')
       }
     }
@@ -79,7 +80,7 @@ describe('chat aggregate', () => {
     const textMessage = new TextMessage(alternativeUser, 'Hello World!')
 
     const chatReactions: IChatReactions = {
-      sendNotificationToSession: function (_notificationMessage: NotificationMessage): void {
+      emitNotificationToSession: function (_notificationMessage: NotificationMessage): void {
         return
       },
       emitTextMessagesToClient: function (...textMessages: TextMessage[]): void {
@@ -87,7 +88,7 @@ describe('chat aggregate', () => {
         expect(textMessages[0]).to.be.equal(textMessage)
         done()
       },
-      sendTextMessagesToSession: function (..._textMessages: TextMessage[]): void {
+      emitTextMessagesToSession: function (..._textMessages: TextMessage[]): void {
         throw new Error('Method should not be used for testing.')
       }
     }
@@ -110,13 +111,13 @@ describe('chat aggregate', () => {
     const textMessage = new TextMessage(user, 'Hello World!')
 
     const chatReactions: IChatReactions = {
-      sendNotificationToSession: function (_notificationMessage: NotificationMessage): void {
+      emitNotificationToSession: function (_notificationMessage: NotificationMessage): void {
         throw new Error('Method should not be used for testing.')
       },
       emitTextMessagesToClient: function (..._textMessages: TextMessage[]): void {
         throw new Error('Method should not be used for testing.')
       },
-      sendTextMessagesToSession: function (...textMessages: TextMessage[]): void {
+      emitTextMessagesToSession: function (...textMessages: TextMessage[]): void {
         expect(textMessages).to.have.lengthOf(1)
         expect(textMessages[0]).to.be.equal(textMessage)
         done()

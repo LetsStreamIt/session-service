@@ -1,6 +1,6 @@
-import { CommandType, ISessionCommand } from '../../../command/command'
-import { ISessionReactions } from '../../../reactions/sessionReactions'
-import { User } from '../../../user'
+import { CommandType, ISessionCommand } from '../../../common/command/command'
+import { ISessionReactions } from '../../../common/reactions/sessionReactions'
+import { User } from '../../../common/user'
 
 /**
  * Send Message Command.

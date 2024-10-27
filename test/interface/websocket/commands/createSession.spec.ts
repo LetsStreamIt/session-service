@@ -1,14 +1,14 @@
 import { Socket as ClientSocket } from 'socket.io-client'
 import { Server, Socket as ServerSocket } from 'socket.io'
 import { expect } from 'chai'
+import { ISessionService, SessionService } from '../../../../src/application/sessionService'
+import { acceptCreateSessionCommand } from '../../../../src/infrastructure/adapters/websocket/commands/session/createSession'
+import { User, UserId } from '../../../../src/domain/common/user'
+import { CommandType } from '../../../../src/domain/common/command/command'
 import {
-  ISessionService,
-  SessionService
-} from '../../../../src/application/sessionService/sessionService'
-import { acceptCreateSessionCommand } from '../../../../src/interface/websocket/commands/session/createSession'
-import { User, UserId } from '../../../../src/domain/user'
-import { CommandType } from '../../../../src/domain/command/command'
-import { CreateSessionResponse, ResponseStatus } from '../../../../src/domain/command/response'
+  CreateSessionResponse,
+  ResponseStatus
+} from '../../../../src/domain/common/command/response'
 import { commonAfter, commonBefore } from './socketIoTestUtils'
 
 describe('create session message', () => {

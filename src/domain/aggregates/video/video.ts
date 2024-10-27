@@ -1,8 +1,8 @@
-import { EventType } from '../../event/event'
-import { IEventBus } from '../../event/eventBus'
-import { IVideoReactions, IVideoState, PlayState } from '../../reactions/videoReactions'
-import { User } from '../../user'
-import { isDeepEqual } from '../../utils'
+import { EventType } from '../../common/event/event'
+import { IEventBus } from '../../common/event/eventBus'
+import { IVideoReactions, IVideoState, PlayState } from '../../common/reactions/videoReactions'
+import { User } from '../../common/user'
+import { isDeepEqual } from '../../common/utils'
 import { UserJoinedSessionEvent, UserLeftSessionEvent } from '../session/events/sessionEvents'
 import { VideoPlayedEvent, VideoStoppedEvent } from './events/videoEvents'
 

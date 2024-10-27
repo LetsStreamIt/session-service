@@ -1,5 +1,5 @@
-import { ISessionEvent, EventType } from '../../../event/event'
-import { ISessionReactions } from '../../../reactions/sessionReactions'
+import { ISessionEvent, EventType } from '../../../common/event/event'
+import { ISessionReactions } from '../../../common/reactions/sessionReactions'
 
 /**
  * Video Played Event

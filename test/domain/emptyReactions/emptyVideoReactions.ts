@@ -1,4 +1,4 @@
-import { IVideoReactions, IVideoState } from '../../../src/domain/reactions/videoReactions'
+import { IVideoReactions, IVideoState } from '../../../src/domain/common/reactions/videoReactions'
 
 export class EmptyVideoReactions implements IVideoReactions {
   retreiveVideoState(): Promise<IVideoState> {

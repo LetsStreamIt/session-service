@@ -1,6 +1,7 @@
-import { CommandType, ISessionCommand } from '../../../command/command'
-import { ISessionReactions } from '../../../reactions/sessionReactions'
-import { User } from '../../../user'
+import { CommandType, ISessionCommand } from '../../../common/command/command'
+import { ISessionReactions } from '../../../common/reactions/sessionReactions'
+import { User } from '../../../common/user'
+import { IProfileServiceUtils, IAuthServiceUtils } from '../../../utils/profileServiceUtils'
 
 /**
  * Create Session Command
@@ -23,10 +24,18 @@ export class CreateSessionCommand implements ISessionCommand {
 export class UserTokenCommand implements ISessionCommand {
   type: CommandType
   token: string
+  profileServiceUtils: IProfileServiceUtils
+  authServiceUtils: IAuthServiceUtils
 
-  constructor(token: string) {
+  constructor(
+    token: string,
+    profileServiceUtils: IProfileServiceUtils,
+    authServiceUtils: IAuthServiceUtils
+  ) {
     this.type = CommandType.USER_TOKEN
     this.token = token
+    this.profileServiceUtils = profileServiceUtils
+    this.authServiceUtils = authServiceUtils
   }
 }
 

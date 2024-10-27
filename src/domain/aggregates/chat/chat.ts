@@ -1,6 +1,6 @@
 import { TextMessage, NotificationMessage, JoinNotification } from './message'
-import { IEventBus } from '../../event/eventBus'
-import { EventType } from '../../event/event'
+import { IEventBus } from '../../common/event/eventBus'
+import { EventType } from '../../common/event/event'
 import { UserJoinedSessionEvent, UserLeftSessionEvent } from '../session/events/sessionEvents'
 import { MessageSentEvent } from './events/chatEvents'
 
@@ -40,7 +40,7 @@ export class Chat implements IChat {
     event: UserJoinedSessionEvent
   ) => {
     return new Promise((resolve) => {
-      event.getSessionReactions.getChatReactions.sendNotificationToSession(
+      event.getSessionReactions.getChatReactions.emitNotificationToSession(
         new NotificationMessage(event.getUser, JoinNotification.JOIN_SESSION)
       )
       event.getSessionReactions.getChatReactions.emitTextMessagesToClient(...this.messages)
@@ -58,7 +58,7 @@ export class Chat implements IChat {
     event: UserLeftSessionEvent
   ) => {
     return new Promise((resolve) => {
-      event.getSessionReactions.getChatReactions.sendNotificationToSession(
+      event.getSessionReactions.getChatReactions.emitNotificationToSession(
         new NotificationMessage(event.getUser, JoinNotification.LEAVE_SESSION)
       )
       resolve()
@@ -76,7 +76,7 @@ export class Chat implements IChat {
   ) => {
     return new Promise((resolve) => {
       this.messages.push(event.getTextMessage)
-      event.getSessionReactions.getChatReactions.sendTextMessagesToSession(event.getTextMessage)
+      event.getSessionReactions.getChatReactions.emitTextMessagesToSession(event.getTextMessage)
       resolve()
     })
   }

@@ -1,20 +1,17 @@
 import { Socket as ClientSocket } from 'socket.io-client'
 import { Server, Socket as ServerSocket } from 'socket.io'
-import {
-  ISessionService,
-  SessionService
-} from '../../../../src/application/sessionService/sessionService'
+import { ISessionService, SessionService } from '../../../../src/application/sessionService'
 import { commonAfter, commonBefore } from './socketIoTestUtils'
-import { acceptJoinSessionCommand } from '../../../../src/interface/websocket/commands/session/joinSession'
-import { User, UserId } from '../../../../src/domain/user'
-import { CommandType } from '../../../../src/domain/command/command'
+import { acceptJoinSessionCommand } from '../../../../src/infrastructure/adapters/websocket/commands/session/joinSession'
+import { User, UserId } from '../../../../src/domain/common/user'
+import { CommandType } from '../../../../src/domain/common/command/command'
 import {
   CreateSessionResponse,
   JoinSessionResponse,
   JoinSessionResponseType
-} from '../../../../src/domain/command/response'
+} from '../../../../src/domain/common/command/response'
 import { expect } from 'chai'
-import { acceptCreateSessionCommand } from '../../../../src/interface/websocket/commands/session/createSession'
+import { acceptCreateSessionCommand } from '../../../../src/infrastructure/adapters/websocket/commands/session/createSession'
 
 describe('join session message', () => {
   let io: Server, serverSocket: ServerSocket, clientSocket: ClientSocket

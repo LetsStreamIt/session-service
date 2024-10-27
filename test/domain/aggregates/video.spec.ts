@@ -1,16 +1,16 @@
-import { IEventBus, EventBus } from '../../../src/domain/event/eventBus'
-import { IChatReactions } from '../../../src/domain/reactions/chatReactions'
+import { IEventBus, EventBus } from '../../../src/domain/common/event/eventBus'
+import { IChatReactions } from '../../../src/domain/common/reactions/chatReactions'
 import { EmptyChatReactions } from '../emptyReactions/emptyChatReactions'
 import { Video, IVideo } from '../../../src/domain/aggregates/video/video'
 import {
   IVideoReactions,
   IVideoState,
   PlayState
-} from '../../../src/domain/reactions/videoReactions'
+} from '../../../src/domain/common/reactions/videoReactions'
 import { VideoPlayedEvent } from '../../../src/domain/aggregates/video/events/videoEvents'
 import { EmptySessionReactions } from '../emptyReactions/emptySessionReactions'
 import { expect } from 'chai'
-import { User, UserId } from '../../../src/domain/user'
+import { User, UserId } from '../../../src/domain/common/user'
 import { UserJoinedSessionEvent } from '../../../src/domain/aggregates/session/events/sessionEvents'
 
 describe('video aggregate', () => {

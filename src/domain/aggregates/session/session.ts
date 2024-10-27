@@ -1,8 +1,8 @@
-import { Pair, Entity, Repository } from '../../entity'
-import { IEventBus, EventBus } from '../../event/eventBus'
+import { Pair, Entity, Repository } from '../../common/entity'
+import { IEventBus, EventBus } from '../../common/event/eventBus'
 import { IChat, Chat } from '../chat/chat'
-import { User, UserRepository } from '../../user'
-import { EventType } from '../../event/event'
+import { User, UserRepository } from '../../common/user'
+import { EventType } from '../../common/event/event'
 import { IVideo, Video } from '../video/video'
 import { UserJoinedSessionEvent, UserLeftSessionEvent } from './events/sessionEvents'
 
