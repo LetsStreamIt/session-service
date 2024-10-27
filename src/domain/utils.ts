@@ -1,3 +1,9 @@
+/**
+ * Checks if two objects are deep equal
+ * @param object1
+ * @param object2
+ * @returns true if the two objects are deep equal, false otherwise
+ */
 export const isDeepEqual = (object1: any, object2: any) => {
   const objKeys1 = Object.keys(object1)
   const objKeys2 = Object.keys(object2)
@@ -17,6 +23,11 @@ export const isDeepEqual = (object1: any, object2: any) => {
   return true
 }
 
+/**
+ * Checks if the value specified as parameter is of type object
+ * @param object
+ * @returns true if it's an object, false otherwise
+ */
 export const isObject = (object: any) => {
   return object != null && typeof object === 'object'
 }

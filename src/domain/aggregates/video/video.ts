@@ -1,26 +1,10 @@
 import { EventType } from '../../event/event'
 import { IEventBus } from '../../event/eventBus'
-import { IVideoReactions } from '../../reactions/videoReactions'
+import { IVideoReactions, IVideoState, PlayState } from '../../reactions/videoReactions'
 import { User } from '../../user'
 import { isDeepEqual } from '../../utils'
 import { UserJoinedSessionEvent, UserLeftSessionEvent } from '../session/events/sessionEvents'
 import { VideoPlayedEvent, VideoStoppedEvent } from './events/videoEvents'
-
-/**
- * Play State
- */
-export enum PlayState {
-  PAUSED = 'Paused',
-  PLAYING = 'Playing'
-}
-
-/**
- * Video State
- */
-export interface VideoState {
-  timestamp: number
-  state: PlayState
-}
 
 /**
  * Video Aggregate Interface
@@ -80,7 +64,7 @@ export class Video implements IVideo {
         if (videoStates.length > 0) {
           const timestamps: number[] = videoStates.map((videoState) => videoState.timestamp)
           const minTimestamp: number = Math.min(...timestamps)
-          const videoStateSync: VideoState = videoStates[timestamps.indexOf(minTimestamp)]
+          const videoStateSync: IVideoState = videoStates[timestamps.indexOf(minTimestamp)]
           event.getSessionReactions.getVideoReactions.synchronizeClient(videoStateSync)
         }
         this.userReactions.set(event.getUser, event.getSessionReactions.getVideoReactions)

@@ -4,7 +4,6 @@ import {
   VideoReactionType,
   IVideoState
 } from '../../../domain/reactions/videoReactions'
-import { VideoState } from '../../../domain/aggregates/video/video'
 
 /**
  * WebSocket Video Reactions
@@ -22,23 +21,17 @@ export class WSVideoReactions implements IVideoReactions {
 
   retreiveVideoState(): Promise<IVideoState> {
     return new Promise((resolve) => {
-      this.socket.emit(VideoReactionType.VIDEO_STATE, (videoState: VideoState) => {
+      this.socket.emit(VideoReactionType.VIDEO_STATE, (videoState: IVideoState) => {
         resolve(videoState)
       })
     })
   }
 
-  synchronizeClient(videoState: IVideoState): Promise<void> {
-    return new Promise((resolve) => {
-      this.socket.emit(VideoReactionType.SYNCHRONIZE, videoState)
-      resolve()
-    })
+  synchronizeClient(videoState: IVideoState) {
+    this.socket.emit(VideoReactionType.SYNCHRONIZE, videoState)
   }
 
-  syncronizeSession(videoState: IVideoState): Promise<void> {
-    return new Promise((resolve) => {
-      this.io.to(this.sessionName).emit(VideoReactionType.SYNCHRONIZE, videoState)
-      resolve()
-    })
+  syncronizeSession(videoState: IVideoState) {
+    this.io.to(this.sessionName).emit(VideoReactionType.SYNCHRONIZE, videoState)
   }
 }
