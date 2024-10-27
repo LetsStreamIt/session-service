@@ -1,10 +1,7 @@
 import { Server } from 'socket.io'
-import { acceptConnectionCommand } from './commands/connection/connection'
-import { SessionService } from '../../../application/sessionService'
-import {
-  AuthServiceUtils,
-  ProfileServiceUtils
-} from '../../communication/profileService/externalServicesUtils'
+import { acceptConnectionCommand } from './adapters/websocket/commands/connection/connection'
+import { SessionService } from '../application/sessionService'
+import { AuthServiceUtils, ProfileServiceUtils } from './communication/externalServicesUtils'
 
 /**
  * Accepts Commands

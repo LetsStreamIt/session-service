@@ -5,10 +5,7 @@ import { ISessionService } from '../../../../../application/sessionService'
 import { ResponseStatus, UserTokenResponse } from '../../../../../domain/common/command/response'
 import { UserTokenCommand } from '../../../../../domain/aggregates/session/commands/sessionCommands'
 import { CommandType } from '../../../../../domain/common/command/command'
-import {
-  IAuthServiceUtils,
-  IProfileServiceUtils
-} from '../../../../../domain/utils/profileServiceUtils'
+import { IAuthServiceUtils, IProfileServiceUtils } from '../../../../../domain/utils/serviceUtils'
 
 /**
  * Accept User token command.

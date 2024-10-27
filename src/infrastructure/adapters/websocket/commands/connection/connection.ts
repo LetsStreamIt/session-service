@@ -3,10 +3,7 @@ import { acceptUserTokenCommand } from './userToken'
 import { acceptDisconnectionCommand } from './disconnect'
 import { CommandType } from '../../../../../domain/common/command/command'
 import { ISessionService } from '../../../../../application/sessionService'
-import {
-  IProfileServiceUtils,
-  IAuthServiceUtils
-} from '../../../../../domain/utils/profileServiceUtils'
+import { IProfileServiceUtils, IAuthServiceUtils } from '../../../../../domain/utils/serviceUtils'
 
 /**
  * Accept connection command.

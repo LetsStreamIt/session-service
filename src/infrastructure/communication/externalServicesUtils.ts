@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios'
-import { IAuthServiceUtils, IProfileServiceUtils } from '../../../domain/utils/profileServiceUtils'
-import { standardConfig } from '../../config'
+import { IAuthServiceUtils, IProfileServiceUtils } from '../../domain/utils/serviceUtils'
+import { standardConfig } from '../config'
 
 function httpGet(
   hostname: string,

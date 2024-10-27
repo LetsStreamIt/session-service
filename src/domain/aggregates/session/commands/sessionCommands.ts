@@ -1,7 +1,7 @@
 import { CommandType, ISessionCommand } from '../../../common/command/command'
 import { ISessionReactions } from '../../../common/reactions/sessionReactions'
 import { User } from '../../../common/user'
-import { IProfileServiceUtils, IAuthServiceUtils } from '../../../utils/profileServiceUtils'
+import { IProfileServiceUtils, IAuthServiceUtils } from '../../../utils/serviceUtils'
 
 /**
  * Create Session Command
