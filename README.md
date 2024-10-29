@@ -19,7 +19,8 @@
 
 Session Service is responsible to manage a Youtube streaming session.
 
-It ensures synchronized video playback, in response to play and stop performed by the users. It also contains a chat through which users can communicate each other.
+It ensures synchronized video playback, in response to play and stop performed by the users. It also contains a chat through which users can communicate during the streaming.
+
 
 ## Technologies
 
@@ -44,7 +45,7 @@ It ensures synchronized video playback, in response to play and stop performed b
 
 ## Usage
 
-In order to ru it, specify the following environment variables:
+In order to run it, specify the following environment variables:
 - `SESSION_SERVICE_PORT`: Port where to deploy the service
 - `SESSION_SERVICE_HOSTNAME`: Hostname where to deploy the service
 - `PROFILE_SERVICE_HOSTNAME`: Profile Service hostname
@@ -78,7 +79,7 @@ It is possible to run the service both locally or through a Docker container:
 
 ## Documentation
 
-Session Service code documentation is built using Typedoc and is available to the following [link](https://letsstreamit.github.io/session-service/).
+Session Service code documentation is built using [Typedoc](https://typedoc.org/api/) and is available to the following [link](https://letsstreamit.github.io/session-service/).
 
 ## License
 
