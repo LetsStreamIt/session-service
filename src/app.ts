@@ -19,7 +19,7 @@ export const io: Server = new Server(server, {
 
 acceptCommands(io)
 
-const port: number = parseInt(standardConfig.LOCAL_PORT, 10)
+const port: number = parseInt(standardConfig.SESSION_SERVICE_PORT, 10)
 const hostname: string = standardConfig.SESSION_SERVICE_HOSTNAME
 
 server.listen(port, hostname, () => {
