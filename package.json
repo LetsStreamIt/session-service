@@ -21,7 +21,7 @@
     "dist/"
   ],
   "scripts": {
-    "build": "npm run clean && npm run lint && tsc",
+    "build": "npm run clean && tsc",
     "clean": "node -e \"var { rmdirSync, existsSync } = require('fs'), path = require('path'); ['./dist'].forEach(fPath => {if (existsSync(path.join(__dirname, fPath))) rmdirSync(path.join(__dirname, fPath), { recursive: true })}); process.exit(0);\"",
     "clean:all": "npm run clean && (rm -r ./node_modules || true)",
     "lint:fix": "eslint --fix src/**/*.ts test/**/*.ts",
@@ -39,7 +39,6 @@
     "@commitlint/config-conventional": "^19.2.2",
     "@eslint/js": "^9.8.0",
     "@types/chai": "^5.0.0",
-    "@types/dotenv": "^8.2.0",
     "@types/eslint__js": "^8.42.3",
     "@types/express": "^5.0.0",
     "@types/mocha": "^10.0.1",
