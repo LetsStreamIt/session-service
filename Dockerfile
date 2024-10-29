@@ -1,19 +1,14 @@
-# Use Node 20.16 alpine as base image
-FROM node:20.18-alpine3.19 AS base
+# build stage
+FROM node:lts AS build-stage
 
-# Change the working directory to /build
-WORKDIR /build
-
-# Copy the package.json and package-lock.json files to the /build directory
-COPY . .
-
+WORKDIR /app
+# Install dependencies
+COPY package*.json ./
 RUN npm install
-
-# Install production dependencies and clean the cache
-RUN npm ci && npm cache clean --force
-
-# Copy the entire source code into the container
+# Build
 COPY . .
+RUN npm run build
 
-# Start the application
-CMD ["npm", "run", "serve"]
+# Run app using pm2
+RUN npm install pm2 -g 
+CMD ["pm2-runtime", "dist/app.js"]
