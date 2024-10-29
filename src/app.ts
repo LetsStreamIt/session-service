@@ -9,9 +9,9 @@ const server = http.createServer(app)
 
 // Socket IO server
 export const io: Server = new Server(server, {
+  path: '/api/session/',
   cors: {
-    origin: (_origin: string | undefined, callback: (error: any, allow: boolean) => void) => {
-      // Allow all origins
+    origin: (_req, callback) => {
       callback(null, true)
     }
   }
@@ -19,8 +19,9 @@ export const io: Server = new Server(server, {
 
 acceptCommands(io)
 
-const port: string = standardConfig.LOCAL_PORT
+const port: number = parseInt(standardConfig.LOCAL_PORT, 10)
+const hostname: string = standardConfig.SESSION_SERVICE_HOSTNAME
 
-server.listen(port, () => {
-  console.log(`listening on *:${port}`)
+server.listen(port, hostname, () => {
+  console.log(`listening on ${hostname}:${port}`)
 })
