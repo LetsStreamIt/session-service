@@ -116,7 +116,7 @@ jobs:
           build_dir: docs/
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
+
   deploy-image:
     permissions:
       contents: write
@@ -160,7 +160,7 @@ jobs:
       - build
       - release
       - deploy-image
-      - upload-docs
+      - docs
     if: >-
       always() && (
         contains(join(needs.*.result, ','), 'failure')
