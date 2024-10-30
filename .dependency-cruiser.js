@@ -20,7 +20,7 @@ module.exports = {
         path: '^(src/application)'
       },
       to: {
-        pathNot: '^(src/domain)|^(src/application)|^(src/utils)|^(node_modules/axios)|^(node_modules/js-sha256)'
+        pathNot: '^(src/domain)|^(src/application)|^(node_modules/axios)|^(node_modules/js-sha256)'
       }
     },
     {
