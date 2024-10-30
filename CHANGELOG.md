@@ -1,3 +1,18 @@
+## [1.0.1](https://github.com/LetsStreamIt/session-service/compare/v1.0.0...v1.0.1) (2024-10-30)
+
+### Documentation
+
+* del docs dir content ([ec2c523](https://github.com/LetsStreamIt/session-service/commit/ec2c523a559009bde47dd2e99a05dce127ff7a65))
+* update readme ([dc4cdc1](https://github.com/LetsStreamIt/session-service/commit/dc4cdc14e7052c9d3c9532db6b92f9eb96a686f3))
+
+### Build and continuous integration
+
+* fix jobs dependencies ([0eb01d0](https://github.com/LetsStreamIt/session-service/commit/0eb01d07c47e542d95020d186765a4eb1507de0e))
+
+### General maintenance
+
+* del dep graph img ([da50b2f](https://github.com/LetsStreamIt/session-service/commit/da50b2f35b1bf6b34d27a952a620cd09aae6363f))
+
 ## [1.0.0](https://github.com/LetsStreamIt/session-service/compare/v0.12.5...v1.0.0) (2024-10-30)
 
 ### ⚠ BREAKING CHANGES
