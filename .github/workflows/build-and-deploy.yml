@@ -37,6 +37,7 @@ jobs:
           node-version: lts/*
       - name: Install dependencies
         run: npm ci
+      # Run formatter
       - name: Check code format
         run: npm run format:check
   
@@ -51,6 +52,7 @@ jobs:
           node-version: lts/*
       - name: Install dependencies
         run: npm ci
+      # Run linter
       - name: Run ESLint
         run: npm run lint:check
 
