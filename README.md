@@ -1,10 +1,6 @@
 # Session Service
 
-![CI status](https://github.com/letsstreamit/session-service/actions/workflows/ci.yml/badge.svg)
-![Deploy Image status](https://github.com/letsstreamit/session-service/actions/workflows/deploy-image.yaml/badge.svg)
-![GH pages status](https://github.com/letsstreamit/session-service/actions/workflows/gh-pages.yaml/badge.svg)
-![Release status](https://github.com/letsstreamit/session-service/actions/workflows/release.yaml/badge.svg)
-
+![CI status](https://github.com/letsstreamit/session-service/actions/workflows/dispatcher.yml/badge.svg)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![Version](https://img.shields.io/github/v/release/letsstreamit/session-service?style=plastic)
