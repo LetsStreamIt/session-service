@@ -13,9 +13,9 @@
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=LetsStreamIt_session-service&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=LetsStreamIt_session-service)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=LetsStreamIt_session-service&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=LetsStreamIt_session-service)
 
-Session Service is responsible to manage a Youtube streaming session.
+Session Service is responsible for managing a Youtube streaming session.
 
-It ensures synchronized video playback, in response to play and stop performed by the users. It also contains a chat through which users can communicate each other.
+It ensures synchronized video playback, in response to play and stop performed by the users. It also manages a chat through which users can communicate each other while watching the video.
 
 ## Technologies
 
@@ -43,13 +43,17 @@ It ensures synchronized video playback, in response to play and stop performed b
 
 ## Usage
 
-In order to ru it, specify the following environment variables:
-- `SESSION_SERVICE_PORT`: Port where to deploy the service
-- `SESSION_SERVICE_HOSTNAME`: Hostname where to deploy the service
-- `PROFILE_SERVICE_HOSTNAME`: Profile Service hostname
-- `PROFILE_SERVICE_PORT`: Profile Service Port
-- `AUTH_SERVICE_HOSTNAME`: Auth Service Hostname
-- `AUTH_SERVICE_PORT`: Auth Service Port
+In order to run it, specify the following environment variables:
+
+| Variable                   | Description                                                                              | Default     |
+| -------------------------- | ---------------------------------------------------------------------------------------- | ----------- |
+| `SESSION_SERVICE_HOSTNAME` | The hostname of the service                                                              | `localhost` |
+| `PROFILE_SERVICE_PORT`     | The port of the service                                                                  | `4000`      |
+| `PROFILE_SERVICE_HOSTNAME` | The hostname of the profile service                                                      | `localhost` |
+| `PROFILE_SERVICE_PORT`     | The port of the profile service                                                          | `8080`      |
+| `AUTH_SERVICE_HOSTNAME`    | The hostname of the auth service                                                         | `localhost` |
+| `AUTH_SERVICE_PORT`        | The port of the auth service                                                             | `3000`      |
+
 
 It is possible to run the service both locally or through a Docker container:
 1. To run the service locally:
@@ -59,16 +63,16 @@ It is possible to run the service both locally or through a Docker container:
     npm run build && npm run start
     ```
 2. Using the docker container:
-    1. Create a ```env.list``` file specifying the environment variable values:
+    1. Create a ```env.list``` file specifying the environment variable values. Syntax should look like this:
         ```plaintext
-        PROFILE_SERVICE_HOSTNAME="localhost"
-        PROFILE_SERVICE_PORT=3001
-        AUTH_SERVICE_HOSTNAME="localhost"
-        AUTH_SERVICE_PORT=3000
-        SESSION_SERVICE_HOSTNAME="localhost"
-        SESSION_SERVICE_PORT=4000
+        SESSION_SERVICE_HOSTNAME=YOUR_SESSION_SERVICE_HOSTNAME
+        SESSION_SERVICE_PORT=YOUR_SESSION_SERVICE_PORT
+        PROFILE_SERVICE_HOSTNAME=YOUR_PROFILE_SERVICE_HOSTNAME
+        PROFILE_SERVICE_PORT=YOUR_PROFILE_SERVICE_PORT
+        AUTH_SERVICE_HOSTNAME=YOUR_AUTH_SERVICE_HOSTNAME
+        AUTH_SERVICE_PORT=YOUR_AUTH_SERVICE_PORT
         ```
-        The values listed above are the current default values if they are not specified by the user.
+        Either specify their values if different from the default, or omit the entire row otherwise.
 
     2. Run the docker container:
         ```bash
@@ -77,7 +81,7 @@ It is possible to run the service both locally or through a Docker container:
 
 ## License
 
-Session Service is licensed under [MIT](./LICENSE).
+Session Service is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
 
 ## Authors
 
