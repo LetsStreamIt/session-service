@@ -1,3 +1,23 @@
+## [1.0.0](https://github.com/LetsStreamIt/session-service/compare/v0.12.5...v1.0.0) (2024-10-30)
+
+### ⚠ BREAKING CHANGES
+
+* Release v1.0.0
+
+### Documentation
+
+* update authors in readme ([6a132af](https://github.com/LetsStreamIt/session-service/commit/6a132af4bfb253f355309fe3082f696c9d00ea7e))
+* update badges in readme ([33609c5](https://github.com/LetsStreamIt/session-service/commit/33609c5a5f6a805548a1fd18971d635c9d60a4aa))
+
+### Build and continuous integration
+
+* align ci with other services ([4b95e47](https://github.com/LetsStreamIt/session-service/commit/4b95e47ebc280d7c80ec11a201b830ba0afe9308))
+* modify workflow deps ([b5c7bc6](https://github.com/LetsStreamIt/session-service/commit/b5c7bc6428e00f627f10775596d5116bf7e48382))
+
+### General maintenance
+
+* add comment in ci file ([ffe7860](https://github.com/LetsStreamIt/session-service/commit/ffe78600aa999502dd8be9aa83c26e3610267de7))
+
 ## [0.12.5](https://github.com/LetsStreamIt/session-service/compare/v0.12.4...v0.12.5) (2024-10-30)
 
 ### ⚠ BREAKING CHANGES
