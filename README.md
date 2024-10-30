@@ -86,4 +86,3 @@ Session Service is licensed under [MIT](./LICENSE).
 ## Authors
 
 - Luca Fabri ([w-disaster](https://github.com/w-disaster))
-- Simone Ceredi ([sceredi](https://github.com/sceredi))
