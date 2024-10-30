@@ -19,8 +19,7 @@
 
 Session Service is responsible to manage a Youtube streaming session.
 
-It ensures synchronized video playback, in response to play and stop performed by the users. It also contains a chat through which users can communicate during the streaming.
-
+It ensures synchronized video playback, in response to play and stop performed by the users. It also contains a chat through which users can communicate each other.
 
 ## Technologies
 
@@ -41,11 +40,14 @@ It ensures synchronized video playback, in response to play and stop performed b
 [![Renovate](https://img.shields.io/badge/RenovateBot-1A1F6C?style=for-the-badge&logo=renovate&logoColor=white)](https://renovatebot.com/)
 [![SonarCloud](https://img.shields.io/badge/SonarCloud-F3702A?style=for-the-badge&logo=sonarcloud&logoColor=white)](https://sonarcloud.io/)
 
+### Documentation
+
+[![Typedoc](https://img.shields.io/badge/Typedoc-2ECE53?style=for-the-badge&logo=readthedocs&logoColor=white)](https://typedoc.org/)
 
 
 ## Usage
 
-In order to run it, specify the following environment variables:
+In order to ru it, specify the following environment variables:
 - `SESSION_SERVICE_PORT`: Port where to deploy the service
 - `SESSION_SERVICE_HOSTNAME`: Hostname where to deploy the service
 - `PROFILE_SERVICE_HOSTNAME`: Profile Service hostname
@@ -77,10 +79,11 @@ It is possible to run the service both locally or through a Docker container:
         docker run --env-file ./env.list ghcr.io/letsstreamit/session-service:main
         ```
 
-## Documentation
-
-Session Service code documentation is built using [Typedoc](https://typedoc.org/api/) and is available to the following [link](https://letsstreamit.github.io/session-service/).
-
 ## License
 
 Session Service is licensed under [MIT](./LICENSE).
+
+## Authors
+
+- Luca Fabri ([w-disaster](https://github.com/w-disaster))
+- Simone Ceredi ([sceredi](https://github.com/sceredi))
