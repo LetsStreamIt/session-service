@@ -28,6 +28,8 @@ jobs:
   
   format:
     runs-on: ubuntu-latest
+    needs:
+      - build
     steps:
       - name: Checkout
         uses: DanySK/action-checkout@0.2.22
@@ -43,6 +45,8 @@ jobs:
   
   linter:
     runs-on: ubuntu-latest
+    needs:
+      - build
     steps:
       - name: Checkout
         uses: DanySK/action-checkout@0.2.22
@@ -92,7 +96,7 @@ jobs:
   docs:
     concurrency:
       # Only one release job at a time. Strictly sequential.
-      group: release
+      group: docs
     runs-on: ubuntu-latest
     needs:
       - release
@@ -126,7 +130,7 @@ jobs:
       contents: write
       packages: write
     concurrency:
-      group: release
+      group: deploy-image
     runs-on: ubuntu-latest
     needs:
       - release
@@ -158,10 +162,13 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          
+
   success:
     runs-on: ubuntu-latest
     needs:
+      - build
+      - format
+      - linter
       - release
       - deploy-image
       - docs
