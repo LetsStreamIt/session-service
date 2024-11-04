@@ -66,6 +66,7 @@
     "node": "20.18"
   },
   "dependencies": {
+    "@asyncapi/cli": "^2.8.0",
     "@types/socket.io": "^3.0.2",
     "axios": "^1.7.7",
     "dotenv": "^16.4.5",
