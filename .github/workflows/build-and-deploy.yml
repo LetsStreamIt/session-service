@@ -86,7 +86,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          npx semantic-release > semantic_release_output.txt || true
+          npx semantic-release > semantic_release_output.txt || false
           cat semantic_release_output.txt
       - name: Check if release was created
         id: check-release
