@@ -94,9 +94,7 @@ jobs:
         shell: bash
 
   docs:
-    concurrency:
-      # Only one release job at a time. Strictly sequential.
-      group: docs
+    
     runs-on: ubuntu-latest
     needs:
       - build
