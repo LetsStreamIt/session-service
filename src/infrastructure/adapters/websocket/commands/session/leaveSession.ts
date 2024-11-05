@@ -4,6 +4,7 @@ import { LeaveSessionCommand } from '../../../../../domain/aggregates/session/co
 import { ISessionReactions } from '../../../../../domain/common/reactions/sessionReactions'
 import { User } from '../../../../../domain/common/user'
 import { CommandType } from '../../../../../domain/common/command/command'
+import { LeaveSessionResponse } from '../../../../../domain/common/command/response'
 
 /**
  * Accept Leave Session Commands.
@@ -21,9 +22,9 @@ export function acceptLeaveSessionCommand(
   sessionService: ISessionService,
   sessionReactions: ISessionReactions
 ) {
-  socket.on(CommandType.LEAVE_SESSION, () => {
-    sessionService.handleLeaveSessionCommand(
-      new LeaveSessionCommand(user, sessionName, sessionReactions)
-    )
+  socket.on(CommandType.LEAVE_SESSION, (ack) => {
+    sessionService
+      .handleLeaveSessionCommand(new LeaveSessionCommand(user, sessionName, sessionReactions))
+      .then((leaveSessionResponse: LeaveSessionResponse) => ack(leaveSessionResponse))
   })
 }

@@ -115,6 +115,8 @@ jobs:
         # build doc using Typedoc
       - name: Build Typedoc site
         run: npm run docs:build
+      - name: Build Async API doc
+        run: npm run docs:build-api
 
       # deploy to GH pages
       - name: Deploy to GitHub Pages

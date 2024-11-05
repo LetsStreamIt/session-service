@@ -1,0 +1,800 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "Chat": {
+      "additionalProperties": false,
+      "properties": {},
+      "type": "object"
+    },
+    "ChatReactionType": {
+      "description": "Chat Reaction Type",
+      "enum": [
+        "notificationMessage",
+        "textMessage"
+      ],
+      "type": "string"
+    },
+    "CommandType": {
+      "description": "Command Type",
+      "enum": [
+        "connection",
+        "userToken",
+        "disconnect",
+        "createSession",
+        "joinSession",
+        "leaveSession",
+        "sendMessage",
+        "stopVideo",
+        "playVideo"
+      ],
+      "type": "string"
+    },
+    "CreateSessionCommand": {
+      "additionalProperties": false,
+      "description": "Create Session Command",
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/CommandType"
+        },
+        "user": {
+          "$ref": "#/definitions/User"
+        },
+        "videoUrl": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "user",
+        "videoUrl"
+      ],
+      "type": "object"
+    },
+    "CreateSessionResponse": {
+      "additionalProperties": false,
+      "description": "Create Session Response",
+      "properties": {
+        "command": {
+          "$ref": "#/definitions/CommandType"
+        },
+        "content": {
+          "$ref": "#/definitions/CreateSessionResponseContent"
+        }
+      },
+      "required": [
+        "command",
+        "content"
+      ],
+      "type": "object"
+    },
+    "CreateSessionResponseContent": {
+      "additionalProperties": false,
+      "description": "Create Session Response Content",
+      "properties": {
+        "sessionName": {
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/definitions/ResponseStatus"
+        }
+      },
+      "required": [
+        "status",
+        "sessionName"
+      ],
+      "type": "object"
+    },
+    "Entity<SessionId,SessionEntry>": {
+      "additionalProperties": false,
+      "description": "Entity",
+      "type": "object"
+    },
+    "Entity<UserId,string>": {
+      "additionalProperties": false,
+      "description": "Entity",
+      "type": "object"
+    },
+    "EventBus": {
+      "additionalProperties": false,
+      "description": "Event Bus Implementation",
+      "properties": {},
+      "type": "object"
+    },
+    "EventType": {
+      "description": "Event Type",
+      "enum": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "type": "number"
+    },
+    "IAuthServiceUtils": {
+      "additionalProperties": false,
+      "description": "Auth Service Utils interface",
+      "type": "object"
+    },
+    "IChat": {
+      "additionalProperties": false,
+      "description": "Chat Aggregate.",
+      "type": "object"
+    },
+    "IChatReactions": {
+      "additionalProperties": false,
+      "description": "Chat Reactions Interface",
+      "type": "object"
+    },
+    "IEventBus": {
+      "additionalProperties": false,
+      "description": "Event Bus Interface",
+      "type": "object"
+    },
+    "IMessage<JoinNotification>": {
+      "additionalProperties": false,
+      "description": "Message Interface",
+      "type": "object"
+    },
+    "IMessage<string>": {
+      "additionalProperties": false,
+      "description": "Message Interface",
+      "type": "object"
+    },
+    "IProfileServiceUtils": {
+      "additionalProperties": false,
+      "description": "Profile Service Utils interface",
+      "type": "object"
+    },
+    "IResponse<CreateSessionResponseContent>": {
+      "additionalProperties": false,
+      "description": "Response",
+      "properties": {
+        "command": {
+          "$ref": "#/definitions/CommandType"
+        },
+        "content": {
+          "$ref": "#/definitions/CreateSessionResponseContent"
+        }
+      },
+      "required": [
+        "command",
+        "content"
+      ],
+      "type": "object"
+    },
+    "IResponse<JoinSessionResponseContent>": {
+      "additionalProperties": false,
+      "description": "Response",
+      "properties": {
+        "command": {
+          "$ref": "#/definitions/CommandType"
+        },
+        "content": {
+          "$ref": "#/definitions/JoinSessionResponseContent"
+        }
+      },
+      "required": [
+        "command",
+        "content"
+      ],
+      "type": "object"
+    },
+    "IResponse<ResponseStatus>": {
+      "additionalProperties": false,
+      "description": "Response",
+      "properties": {
+        "command": {
+          "$ref": "#/definitions/CommandType"
+        },
+        "content": {
+          "$ref": "#/definitions/ResponseStatus"
+        }
+      },
+      "required": [
+        "command",
+        "content"
+      ],
+      "type": "object"
+    },
+    "IResponse<UserTokenResponseContent>": {
+      "additionalProperties": false,
+      "description": "Response",
+      "properties": {
+        "command": {
+          "$ref": "#/definitions/CommandType"
+        },
+        "content": {
+          "$ref": "#/definitions/UserTokenResponseContent"
+        }
+      },
+      "required": [
+        "command",
+        "content"
+      ],
+      "type": "object"
+    },
+    "ISessionCommand": {
+      "additionalProperties": false,
+      "description": "Session Command Interface",
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/CommandType"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "type": "object"
+    },
+    "ISessionEvent": {
+      "additionalProperties": false,
+      "description": "Session Event Interface",
+      "type": "object"
+    },
+    "ISessionReactions": {
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "IVideo": {
+      "additionalProperties": false,
+      "description": "Video Aggregate Interface",
+      "type": "object"
+    },
+    "IVideoReactions": {
+      "additionalProperties": false,
+      "description": "Video Reactions Implementation",
+      "type": "object"
+    },
+    "IVideoState": {
+      "additionalProperties": false,
+      "description": "Video State",
+      "properties": {
+        "state": {
+          "$ref": "#/definitions/PlayState"
+        },
+        "timestamp": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "timestamp",
+        "state"
+      ],
+      "type": "object"
+    },
+    "JoinNotification": {
+      "description": "Join Notification",
+      "enum": [
+        0,
+        1
+      ],
+      "type": "number"
+    },
+    "JoinSessionCommand": {
+      "additionalProperties": false,
+      "description": "Join Session Command",
+      "properties": {
+        "sessionName": {
+          "type": "string"
+        },
+        "sessionReactions": {
+          "$ref": "#/definitions/ISessionReactions"
+        },
+        "type": {
+          "$ref": "#/definitions/CommandType"
+        },
+        "user": {
+          "$ref": "#/definitions/User"
+        }
+      },
+      "required": [
+        "sessionName",
+        "sessionReactions",
+        "type",
+        "user"
+      ],
+      "type": "object"
+    },
+    "JoinSessionResponse": {
+      "additionalProperties": false,
+      "description": "Join Session Response",
+      "properties": {
+        "command": {
+          "$ref": "#/definitions/CommandType"
+        },
+        "content": {
+          "$ref": "#/definitions/JoinSessionResponseContent"
+        }
+      },
+      "required": [
+        "command",
+        "content"
+      ],
+      "type": "object"
+    },
+    "JoinSessionResponseContent": {
+      "additionalProperties": false,
+      "description": "Join Session Response Content",
+      "properties": {
+        "responseType": {
+          "$ref": "#/definitions/JoinSessionResponseType"
+        },
+        "videoId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "responseType",
+        "videoId"
+      ],
+      "type": "object"
+    },
+    "JoinSessionResponseType": {
+      "description": "Join Session Response Type",
+      "enum": [
+        0,
+        1,
+        2
+      ],
+      "type": "number"
+    },
+    "LeaveSessionCommand": {
+      "additionalProperties": false,
+      "description": "Leave Session Command",
+      "properties": {
+        "sessionName": {
+          "type": "string"
+        },
+        "sessionReactions": {
+          "$ref": "#/definitions/ISessionReactions"
+        },
+        "type": {
+          "$ref": "#/definitions/CommandType"
+        },
+        "user": {
+          "$ref": "#/definitions/User"
+        }
+      },
+      "required": [
+        "sessionName",
+        "sessionReactions",
+        "type",
+        "user"
+      ],
+      "type": "object"
+    },
+    "LeaveSessionResponse": {
+      "additionalProperties": false,
+      "description": "Leave Session Response",
+      "properties": {
+        "command": {
+          "$ref": "#/definitions/CommandType"
+        },
+        "content": {
+          "$ref": "#/definitions/ResponseStatus"
+        }
+      },
+      "required": [
+        "command",
+        "content"
+      ],
+      "type": "object"
+    },
+    "MessageContent": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/JoinNotification"
+        },
+        {
+          "type": "string"
+        }
+      ],
+      "description": "Message Content is a Join Notification Message or a string representing the text message"
+    },
+    "MessageSentEvent": {
+      "additionalProperties": false,
+      "description": "Message Sent Event",
+      "properties": {},
+      "type": "object"
+    },
+    "NotificationMessage": {
+      "additionalProperties": false,
+      "description": "Notification Message",
+      "properties": {},
+      "type": "object"
+    },
+    "Pair<UserRepository,Pair<IChat,IVideo>>": {
+      "additionalProperties": false,
+      "description": "Pair of objects",
+      "type": "object"
+    },
+    "PlayState": {
+      "description": "Play State",
+      "enum": [
+        "Paused",
+        "Playing"
+      ],
+      "type": "string"
+    },
+    "PlayVideoCommand": {
+      "additionalProperties": false,
+      "description": "Play Video Command",
+      "properties": {
+        "sessionName": {
+          "type": "string"
+        },
+        "sessionReactions": {
+          "$ref": "#/definitions/ISessionReactions"
+        },
+        "timestamp": {
+          "type": "number"
+        },
+        "type": {
+          "$ref": "#/definitions/CommandType"
+        },
+        "user": {
+          "$ref": "#/definitions/User"
+        }
+      },
+      "required": [
+        "sessionName",
+        "sessionReactions",
+        "timestamp",
+        "type",
+        "user"
+      ],
+      "type": "object"
+    },
+    "PlayVideoResponse": {
+      "additionalProperties": false,
+      "description": "Play Video Response",
+      "properties": {
+        "command": {
+          "$ref": "#/definitions/CommandType"
+        },
+        "content": {
+          "$ref": "#/definitions/ResponseStatus"
+        }
+      },
+      "required": [
+        "command",
+        "content"
+      ],
+      "type": "object"
+    },
+    "Repository<Session,SessionId,SessionEntry>": {
+      "additionalProperties": false,
+      "description": "Repository",
+      "type": "object"
+    },
+    "Repository<User,UserId,string>": {
+      "additionalProperties": false,
+      "description": "Repository",
+      "type": "object"
+    },
+    "ResponseStatus": {
+      "description": "Response Status",
+      "enum": [
+        0,
+        1
+      ],
+      "type": "number"
+    },
+    "SendMessageCommand": {
+      "additionalProperties": false,
+      "description": "Send Message Command.",
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "sessionName": {
+          "type": "string"
+        },
+        "sessionReactions": {
+          "$ref": "#/definitions/ISessionReactions"
+        },
+        "type": {
+          "$ref": "#/definitions/CommandType"
+        },
+        "user": {
+          "$ref": "#/definitions/User"
+        }
+      },
+      "required": [
+        "message",
+        "sessionName",
+        "sessionReactions",
+        "type",
+        "user"
+      ],
+      "type": "object"
+    },
+    "SendMessageResponse": {
+      "additionalProperties": false,
+      "description": "Send Message Response",
+      "properties": {
+        "command": {
+          "$ref": "#/definitions/CommandType"
+        },
+        "content": {
+          "$ref": "#/definitions/ResponseStatus"
+        }
+      },
+      "required": [
+        "command",
+        "content"
+      ],
+      "type": "object"
+    },
+    "Session": {
+      "additionalProperties": false,
+      "properties": {},
+      "type": "object"
+    },
+    "SessionCreatedEvent": {
+      "additionalProperties": false,
+      "description": "Session Created Event",
+      "properties": {},
+      "type": "object"
+    },
+    "SessionEntry": {
+      "additionalProperties": false,
+      "properties": {},
+      "type": "object"
+    },
+    "SessionId": {
+      "additionalProperties": false,
+      "description": "Session Id",
+      "properties": {
+        "sessionName": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "sessionName"
+      ],
+      "type": "object"
+    },
+    "SessionRepository": {
+      "additionalProperties": false,
+      "properties": {},
+      "type": "object"
+    },
+    "StopVideoCommand": {
+      "additionalProperties": false,
+      "description": "Stop Video Command",
+      "properties": {
+        "sessionName": {
+          "type": "string"
+        },
+        "sessionReactions": {
+          "$ref": "#/definitions/ISessionReactions"
+        },
+        "timestamp": {
+          "type": "number"
+        },
+        "type": {
+          "$ref": "#/definitions/CommandType"
+        },
+        "user": {
+          "$ref": "#/definitions/User"
+        }
+      },
+      "required": [
+        "sessionName",
+        "sessionReactions",
+        "timestamp",
+        "type",
+        "user"
+      ],
+      "type": "object"
+    },
+    "StopVideoResponse": {
+      "additionalProperties": false,
+      "description": "Stop Video Reponse",
+      "properties": {
+        "command": {
+          "$ref": "#/definitions/CommandType"
+        },
+        "content": {
+          "$ref": "#/definitions/ResponseStatus"
+        }
+      },
+      "required": [
+        "command",
+        "content"
+      ],
+      "type": "object"
+    },
+    "TextMessage": {
+      "additionalProperties": false,
+      "description": "Text Message",
+      "properties": {},
+      "type": "object"
+    },
+    "TokenStatus": {
+      "description": "Token Status",
+      "enum": [
+        0,
+        1
+      ],
+      "type": "number"
+    },
+    "User": {
+      "additionalProperties": false,
+      "description": "User",
+      "properties": {},
+      "type": "object"
+    },
+    "UserId": {
+      "additionalProperties": false,
+      "description": "User Id",
+      "type": "object"
+    },
+    "UserJoinedSessionEvent": {
+      "additionalProperties": false,
+      "description": "User Joined Session Event",
+      "properties": {},
+      "type": "object"
+    },
+    "UserLeftSessionEvent": {
+      "additionalProperties": false,
+      "description": "User Left Session Event",
+      "properties": {},
+      "type": "object"
+    },
+    "UserRepository": {
+      "additionalProperties": false,
+      "description": "User Repository",
+      "properties": {},
+      "type": "object"
+    },
+    "UserTokenCommand": {
+      "additionalProperties": false,
+      "description": "User Token Command",
+      "properties": {
+        "authServiceUtils": {
+          "$ref": "#/definitions/IAuthServiceUtils"
+        },
+        "profileServiceUtils": {
+          "$ref": "#/definitions/IProfileServiceUtils"
+        },
+        "token": {
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/definitions/CommandType"
+        }
+      },
+      "required": [
+        "authServiceUtils",
+        "profileServiceUtils",
+        "token",
+        "type"
+      ],
+      "type": "object"
+    },
+    "UserTokenResponse": {
+      "additionalProperties": false,
+      "description": "User Token Response",
+      "properties": {
+        "command": {
+          "$ref": "#/definitions/CommandType"
+        },
+        "content": {
+          "$ref": "#/definitions/UserTokenResponseContent"
+        }
+      },
+      "required": [
+        "command",
+        "content"
+      ],
+      "type": "object"
+    },
+    "UserTokenResponseContent": {
+      "additionalProperties": false,
+      "description": "User Token Response Content",
+      "properties": {
+        "status": {
+          "$ref": "#/definitions/ResponseStatus"
+        },
+        "tokenStatus": {
+          "$ref": "#/definitions/TokenStatus"
+        },
+        "user": {
+          "$ref": "#/definitions/User"
+        }
+      },
+      "required": [
+        "status",
+        "tokenStatus"
+      ],
+      "type": "object"
+    },
+    "Video": {
+      "additionalProperties": false,
+      "properties": {
+        "eventBus": {
+          "$ref": "#/definitions/IEventBus"
+        },
+        "userReactions": {
+          "additionalProperties": false,
+          "properties": {
+            "size": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "size"
+          ],
+          "type": "object"
+        },
+        "videoId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "userReactions",
+        "videoId",
+        "eventBus"
+      ],
+      "type": "object"
+    },
+    "VideoPlayedEvent": {
+      "additionalProperties": false,
+      "description": "Video Played Event",
+      "properties": {},
+      "type": "object"
+    },
+    "VideoReactionType": {
+      "description": "Video Reaction Type",
+      "enum": [
+        "videoState",
+        "synchronize"
+      ],
+      "type": "string"
+    },
+    "VideoStoppedEvent": {
+      "additionalProperties": false,
+      "description": "Video Stopped Event",
+      "properties": {},
+      "type": "object"
+    },
+    "isDeepEqual": {
+      "$comment": "(object1: any, object2: any) =>undefined",
+      "properties": {
+        "namedArgs": {
+          "additionalProperties": false,
+          "properties": {
+            "object1": {},
+            "object2": {}
+          },
+          "required": [
+            "object1",
+            "object2"
+          ],
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "isObject": {
+      "$comment": "(object: any) =>undefined",
+      "properties": {
+        "namedArgs": {
+          "additionalProperties": false,
+          "properties": {
+            "object": {}
+          },
+          "required": [
+            "object"
+          ],
+          "type": "object"
+        }
+      },
+      "type": "object"
+    }
+  }
+}

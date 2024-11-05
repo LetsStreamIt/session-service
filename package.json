@@ -26,6 +26,7 @@
     "lint:fix": "eslint --fix src/**/*.ts test/**/*.ts",
     "lint:check": "eslint src/**/*.ts test/**/*.ts",
     "docs:build": "typedoc --entryPointStrategy expand ./src",
+    "docs:build-api": "ts-json-schema-generator --path './src/domain/**/*.ts' --type '*' -f tsconfig.json > docs/api/schemas.json &&  asyncapi generate fromTemplate ./docs/api/asyncapi.yaml @asyncapi/html-template@2.3.14  --force-write -o ./docs/api/",
     "format:write": "prettier --write src/ test/",
     "format:check": "prettier --check src/ test/",
     "preversion": "npm run build && npm run cover:check",
@@ -66,12 +67,25 @@
     "node": "20.18"
   },
   "dependencies": {
+    "@asyncapi/cli": "^2.8.0",
+    "@asyncapi/generator": "^2.5.0",
     "@types/socket.io": "^3.0.2",
     "axios": "^1.7.7",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "js-sha256": "^0.11.0",
     "socket.io": "^4.8.0",
-    "socket.io-client": "^4.8.0"
+    "socket.io-client": "^4.8.0",
+    "ts-json-schema-generator": "^2.3.0"
+  },
+  "generator": {
+    "renderer": "react",
+    "apiVersion": "v3",
+    "parameters": {
+      "server": {
+        "description": "The server you want to use in the code.",
+        "required": true
+      }
+    }
   }
 }
