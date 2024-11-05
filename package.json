@@ -26,7 +26,7 @@
     "lint:fix": "eslint --fix src/**/*.ts test/**/*.ts",
     "lint:check": "eslint src/**/*.ts test/**/*.ts",
     "docs:build": "typedoc --entryPointStrategy expand ./src",
-    "docs:build-api": "ts-json-schema-generator --path './src/domain/**/*.ts' --type '*' -f tsconfig.json > docs/api/schemas.json &&  asyncapi generate fromTemplate ./docs/api/asyncapi.yaml @asyncapi/html-template@2.3.14  --force-write -o ./docs/api/",
+    "docs:build-api": "ts-json-schema-generator --path './src/domain/**/*.ts' --type '*' -f tsconfig.json > ./docs/api/schemas.json &&  asyncapi generate fromTemplate ./docs/api/asyncapi.yaml @asyncapi/html-template@2.3.14  --force-write -o ./docs/api/",
     "format:write": "prettier --write src/ test/",
     "format:check": "prettier --check src/ test/",
     "preversion": "npm run build && npm run cover:check",
