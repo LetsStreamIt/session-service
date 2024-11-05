@@ -2,7 +2,7 @@ asyncapi: 2.2.0
 
 info:
   title: Session Service WebSocket Communication
-  version: 1.0.1
+  version: 1.1.0
   description: |
     This is the WebSocket API specification of Session Service.
 
