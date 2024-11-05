@@ -13,7 +13,6 @@ import { LeaveSessionResponse } from '../../../../../domain/common/command/respo
  * @param user access user
  * @param sessionService Session Servuce
  * @param sessionReactions Session Reactions
- * @returns
  */
 export function acceptLeaveSessionCommand(
   socket: Socket,
