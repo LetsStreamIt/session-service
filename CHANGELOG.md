@@ -1,3 +1,33 @@
+## [1.1.0](https://github.com/LetsStreamIt/session-service/compare/v1.0.1...v1.1.0) (2024-11-05)
+
+### Features
+
+* return leave session response ([7cfaefb](https://github.com/LetsStreamIt/session-service/commit/7cfaefb740fcdedfb4f811e76e2b141e32f341d4))
+
+### Dependency updates
+
+* **deps:** update dependency @types/chai to v5.0.1 ([8684f99](https://github.com/LetsStreamIt/session-service/commit/8684f998b72236b733b98bd1de485300f983f3d5))
+* **deps:** update dependency @types/node to v22.8.4 ([ac2fb19](https://github.com/LetsStreamIt/session-service/commit/ac2fb19647f39d651487bd1ef39029d5573b4f45))
+* **deps:** update dependency @types/node to v22.8.5 ([b2596ea](https://github.com/LetsStreamIt/session-service/commit/b2596ea32b89c6cbd70a4ef2fa778a5e3e7d2cbe))
+* **deps:** update dependency @types/node to v22.8.6 ([d9772f2](https://github.com/LetsStreamIt/session-service/commit/d9772f267268aab176e8f65dc8c1902fd1e78c64))
+* **deps:** update dependency mocha to v10.8.1 ([146a5db](https://github.com/LetsStreamIt/session-service/commit/146a5db8a10788a93475bed9e76d579f6f2eb297))
+* **deps:** update dependency mocha to v10.8.2 ([06047fc](https://github.com/LetsStreamIt/session-service/commit/06047fcdab78070cb95053a7a180fe1e6a05620c))
+* **deps:** update dependency semantic-release-preconfigured-conventional-commits to v1.1.113 ([2d36cfc](https://github.com/LetsStreamIt/session-service/commit/2d36cfc0ddf6238fbc086da6abd98b4e72a53ed2))
+* **deps:** update dependency semantic-release-preconfigured-conventional-commits to v1.1.114 ([6505eaf](https://github.com/LetsStreamIt/session-service/commit/6505eaf2c3ed787f4a6f10016be10def697c8f51))
+* **deps:** update dependency typedoc to v0.26.11 ([5cea93e](https://github.com/LetsStreamIt/session-service/commit/5cea93e11bf75209140708fa4dfcd1de813c37bf))
+* **deps:** update eslint monorepo to v9.14.0 ([e55ba6e](https://github.com/LetsStreamIt/session-service/commit/e55ba6e42bea8c2450893189d90941e681045076))
+* **deps:** update typescript-eslint monorepo to v8.12.0 ([f9ac7da](https://github.com/LetsStreamIt/session-service/commit/f9ac7dae870e0cc18b2a3e6caeb5f1c2e9d56ee8))
+* **deps:** update typescript-eslint monorepo to v8.12.1 ([ef65da2](https://github.com/LetsStreamIt/session-service/commit/ef65da2d7d44ed51eaf8707835b42e403a7c2323))
+* **deps:** update typescript-eslint monorepo to v8.12.2 ([03ff330](https://github.com/LetsStreamIt/session-service/commit/03ff33057e6bd52aa1fa9029e27eb041e3b5e919))
+
+### Build and continuous integration
+
+* **deps:** update docker/metadata-action digest to 0de3687 ([c817b15](https://github.com/LetsStreamIt/session-service/commit/c817b155cd462e4ccfd0e070ac8bee5cd2351390))
+* modify workflow groups ([359fa95](https://github.com/LetsStreamIt/session-service/commit/359fa954c26be22a66c72e9a253432b80bcaf3a7))
+* update commitlint.config.mjs ([9175eca](https://github.com/LetsStreamIt/session-service/commit/9175ecaf35c0bf51d35546d88f016feff81c7224))
+* update release job ([cf8d3c6](https://github.com/LetsStreamIt/session-service/commit/cf8d3c66289e70ff393ce0294e72c3d3f0b13885))
+* update release.config.mjs ([31a58bd](https://github.com/LetsStreamIt/session-service/commit/31a58bda906d2b04cd2336172aea3760f26f3a78))
+
 ## [1.0.1](https://github.com/LetsStreamIt/session-service/compare/v1.0.0...v1.0.1) (2024-10-30)
 
 ### Documentation
