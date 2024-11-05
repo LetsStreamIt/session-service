@@ -95,10 +95,13 @@ jobs:
 
   docs:
     concurrency:
+      # Only one release job at a time. Strictly sequential.
       group: docs
     runs-on: ubuntu-latest
     needs:
-      - build
+      - release
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && needs.release.outputs.release_created == 'true'
+    # Skips if is PR or isn't inside main branch
     steps:
       - name: Checkout
         uses: actions/checkout@v4.2.2
