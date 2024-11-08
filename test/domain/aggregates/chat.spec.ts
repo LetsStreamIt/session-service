@@ -32,8 +32,8 @@ describe('chat aggregate', () => {
   it('should emit a chat notification to the session when a user joins', (done) => {
     const chatReactions: IChatReactions = {
       emitNotificationToSession: function (notificationMessage: NotificationMessage): void {
-        expect(notificationMessage.getSender).to.be.equal(user)
-        expect(notificationMessage.getContent).to.be.equal(JoinNotification.JOIN_SESSION)
+        expect(notificationMessage.sender).to.be.equal(user)
+        expect(notificationMessage.content).to.be.equal(JoinNotification.JOIN_SESSION)
         done()
       },
       emitTextMessagesToClient: function (..._textMessages: TextMessage[]): void {
@@ -55,8 +55,8 @@ describe('chat aggregate', () => {
   it('should emit a chat notification to the session when a user leaves', (done) => {
     const chatReactions: IChatReactions = {
       emitNotificationToSession: function (notificationMessage: NotificationMessage): void {
-        expect(notificationMessage.getSender).to.be.equal(user)
-        expect(notificationMessage.getContent).to.be.equal(JoinNotification.LEAVE_SESSION)
+        expect(notificationMessage.sender).to.be.equal(user)
+        expect(notificationMessage.content).to.be.equal(JoinNotification.LEAVE_SESSION)
         done()
       },
       emitTextMessagesToClient: function (..._textMessages: TextMessage[]): void {
