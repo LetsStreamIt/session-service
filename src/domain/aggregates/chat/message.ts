@@ -15,29 +15,20 @@ export type MessageContent = JoinNotification | string
  * Message Interface
  */
 export interface IMessage<X extends MessageContent> {
-  get getContent(): X
-
-  get getSender(): User
+  readonly content: X
+  readonly sender: User
 }
 
 /**
  * Notification Message
  */
 export class NotificationMessage implements IMessage<JoinNotification> {
-  private readonly content: JoinNotification
-  private readonly sender: User
+  readonly content: JoinNotification
+  readonly sender: User
 
   constructor(sender: User, notification: JoinNotification) {
     this.content = notification
     this.sender = sender
-  }
-
-  get getContent(): JoinNotification {
-    return this.content
-  }
-
-  get getSender(): User {
-    return this.sender
   }
 }
 
@@ -45,19 +36,11 @@ export class NotificationMessage implements IMessage<JoinNotification> {
  * Text Message
  */
 export class TextMessage implements IMessage<string> {
-  private readonly content: string
-  private readonly sender: User
+  readonly content: string
+  readonly sender: User
 
   constructor(sender: User, text: string) {
     this.content = text
     this.sender = sender
-  }
-
-  get getContent(): string {
-    return this.content
-  }
-
-  get getSender(): User {
-    return this.sender
   }
 }
