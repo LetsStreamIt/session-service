@@ -77,7 +77,7 @@ export class Video implements IVideo {
   ) => {
     return new Promise((resolve) => {
       for (const key of this.userReactions.keys()) {
-        if (isDeepEqual(event.user.getId, key.getId)) {
+        if (isDeepEqual(event.user.id, key.id)) {
           this.userReactions.delete(key)
           break
         }

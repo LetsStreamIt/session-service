@@ -25,16 +25,16 @@ export class Pair<X, Y> {
  * Entity
  */
 export class Entity<X, Y> {
-  protected readonly id: X
-  protected readonly value: Y
+  protected readonly entityId: X
+  protected readonly entityValue: Y
 
   constructor(id: X, value: Y) {
-    this.id = id
-    this.value = value
+    this.entityId = id
+    this.entityValue = value
   }
 
-  get getId(): X {
-    return this.id
+  get id(): X {
+    return this.entityId
   }
 }
 
@@ -42,19 +42,19 @@ export class Entity<X, Y> {
  * Repository
  */
 export class Repository<X extends Entity<Y, Z>, Y, Z> {
-  private values: X[]
+  private uValues: X[]
 
   constructor(...values: X[]) {
-    this.values = values
+    this.uValues = values
   }
 
   contains(id: Y): boolean {
-    return this.values.some((el) => isDeepEqual(el.getId, id))
+    return this.uValues.some((el) => isDeepEqual(el.id, id))
   }
 
   add(element: X): boolean {
-    if (!this.contains(element.getId)) {
-      this.values.push(element)
+    if (!this.contains(element.id)) {
+      this.uValues.push(element)
       return true
     }
     return false
@@ -62,17 +62,17 @@ export class Repository<X extends Entity<Y, Z>, Y, Z> {
 
   remove(id: Y): boolean {
     if (this.contains(id)) {
-      this.values = this.values.filter((el) => !isDeepEqual(el.getId, id))
+      this.uValues = this.uValues.filter((el) => !isDeepEqual(el.id, id))
       return true
     }
     return false
   }
 
   find(id: Y): X | undefined {
-    return this.values.find((el) => isDeepEqual(el.getId, id))
+    return this.uValues.find((el) => isDeepEqual(el.id, id))
   }
 
-  get getValues(): X[] {
-    return this.values
+  get values(): X[] {
+    return this.uValues
   }
 }

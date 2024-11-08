@@ -12,7 +12,7 @@ describe('user repository', () => {
 
   it('should add a user entity when no user with same id is existing', () => {
     expect(userRepository.add(user)).to.equal(true)
-    expect(userRepository.getValues.includes(user)).to.equal(true)
+    expect(userRepository.values.includes(user)).to.equal(true)
     expect(userRepository.contains(uId)).to.equal(true)
   })
 
@@ -21,7 +21,7 @@ describe('user repository', () => {
     const newUser: User = new User(uId, 'newTestUsername')
 
     expect(userRepository.add(newUser)).to.equal(false)
-    expect(userRepository.getValues.includes(newUser)).to.equal(false)
+    expect(userRepository.values.includes(newUser)).to.equal(false)
   })
 
   it('should retreive a user entity given its id', () => {

@@ -4,8 +4,8 @@ import { Entity, Repository } from './entity'
  * User
  */
 export class User extends Entity<UserId, string> {
-  get getUsername(): string {
-    return this.value
+  get username(): string {
+    return this.entityValue
   }
 }
 
@@ -13,14 +13,14 @@ export class User extends Entity<UserId, string> {
  * User Id
  */
 export class UserId {
-  private readonly email: string
+  private readonly userEmail: string
 
   constructor(email: string) {
-    this.email = email
+    this.userEmail = email
   }
 
-  get getEmail(): string {
-    return this.email
+  get email(): string {
+    return this.userEmail
   }
 }
 
