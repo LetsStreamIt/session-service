@@ -5,7 +5,7 @@ import { JoinSessionCommand } from '../../../../../domain/aggregates/session/com
 import { CommandType } from '../../../../../domain/common/command/command'
 import {
   JoinSessionResponse,
-  JoinSessionResponseType
+  JoinSessionResponseStatus
 } from '../../../../../domain/common/command/response'
 import { ISessionReactions } from '../../../../../domain/common/reactions/sessionReactions'
 import { acceptSendMessageCommand } from './chat/sendMessage'
@@ -35,7 +35,7 @@ export function acceptJoinSessionCommand(
     sessionService
       .handleJoinSessionCommand(new JoinSessionCommand(user, sessionName, sessionReactions))
       .then((joinSessionResponse: JoinSessionResponse) => {
-        if (joinSessionResponse.content.responseType == JoinSessionResponseType.SUCCESS) {
+        if (joinSessionResponse.content.status == JoinSessionResponseStatus.SUCCESS) {
           acceptLeaveSessionCommand(socket, user, sessionName, sessionService, sessionReactions)
           acceptChatCommands(socket, user, sessionName, sessionService, sessionReactions)
           acceptVideoCommands(socket, user, sessionName, sessionService, sessionReactions)

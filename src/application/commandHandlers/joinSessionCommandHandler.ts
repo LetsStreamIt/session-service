@@ -4,7 +4,7 @@ import { SessionRepository, SessionId, Session } from '../../domain/aggregates/s
 import {
   JoinSessionResponse,
   JoinSessionResponseContent,
-  JoinSessionResponseType
+  JoinSessionResponseStatus
 } from '../../domain/common/command/response'
 import { User } from '../../domain/common/user'
 
@@ -31,34 +31,34 @@ export async function handleJoinSessionCommand(
   command: JoinSessionCommand
 ): Promise<JoinSessionResponse> {
   return new Promise((resolve) => {
-    if (!isUserJoined(sessions, command.user)) {
-      const sessionId: SessionId = new SessionId(command.sessionName)
+    if (!isUserJoined(sessions, command.content.user)) {
+      const sessionId: SessionId = new SessionId(command.content.sessionName)
       const session: Session | undefined = sessions.find(sessionId)
 
       // Resolve the Promise if the session is already existing, reject otherwise
       if (session) {
-        const videoId = session.getVideo.getVideoId
+        const videoId = session.video.videoRef
         if (videoId) {
-          session.getEventBus.publish(
-            new UserJoinedSessionEvent(command.user, command.sessionReactions)
+          session.eventBus.publish(
+            new UserJoinedSessionEvent(command.content.user, command.content.sessionReactions)
           )
           resolve(
             new JoinSessionResponse(
-              new JoinSessionResponseContent(JoinSessionResponseType.SUCCESS, videoId)
+              new JoinSessionResponseContent(JoinSessionResponseStatus.SUCCESS, videoId)
             )
           )
         }
       } else {
         resolve(
           new JoinSessionResponse(
-            new JoinSessionResponseContent(JoinSessionResponseType.SESSION_NOT_FOUND, '')
+            new JoinSessionResponseContent(JoinSessionResponseStatus.SESSION_NOT_FOUND, '')
           )
         )
       }
     } else {
       resolve(
         new JoinSessionResponse(
-          new JoinSessionResponseContent(JoinSessionResponseType.USER_ALREADY_JOINED, '')
+          new JoinSessionResponseContent(JoinSessionResponseStatus.USER_ALREADY_JOINED, '')
         )
       )
     }

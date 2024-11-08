@@ -3,36 +3,39 @@ import { ISessionReactions } from '../../../common/reactions/sessionReactions'
 import { User } from '../../../common/user'
 import { IProfileServiceUtils, IAuthServiceUtils } from '../../../utils/serviceUtils'
 
-/**
- * Create Session Command
- */
-export class CreateSessionCommand implements ISessionCommand {
-  type: CommandType
-  user: User
-  videoUrl: string
+export class CreateSessionCommandContent {
+  readonly user: User
+  readonly videoUrl: string
 
   constructor(user: User, videoUrl: string) {
-    this.type = CommandType.CREATE_SESSION
     this.user = user
     this.videoUrl = videoUrl
   }
 }
 
 /**
- * User Token Command
+ * Create Session Command
  */
-export class UserTokenCommand implements ISessionCommand {
-  type: CommandType
-  token: string
-  profileServiceUtils: IProfileServiceUtils
-  authServiceUtils: IAuthServiceUtils
+export class CreateSessionCommand implements ISessionCommand<CreateSessionCommandContent> {
+  readonly type: CommandType
+  readonly content: CreateSessionCommandContent
+
+  constructor(user: User, videoUrl: string) {
+    this.type = CommandType.CREATE_SESSION
+    this.content = new CreateSessionCommandContent(user, videoUrl)
+  }
+}
+
+export class UserTokenCommandContent {
+  readonly token: string
+  readonly profileServiceUtils: IProfileServiceUtils
+  readonly authServiceUtils: IAuthServiceUtils
 
   constructor(
     token: string,
     profileServiceUtils: IProfileServiceUtils,
     authServiceUtils: IAuthServiceUtils
   ) {
-    this.type = CommandType.USER_TOKEN
     this.token = token
     this.profileServiceUtils = profileServiceUtils
     this.authServiceUtils = authServiceUtils
@@ -40,16 +43,28 @@ export class UserTokenCommand implements ISessionCommand {
 }
 
 /**
- * Join Session Command
+ * User Token Command
  */
-export class JoinSessionCommand implements ISessionCommand {
-  type: CommandType
-  user: User
-  sessionName: string
-  sessionReactions: ISessionReactions
+export class UserTokenCommand implements ISessionCommand<UserTokenCommandContent> {
+  readonly type: CommandType
+  readonly content: UserTokenCommandContent
+
+  constructor(
+    token: string,
+    profileServiceUtils: IProfileServiceUtils,
+    authServiceUtils: IAuthServiceUtils
+  ) {
+    this.type = CommandType.USER_TOKEN
+    this.content = new UserTokenCommandContent(token, profileServiceUtils, authServiceUtils)
+  }
+}
+
+export class SessionCommandContent {
+  readonly user: User
+  readonly sessionName: string
+  readonly sessionReactions: ISessionReactions
 
   constructor(user: User, sessionName: string, sessionReactions: ISessionReactions) {
-    this.type = CommandType.JOIN_SESSION
     this.user = user
     this.sessionName = sessionName
     this.sessionReactions = sessionReactions
@@ -57,18 +72,27 @@ export class JoinSessionCommand implements ISessionCommand {
 }
 
 /**
+ * Join Session Command
+ */
+export class JoinSessionCommand implements ISessionCommand<SessionCommandContent> {
+  readonly type: CommandType
+  readonly content: SessionCommandContent
+
+  constructor(user: User, sessionName: string, sessionReactions: ISessionReactions) {
+    this.type = CommandType.JOIN_SESSION
+    this.content = new SessionCommandContent(user, sessionName, sessionReactions)
+  }
+}
+
+/**
  * Leave Session Command
  */
-export class LeaveSessionCommand implements ISessionCommand {
-  type: CommandType
-  user: User
-  sessionName: string
-  sessionReactions: ISessionReactions
+export class LeaveSessionCommand implements ISessionCommand<SessionCommandContent> {
+  readonly type: CommandType
+  readonly content: SessionCommandContent
 
   constructor(user: User, sessionName: string, sessionReactions: ISessionReactions) {
     this.type = CommandType.LEAVE_SESSION
-    this.user = user
-    this.sessionName = sessionName
-    this.sessionReactions = sessionReactions
+    this.content = new SessionCommandContent(user, sessionName, sessionReactions)
   }
 }

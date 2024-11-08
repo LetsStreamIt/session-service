@@ -1,4 +1,7 @@
-import { SendMessageCommand } from '../../domain/aggregates/chat/commands/chatCommands'
+import {
+  SendMessageCommand,
+  SendMessageCommandContent
+} from '../../domain/aggregates/chat/commands/chatCommands'
 import { MessageSentEvent } from '../../domain/aggregates/chat/events/chatEvents'
 import { TextMessage } from '../../domain/aggregates/chat/message'
 import { Session, SessionId, SessionRepository } from '../../domain/aggregates/session/session'
@@ -16,11 +19,12 @@ export async function handleSendMessageCommand(
   command: SendMessageCommand
 ): Promise<SendMessageResponse> {
   return new Promise((resolve) => {
-    if (command.message !== '') {
-      const session: Session | undefined = sessions.find(new SessionId(command.sessionName))
-      const textMessage: TextMessage = new TextMessage(command.user, command.message)
+    const content: SendMessageCommandContent = command.content
+    if (content.message !== '') {
+      const session: Session | undefined = sessions.find(new SessionId(content.sessionName))
+      const textMessage: TextMessage = new TextMessage(content.user, content.message)
       if (session) {
-        session.getEventBus.publish(new MessageSentEvent(textMessage, command.sessionReactions))
+        session.eventBus.publish(new MessageSentEvent(textMessage, content.sessionReactions))
       }
       resolve(new SendMessageResponse(ResponseStatus.SUCCESS))
     } else {

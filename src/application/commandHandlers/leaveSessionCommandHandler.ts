@@ -15,10 +15,12 @@ export async function handleLeaveSessionCommand(
   command: LeaveSessionCommand
 ): Promise<LeaveSessionResponse> {
   return new Promise((resolve) => {
-    const sessionId: SessionId = new SessionId(command.sessionName)
+    const sessionId: SessionId = new SessionId(command.content.sessionName)
     const session: Session | undefined = sessions.find(sessionId)
     if (session) {
-      session.getEventBus.publish(new UserLeftSessionEvent(command.user, command.sessionReactions))
+      session.eventBus.publish(
+        new UserLeftSessionEvent(command.content.user, command.content.sessionReactions)
+      )
       resolve(new LeaveSessionResponse(ResponseStatus.SUCCESS))
     } else {
       resolve(new LeaveSessionResponse(ResponseStatus.FAILURE))

@@ -21,17 +21,17 @@ export async function handleCreateSessionCommand(
   command: CreateSessionCommand
 ): Promise<CreateSessionResponse> {
   return new Promise((resolve) => {
-    youtubeVideoIdFromUrl(command.videoUrl).then((videoId: string | undefined) => {
+    youtubeVideoIdFromUrl(command.content.videoUrl).then((videoId: string | undefined) => {
       if (videoId) {
         const sessionName: string = sessionNameFromEmailAndVideoId(
-          command.user.getId.getEmail,
+          command.content.user.getId.getEmail,
           videoId
         )
         const sessionId: SessionId = new SessionId(sessionName)
         const session: Session = new Session(sessionId, videoId)
         sessions.add(session)
         session.registerEventHandlers()
-        subscribeToUserLeftSessionEvents(sessions, session.getEventBus, sessionId)
+        subscribeToUserLeftSessionEvents(sessions, session.eventBus, sessionId)
 
         const timeout = 5_000
         deleteSessionAtTimeout(sessions, sessionId, timeout)
@@ -85,7 +85,7 @@ function subscribeToUserLeftSessionEvents(
 function deleteSessionWhenAllUserLeft(sessions: SessionRepository, sessionId: SessionId): void {
   const session: Session | undefined = sessions.find(sessionId)
   if (session) {
-    if (session.getUsers.getValues.length == 0) {
+    if (session.users.getValues.length == 0) {
       sessions.remove(sessionId)
     }
   }

@@ -1,7 +1,6 @@
 import { Server, Socket } from 'socket.io'
 import { acceptUserTokenCommand } from './userToken'
 import { acceptDisconnectionCommand } from './disconnect'
-import { CommandType } from '../../../../../domain/common/command/command'
 import { ISessionService } from '../../../../../application/sessionService'
 import { IProfileServiceUtils, IAuthServiceUtils } from '../../../../../domain/utils/serviceUtils'
 
@@ -19,7 +18,7 @@ export function acceptConnectionCommand(
   profileServiceUtils: IProfileServiceUtils,
   authServiceUtils: IAuthServiceUtils
 ) {
-  io.on(CommandType.CONNECTION, (socket: Socket) => {
+  io.on('connection', (socket: Socket) => {
     acceptUserTokenCommand(io, socket, sessionService, profileServiceUtils, authServiceUtils)
     acceptDisconnectionCommand(socket)
   })

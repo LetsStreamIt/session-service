@@ -10,25 +10,22 @@ import { VideoPlayedEvent, VideoStoppedEvent } from './events/videoEvents'
  * Video Aggregate Interface
  */
 export interface IVideo {
+  readonly videoRef: string
+
   /**
    * Register Event Handlers for Events triggered by the Session Service.
    */
   registerEventHandlers(): void
-
-  /**
-   * Returns the Video Id of the video associated to the aggregate.
-   */
-  get getVideoId(): string
 }
 
 export class Video implements IVideo {
-  userReactions: Map<User, IVideoReactions>
-  videoId: string
-  eventBus: IEventBus
+  readonly userReactions: Map<User, IVideoReactions>
+  readonly videoRef: string
+  readonly eventBus: IEventBus
 
   constructor(videoRef: string, eventBus: IEventBus) {
     this.userReactions = new Map()
-    this.videoId = videoRef
+    this.videoRef = videoRef
     this.eventBus = eventBus
   }
 
@@ -37,10 +34,6 @@ export class Video implements IVideo {
     this.eventBus.subscribe(EventType.UserLeftSession, this.handleUserLeftEvent)
     this.eventBus.subscribe(EventType.VideoPlayed, this.handleVideoPlayedEvent)
     this.eventBus.subscribe(EventType.VideoStopped, this.handleStopVideoEvent)
-  }
-
-  get getVideoId(): string {
-    return this.videoId
   }
 
   /**
@@ -65,9 +58,9 @@ export class Video implements IVideo {
           const timestamps: number[] = videoStates.map((videoState) => videoState.timestamp)
           const minTimestamp: number = Math.min(...timestamps)
           const videoStateSync: IVideoState = videoStates[timestamps.indexOf(minTimestamp)]
-          event.getSessionReactions.getVideoReactions.synchronizeClient(videoStateSync)
+          event.reactions.videoReactions.synchronizeClient(videoStateSync)
         }
-        this.userReactions.set(event.getUser, event.getSessionReactions.getVideoReactions)
+        this.userReactions.set(event.user, event.reactions.videoReactions)
         resolve()
       })
     })
@@ -84,7 +77,7 @@ export class Video implements IVideo {
   ) => {
     return new Promise((resolve) => {
       for (const key of this.userReactions.keys()) {
-        if (isDeepEqual(event.getUser.getId, key.getId)) {
+        if (isDeepEqual(event.user.getId, key.getId)) {
           this.userReactions.delete(key)
           break
         }
@@ -104,9 +97,9 @@ export class Video implements IVideo {
     event: VideoPlayedEvent
   ) => {
     return new Promise((resolve) => {
-      event.getSessionReactions.getVideoReactions.syncronizeSession({
+      event.reactions.videoReactions.syncronizeSession({
         state: PlayState.PLAYING,
-        timestamp: event.getTimestamp
+        timestamp: event.timestamp
       })
       resolve()
     })
@@ -123,9 +116,9 @@ export class Video implements IVideo {
     event: VideoStoppedEvent
   ) => {
     return new Promise((resolve) => {
-      event.getSessionReactions.getVideoReactions.syncronizeSession({
+      event.reactions.videoReactions.syncronizeSession({
         state: PlayState.PAUSED,
-        timestamp: event.getTimestamp
+        timestamp: event.timestamp
       })
       resolve()
     })

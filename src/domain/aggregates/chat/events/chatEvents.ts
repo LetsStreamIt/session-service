@@ -6,25 +6,13 @@ import { TextMessage } from '../message'
  * Message Sent Event
  */
 export class MessageSentEvent implements ISessionEvent {
-  private readonly type: EventType
-  private readonly sessionReactions: ISessionReactions
-  private readonly textMessage: TextMessage
+  readonly type: EventType
+  readonly reactions: ISessionReactions
+  readonly textMessage: TextMessage
 
-  constructor(textMessage: TextMessage, sessionReactions: ISessionReactions) {
+  constructor(textMessage: TextMessage, reactions: ISessionReactions) {
     this.type = EventType.MessageSent
-    this.sessionReactions = sessionReactions
+    this.reactions = reactions
     this.textMessage = textMessage
-  }
-
-  get getTextMessage(): TextMessage {
-    return this.textMessage
-  }
-
-  get getType(): EventType {
-    return this.type
-  }
-
-  get getSessionReactions(): ISessionReactions {
-    return this.sessionReactions
   }
 }

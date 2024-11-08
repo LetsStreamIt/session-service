@@ -2,7 +2,10 @@ import { Server, Socket } from 'socket.io'
 import { acceptCreateSessionCommand } from '../session/createSession'
 import { acceptJoinSessionCommand } from '../session/joinSession'
 import { ISessionService } from '../../../../../application/sessionService'
-import { ResponseStatus, UserTokenResponse } from '../../../../../domain/common/command/response'
+import {
+  UserTokenResponse,
+  UserTokenResponseStatus
+} from '../../../../../domain/common/command/response'
 import { UserTokenCommand } from '../../../../../domain/aggregates/session/commands/sessionCommands'
 import { CommandType } from '../../../../../domain/common/command/command'
 import { IAuthServiceUtils, IProfileServiceUtils } from '../../../../../domain/utils/serviceUtils'
@@ -28,7 +31,7 @@ export function acceptUserTokenCommand(
       .handleUserTokenCommand(new UserTokenCommand(token, profileServiceUtils, authServiceUtils))
       .then((userTokenResponse: UserTokenResponse) => {
         if (
-          userTokenResponse.content.status == ResponseStatus.SUCCESS &&
+          userTokenResponse.content.tokenStatus == UserTokenResponseStatus.TOKEN_VALID &&
           userTokenResponse.content.user
         ) {
           acceptCreateSessionCommand(socket, userTokenResponse.content.user, sessionService)

@@ -9,11 +9,11 @@ import { IVideoReactions } from '../../../../domain/common/reactions/videoReacti
  * WebSocket Session Reactions
  */
 export class WSSessionReactions implements ISessionReactions {
-  io: Server
-  socket: Socket
-  sessionName: string
-  chatReactions: IChatReactions
-  videoReactions: IVideoReactions
+  readonly io: Server
+  readonly socket: Socket
+  readonly sessionName: string
+  readonly chatReactions: IChatReactions
+  readonly videoReactions: IVideoReactions
 
   constructor(io: Server, socket: Socket, sessionName: string) {
     this.io = io
@@ -30,13 +30,5 @@ export class WSSessionReactions implements ISessionReactions {
   leaveUserFromSessionAndDisconnect() {
     this.socket.leave(this.sessionName)
     this.socket.disconnect()
-  }
-
-  get getChatReactions() {
-    return this.chatReactions
-  }
-
-  get getVideoReactions() {
-    return this.videoReactions
   }
 }

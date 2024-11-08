@@ -6,9 +6,9 @@ import { IChatReactions, ChatReactionType } from '../../../../domain/common/reac
  * WebSocket Chat Reactions
  */
 export class WSChatReactions implements IChatReactions {
-  io: Server
-  socket: Socket
-  sessionName: string
+  readonly io: Server
+  readonly socket: Socket
+  readonly sessionName: string
 
   constructor(io: Server, socket: Socket, sessionName: string) {
     this.io = io

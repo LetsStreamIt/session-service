@@ -5,8 +5,8 @@ import { CommandType } from './command'
  * Response
  */
 export interface IResponse<X> {
-  command: CommandType
-  content: X
+  readonly command: CommandType
+  readonly content: X
 }
 
 /**
@@ -20,7 +20,7 @@ export enum ResponseStatus {
 /**
  * Join Session Response Type
  */
-export enum JoinSessionResponseType {
+export enum JoinSessionResponseStatus {
   SUCCESS = 0,
   USER_ALREADY_JOINED = 1,
   SESSION_NOT_FOUND = 2
@@ -29,7 +29,7 @@ export enum JoinSessionResponseType {
 /**
  * Token Status
  */
-export enum TokenStatus {
+export enum UserTokenResponseStatus {
   TOKEN_VALID = 0,
   TOKEN_INVALID = 1
 }
@@ -38,8 +38,8 @@ export enum TokenStatus {
  * Create Session Response Content
  */
 export class CreateSessionResponseContent {
-  status: ResponseStatus
-  sessionName: string
+  readonly status: ResponseStatus
+  readonly sessionName: string
 
   constructor(status: ResponseStatus, sessionName: string) {
     this.status = status
@@ -48,14 +48,17 @@ export class CreateSessionResponseContent {
 }
 
 /**
- * User Token Response Content
+ * User Token Response Content.
+ * It uses both ResponseStatus and UserTokenResponseStatus.
+ * The purpose of the first one is to signal communication errors with the Authentication of User Service,
+ * while the second one to inform if the token is valid or invalid.
  */
 export class UserTokenResponseContent {
-  status: ResponseStatus
-  user?: User
-  tokenStatus: TokenStatus
+  readonly status: ResponseStatus
+  readonly user?: User
+  readonly tokenStatus: UserTokenResponseStatus
 
-  constructor(status: ResponseStatus, tokenStatus: TokenStatus, user?: User) {
+  constructor(status: ResponseStatus, tokenStatus: UserTokenResponseStatus, user?: User) {
     this.status = status
     this.user = user
     this.tokenStatus = tokenStatus
@@ -66,11 +69,11 @@ export class UserTokenResponseContent {
  * Join Session Response Content
  */
 export class JoinSessionResponseContent {
-  responseType: JoinSessionResponseType
-  videoId: string
+  readonly status: JoinSessionResponseStatus
+  readonly videoId: string
 
-  constructor(responseType: JoinSessionResponseType, videoId: string) {
-    this.responseType = responseType
+  constructor(status: JoinSessionResponseStatus, videoId: string) {
+    this.status = status
     this.videoId = videoId
   }
 }
@@ -79,8 +82,8 @@ export class JoinSessionResponseContent {
  * Join Session Response
  */
 export class JoinSessionResponse implements IResponse<JoinSessionResponseContent> {
-  command: CommandType
-  content: JoinSessionResponseContent
+  readonly command: CommandType
+  readonly content: JoinSessionResponseContent
 
   constructor(content: JoinSessionResponseContent) {
     this.command = CommandType.JOIN_SESSION
@@ -92,8 +95,8 @@ export class JoinSessionResponse implements IResponse<JoinSessionResponseContent
  * Create Session Response
  */
 export class CreateSessionResponse implements IResponse<CreateSessionResponseContent> {
-  command: CommandType
-  content: CreateSessionResponseContent
+  readonly command: CommandType
+  readonly content: CreateSessionResponseContent
 
   constructor(status: ResponseStatus, sessionName: string) {
     this.command = CommandType.CREATE_SESSION
@@ -105,8 +108,8 @@ export class CreateSessionResponse implements IResponse<CreateSessionResponseCon
  * Play Video Response
  */
 export class PlayVideoResponse implements IResponse<ResponseStatus> {
-  command: CommandType
-  content: ResponseStatus
+  readonly command: CommandType
+  readonly content: ResponseStatus
 
   constructor(content: ResponseStatus) {
     this.command = CommandType.PLAY_VIDEO
@@ -118,8 +121,8 @@ export class PlayVideoResponse implements IResponse<ResponseStatus> {
  * Stop Video Reponse
  */
 export class StopVideoResponse implements IResponse<ResponseStatus> {
-  command: CommandType
-  content: ResponseStatus
+  readonly command: CommandType
+  readonly content: ResponseStatus
 
   constructor(content: ResponseStatus) {
     this.command = CommandType.STOP_VIDEO
@@ -131,8 +134,8 @@ export class StopVideoResponse implements IResponse<ResponseStatus> {
  * Send Message Response
  */
 export class SendMessageResponse implements IResponse<ResponseStatus> {
-  command: CommandType
-  content: ResponseStatus
+  readonly command: CommandType
+  readonly content: ResponseStatus
 
   constructor(content: ResponseStatus) {
     this.command = CommandType.SEND_MSG
@@ -144,10 +147,10 @@ export class SendMessageResponse implements IResponse<ResponseStatus> {
  * User Token Response
  */
 export class UserTokenResponse implements IResponse<UserTokenResponseContent> {
-  command: CommandType
-  content: UserTokenResponseContent
+  readonly command: CommandType
+  readonly content: UserTokenResponseContent
 
-  constructor(status: ResponseStatus, tokenStatus: TokenStatus, user?: User) {
+  constructor(status: ResponseStatus, tokenStatus: UserTokenResponseStatus, user?: User) {
     this.command = CommandType.USER_TOKEN
     this.content = new UserTokenResponseContent(status, tokenStatus, user)
   }
@@ -157,8 +160,8 @@ export class UserTokenResponse implements IResponse<UserTokenResponseContent> {
  * Leave Session Response
  */
 export class LeaveSessionResponse implements IResponse<ResponseStatus> {
-  command: CommandType
-  content: ResponseStatus
+  readonly command: CommandType
+  readonly content: ResponseStatus
 
   constructor(content: ResponseStatus) {
     this.command = CommandType.LEAVE_SESSION

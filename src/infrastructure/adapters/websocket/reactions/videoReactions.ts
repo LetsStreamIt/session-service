@@ -9,9 +9,9 @@ import {
  * WebSocket Video Reactions
  */
 export class WSVideoReactions implements IVideoReactions {
-  io: Server
-  socket: Socket
-  sessionName: string
+  readonly io: Server
+  readonly socket: Socket
+  readonly sessionName: string
 
   constructor(io: Server, socket: Socket, sessionName: string) {
     this.io = io

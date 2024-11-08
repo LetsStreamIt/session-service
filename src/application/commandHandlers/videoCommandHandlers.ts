@@ -25,9 +25,11 @@ export async function handlePlayVideoCommand(
   command: PlayVideoCommand
 ): Promise<PlayVideoResponse> {
   return new Promise((resolve) => {
-    const session: Session | undefined = sessions.find(new SessionId(command.sessionName))
+    const session: Session | undefined = sessions.find(new SessionId(command.content.sessionName))
     if (session) {
-      session.getEventBus.publish(new VideoPlayedEvent(command.timestamp, command.sessionReactions))
+      session.eventBus.publish(
+        new VideoPlayedEvent(command.content.timestamp, command.content.sessionReactions)
+      )
       resolve(new PlayVideoResponse(ResponseStatus.SUCCESS))
     } else {
       resolve(new PlayVideoResponse(ResponseStatus.FAILURE))
@@ -47,10 +49,10 @@ export async function handleStopVideoCommand(
   command: StopVideoCommand
 ): Promise<StopVideoResponse> {
   return new Promise((resolve) => {
-    const session: Session | undefined = sessions.find(new SessionId(command.sessionName))
+    const session: Session | undefined = sessions.find(new SessionId(command.content.sessionName))
     if (session) {
-      session.getEventBus.publish(
-        new VideoStoppedEvent(command.timestamp, command.sessionReactions)
+      session.eventBus.publish(
+        new VideoStoppedEvent(command.content.timestamp, command.content.sessionReactions)
       )
       resolve(new StopVideoResponse(ResponseStatus.SUCCESS))
     } else {

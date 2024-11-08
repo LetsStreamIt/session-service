@@ -19,31 +19,8 @@ export class SessionId {
 
 export class SessionEntry extends Pair<UserRepository, Pair<IChat, IVideo>> {}
 
-// export interface ISession extends Entity<SessionId, SessionEntry> {
-//   /**
-//    * Register Event Handlers for Events Emitted by the Session Service
-//    */
-//   registerEventHandlers(): void
-
-//   /**
-//    * Checks if the specified User is Joined to the Session
-//    * @param user
-//    */
-//   isUserJoined(user: User): boolean
-
-//   /**
-//    * Retreives the Event Bus
-//    */
-//   get getEventBus(): IEventBus
-
-//   get getChat(): IChat
-
-//   get getVideo(): IVideo
-
-// }
-
 export class Session extends Entity<SessionId, SessionEntry> {
-  private readonly eventBus: IEventBus
+  private readonly bus: IEventBus
 
   constructor(id: SessionId, videoRef: string) {
     const eventBus = new EventBus()
@@ -52,22 +29,22 @@ export class Session extends Entity<SessionId, SessionEntry> {
       new Pair(new Chat(eventBus), new Video(videoRef, eventBus))
     )
     super(id, sessionEntry)
-    this.eventBus = eventBus
+    this.bus = eventBus
   }
 
-  get getUsers(): UserRepository {
+  get users(): UserRepository {
     return this.value.getX
   }
 
-  get getEventBus(): IEventBus {
-    return this.eventBus
+  get eventBus(): IEventBus {
+    return this.bus
   }
 
-  get getChat(): IChat {
+  get chat(): IChat {
     return this.value.getY.getX
   }
 
-  get getVideo(): IVideo {
+  get video(): IVideo {
     return this.value.getY.getY
   }
 
@@ -97,8 +74,8 @@ export class Session extends Entity<SessionId, SessionEntry> {
     event: UserJoinedSessionEvent
   ) => {
     return new Promise((resolve) => {
-      this.value?.getX.add(event.getUser)
-      event.getSessionReactions.joinUserToSession()
+      this.value?.getX.add(event.user)
+      event.reactions.joinUserToSession()
       resolve()
     })
   }
@@ -114,8 +91,8 @@ export class Session extends Entity<SessionId, SessionEntry> {
     event: UserLeftSessionEvent
   ) => {
     return new Promise((resolve) => {
-      this.value?.getX.remove(event.getUser.getId)
-      event.getSessionReactions.leaveUserFromSessionAndDisconnect()
+      this.value?.getX.remove(event.user.getId)
+      event.reactions.leaveUserFromSessionAndDisconnect()
       resolve()
     })
   }
