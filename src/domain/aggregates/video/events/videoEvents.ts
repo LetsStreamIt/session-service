@@ -5,26 +5,14 @@ import { ISessionReactions } from '../../../common/reactions/sessionReactions'
  * Video Played Event
  */
 export class VideoPlayedEvent implements ISessionEvent {
-  private readonly type: EventType
-  private readonly sessionReactions: ISessionReactions
-  private readonly timestamp: number
+  readonly type: EventType
+  readonly reactions: ISessionReactions
+  readonly timestamp: number
 
-  constructor(timestamp: number, sessionReactions: ISessionReactions) {
+  constructor(timestamp: number, reactions: ISessionReactions) {
     this.type = EventType.VideoPlayed
-    this.sessionReactions = sessionReactions
+    this.reactions = reactions
     this.timestamp = timestamp
-  }
-
-  get getTimestamp(): number {
-    return this.timestamp
-  }
-
-  get getType(): EventType {
-    return this.type
-  }
-
-  get getSessionReactions(): ISessionReactions {
-    return this.sessionReactions
   }
 }
 
@@ -32,25 +20,13 @@ export class VideoPlayedEvent implements ISessionEvent {
  * Video Stopped Event
  */
 export class VideoStoppedEvent implements ISessionEvent {
-  private readonly type: EventType
-  private readonly sessionReactions: ISessionReactions
-  private readonly timestamp: number
+  readonly type: EventType
+  readonly reactions: ISessionReactions
+  readonly timestamp: number
 
-  constructor(timestamp: number, sessionReactions: ISessionReactions) {
+  constructor(timestamp: number, reactions: ISessionReactions) {
     this.type = EventType.VideoStopped
-    this.sessionReactions = sessionReactions
+    this.reactions = reactions
     this.timestamp = timestamp
-  }
-
-  get getTimestamp(): number {
-    return this.timestamp
-  }
-
-  get getType(): EventType {
-    return this.type
-  }
-
-  get getSessionReactions(): ISessionReactions {
-    return this.sessionReactions
   }
 }

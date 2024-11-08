@@ -15,7 +15,7 @@ describe('event bus', () => {
 
   it('should allow to react and publish events', (done) => {
     eventBus.subscribe(EventType.MessageSent, async (messageSentEvent: MessageSentEvent) => {
-      expect(messageSentEvent.getTextMessage).to.be.equal(message)
+      expect(messageSentEvent.textMessage).to.be.equal(message)
       done()
     })
 

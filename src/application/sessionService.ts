@@ -30,6 +30,8 @@ import {
 } from './commandHandlers/videoCommandHandlers'
 
 export interface ISessionService {
+  readonly sessions: SessionRepository
+
   /**
    * Create Session Command Handler
    * @param command Create Session Command
@@ -74,7 +76,7 @@ export interface ISessionService {
 }
 
 export class SessionService implements ISessionService {
-  sessions: SessionRepository
+  readonly sessions: SessionRepository
 
   constructor() {
     this.sessions = new SessionRepository()

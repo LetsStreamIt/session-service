@@ -8,7 +8,7 @@ import { CommandType } from '../../../../src/domain/common/command/command'
 import {
   CreateSessionResponse,
   JoinSessionResponse,
-  JoinSessionResponseType
+  JoinSessionResponseStatus
 } from '../../../../src/domain/common/command/response'
 import { expect } from 'chai'
 import { acceptCreateSessionCommand } from '../../../../src/infrastructure/adapters/websocket/commands/session/createSession'
@@ -44,8 +44,8 @@ describe('join session message', () => {
           CommandType.JOIN_SESSION,
           { sessionName: createSessionResponse.content.sessionName },
           (joinSessionResponse: JoinSessionResponse) => {
-            expect(joinSessionResponse.content.responseType).to.be.equal(
-              JoinSessionResponseType.SUCCESS
+            expect(joinSessionResponse.content.status).to.be.equal(
+              JoinSessionResponseStatus.SUCCESS
             )
             expect(joinSessionResponse.content.videoId).to.be.equal(videoId)
             done()
@@ -60,7 +60,7 @@ describe('join session message', () => {
       CommandType.JOIN_SESSION,
       { sessionName: 'thisSessionDoesNotExist' },
       (response: JoinSessionResponse) => {
-        expect(response.content.responseType).to.be.equal(JoinSessionResponseType.SESSION_NOT_FOUND)
+        expect(response.content.status).to.be.equal(JoinSessionResponseStatus.SESSION_NOT_FOUND)
         expect(response.content.videoId).to.be.equal('')
         done()
       }
@@ -80,15 +80,15 @@ describe('join session message', () => {
           CommandType.JOIN_SESSION,
           { sessionName: createSessionResponse.content.sessionName },
           (joinSessionResponse: JoinSessionResponse) => {
-            expect(joinSessionResponse.content.responseType).to.be.equal(
-              JoinSessionResponseType.SUCCESS
+            expect(joinSessionResponse.content.status).to.be.equal(
+              JoinSessionResponseStatus.SUCCESS
             )
             clientSocket.emit(
               CommandType.JOIN_SESSION,
               { sessionName: createSessionResponse.content.sessionName },
               (joinSessionResponse: JoinSessionResponse) => {
-                expect(joinSessionResponse.content.responseType).to.be.equal(
-                  JoinSessionResponseType.USER_ALREADY_JOINED
+                expect(joinSessionResponse.content.status).to.be.equal(
+                  JoinSessionResponseStatus.USER_ALREADY_JOINED
                 )
                 done()
               }

@@ -2,6 +2,9 @@ import { IChatReactions } from './chatReactions'
 import { IVideoReactions } from './videoReactions'
 
 export interface ISessionReactions {
+  readonly chatReactions: IChatReactions
+  readonly videoReactions: IVideoReactions
+
   /**
    * Join User to Session reaction
    */
@@ -11,8 +14,4 @@ export interface ISessionReactions {
    * Leave User from Session Reaction
    */
   leaveUserFromSessionAndDisconnect(): void
-
-  get getChatReactions(): IChatReactions
-
-  get getVideoReactions(): IVideoReactions
 }

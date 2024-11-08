@@ -1,8 +1,11 @@
-import { UserTokenCommand } from '../../domain/aggregates/session/commands/sessionCommands'
+import {
+  UserTokenCommand,
+  UserTokenCommandContent
+} from '../../domain/aggregates/session/commands/sessionCommands'
 import {
   UserTokenResponse,
   ResponseStatus,
-  TokenStatus
+  UserTokenResponseStatus
 } from '../../domain/common/command/response'
 import { User, UserId } from '../../domain/common/user'
 
@@ -16,23 +19,40 @@ export async function handleUserTokenCommand(
   command: UserTokenCommand
 ): Promise<UserTokenResponse> {
   return new Promise((resolve) => {
-    command.authServiceUtils
-      .getUserEmailFromToken(command.token)
+    const content: UserTokenCommandContent = command.content
+    content.authServiceUtils
+      .getUserEmailFromToken(content.token)
       .then((email: string) => {
-        command.profileServiceUtils
-          .getUsernameFromEmailAndToken(command.token, email)
+        content.profileServiceUtils
+          .getUsernameFromEmailAndToken(content.token, email)
           .then((username: string) => {
             const user: User = new User(new UserId(email), username)
-            resolve(new UserTokenResponse(ResponseStatus.SUCCESS, TokenStatus.TOKEN_VALID, user))
+            resolve(
+              new UserTokenResponse(
+                ResponseStatus.SUCCESS,
+                UserTokenResponseStatus.TOKEN_VALID,
+                user
+              )
+            )
           })
           .catch(() =>
             resolve(
-              new UserTokenResponse(ResponseStatus.FAILURE, TokenStatus.TOKEN_VALID, undefined)
+              new UserTokenResponse(
+                ResponseStatus.FAILURE,
+                UserTokenResponseStatus.TOKEN_VALID,
+                undefined
+              )
             )
           )
       })
       .catch(() =>
-        resolve(new UserTokenResponse(ResponseStatus.FAILURE, TokenStatus.TOKEN_INVALID, undefined))
+        resolve(
+          new UserTokenResponse(
+            ResponseStatus.FAILURE,
+            UserTokenResponseStatus.TOKEN_INVALID,
+            undefined
+          )
+        )
       )
   })
 }
