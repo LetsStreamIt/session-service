@@ -15,7 +15,7 @@ import { User } from '../../domain/common/user'
  * @returns true if joined, false otherwise
  */
 function isUserJoined(sessions: SessionRepository, user: User): boolean {
-  return sessions.getValues.some((session) => session.isUserJoined(user))
+  return sessions.values.some((session) => session.isUserJoined(user))
 }
 
 /**

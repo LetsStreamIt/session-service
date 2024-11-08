@@ -24,7 +24,7 @@ export async function handleCreateSessionCommand(
     youtubeVideoIdFromUrl(command.content.videoUrl).then((videoId: string | undefined) => {
       if (videoId) {
         const sessionName: string = sessionNameFromEmailAndVideoId(
-          command.content.user.getId.getEmail,
+          command.content.user.id.email,
           videoId
         )
         const sessionId: SessionId = new SessionId(sessionName)
@@ -85,7 +85,7 @@ function subscribeToUserLeftSessionEvents(
 function deleteSessionWhenAllUserLeft(sessions: SessionRepository, sessionId: SessionId): void {
   const session: Session | undefined = sessions.find(sessionId)
   if (session) {
-    if (session.users.getValues.length == 0) {
+    if (session.users.values.length == 0) {
       sessions.remove(sessionId)
     }
   }

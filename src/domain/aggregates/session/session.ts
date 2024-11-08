@@ -33,7 +33,7 @@ export class Session extends Entity<SessionId, SessionEntry> {
   }
 
   get users(): UserRepository {
-    return this.value.getX
+    return this.entityValue.getX
   }
 
   get eventBus(): IEventBus {
@@ -41,24 +41,24 @@ export class Session extends Entity<SessionId, SessionEntry> {
   }
 
   get chat(): IChat {
-    return this.value.getY.getX
+    return this.entityValue.getY.getX
   }
 
   get video(): IVideo {
-    return this.value.getY.getY
+    return this.entityValue.getY.getY
   }
 
   registerEventHandlers() {
-    this.value?.getY.getX.registerEventHandlers()
-    this.value?.getY.getY.registerEventHandlers()
+    this.entityValue?.getY.getX.registerEventHandlers()
+    this.entityValue?.getY.getY.registerEventHandlers()
     this.eventBus.subscribe(EventType.UserJoinedSession, this.handleUserJoinedEvent)
     this.eventBus.subscribe(EventType.UserLeftSession, this.handleUserLeftEvent)
   }
 
   isUserJoined(user: User): boolean {
-    const users = this.value?.getX
+    const users = this.entityValue?.getX
     if (users) {
-      return users.contains(user.getId)
+      return users.contains(user.id)
     }
     return false
   }
@@ -74,7 +74,7 @@ export class Session extends Entity<SessionId, SessionEntry> {
     event: UserJoinedSessionEvent
   ) => {
     return new Promise((resolve) => {
-      this.value?.getX.add(event.user)
+      this.entityValue?.getX.add(event.user)
       event.reactions.joinUserToSession()
       resolve()
     })
@@ -91,7 +91,7 @@ export class Session extends Entity<SessionId, SessionEntry> {
     event: UserLeftSessionEvent
   ) => {
     return new Promise((resolve) => {
-      this.value?.getX.remove(event.user.getId)
+      this.entityValue?.getX.remove(event.user.id)
       event.reactions.leaveUserFromSessionAndDisconnect()
       resolve()
     })
