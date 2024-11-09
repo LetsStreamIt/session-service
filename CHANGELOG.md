@@ -1,3 +1,28 @@
+## [2.0.0](https://github.com/LetsStreamIt/session-service/compare/v1.1.1...v2.0.0) (2024-11-09)
+
+### ⚠ BREAKING CHANGES
+
+* API response body change
+
+* Change User model fields ([#181](https://github.com/LetsStreamIt/session-service/issues/181)) ([816003e](https://github.com/LetsStreamIt/session-service/commit/816003ef427ec14a074613b233665d08e37d77cc))
+
+### Dependency updates
+
+* **deps:** update dependency @types/node to v22.8.7 ([819dc1a](https://github.com/LetsStreamIt/session-service/commit/819dc1ad5a31510a2b8062a1b47834d2680ffd87))
+* **deps:** update dependency @types/node to v22.9.0 ([#179](https://github.com/LetsStreamIt/session-service/issues/179)) ([47293a1](https://github.com/LetsStreamIt/session-service/commit/47293a1eab76db6c3b40eff11fda79d8aa053ef8))
+* **deps:** update dependency dependency-cruiser to v16.6.0 ([d79c69c](https://github.com/LetsStreamIt/session-service/commit/d79c69cdf58b9a386496feb75ddfd338dee46635))
+* **deps:** update typescript-eslint monorepo to v8.13.0 ([#178](https://github.com/LetsStreamIt/session-service/issues/178)) ([be5264e](https://github.com/LetsStreamIt/session-service/commit/be5264ec45958693a1ea191341f90151a0b280e7))
+
+### Build and continuous integration
+
+* **deps:** update docker/login-action digest to 7ca3450 ([e30bfc1](https://github.com/LetsStreamIt/session-service/commit/e30bfc124a6991b8ba033f7f9b507cc34949e632))
+
+### General maintenance
+
+* modify user model ([2a7b283](https://github.com/LetsStreamIt/session-service/commit/2a7b283f926224ae917835eea3a0a583ff591086))
+* remove getters and add readonly fields ([15d1e62](https://github.com/LetsStreamIt/session-service/commit/15d1e62c4d12cc32e5e4d0ac830a2d805dc3a3f3))
+* remove getters in text message ([3efb413](https://github.com/LetsStreamIt/session-service/commit/3efb4136bd0f3d25af4c3611ac0b010d76ed075a))
+
 ## [1.1.1](https://github.com/LetsStreamIt/session-service/compare/v1.1.0...v1.1.1) (2024-11-05)
 
 ### Documentation
