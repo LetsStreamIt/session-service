@@ -1,10 +1,11 @@
-import { Pair, Entity, Repository } from '../../common/entity'
+import { Pair, Entity } from '../../common/entity'
 import { IEventBus, EventBus } from '../../common/event/eventBus'
 import { IChat, Chat } from '../chat/chat'
 import { User, UserRepository } from '../../common/user'
 import { EventType } from '../../common/event/event'
 import { IVideo, Video } from '../video/video'
 import { UserJoinedSessionEvent, UserLeftSessionEvent } from './events/sessionEvents'
+import { Repository } from '../../common/repository'
 
 /**
  * Session Id

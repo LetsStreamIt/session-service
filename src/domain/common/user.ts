@@ -1,7 +1,8 @@
-import { Entity, Repository } from './entity'
+import { Entity } from './entity'
+import { Repository } from './repository'
 
 /**
- * User
+ * User is an entity with id UserId and a string value representing the Username
  */
 export class User extends Entity<UserId, string> {
   get username(): string {
@@ -10,7 +11,7 @@ export class User extends Entity<UserId, string> {
 }
 
 /**
- * User Id
+ * User Id contains a string representing the email
  */
 export class UserId {
   private readonly userEmail: string
