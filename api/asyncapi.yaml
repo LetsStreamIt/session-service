@@ -1,0 +1,152 @@
+asyncapi: 2.2.0
+
+info:
+  title: Session Service WebSocket Communication
+  version: 1.1.0
+  description: |
+    This is the WebSocket API specification of Session Service.
+
+servers:
+  deploy-server:
+    url: session-service:{port}/socket.io
+    protocol: wss
+
+channels:
+  /:
+    publish:
+      message:
+        oneOf:
+          - $ref: "#/components/messages/UserTokenCommandMessage"
+          - $ref: "#/components/messages/CreateSessionCommandMessage"
+          - $ref: "#/components/messages/JoinSessionCommandMessage"
+          - $ref: "#/components/messages/LeaveSessionCommandMessage"
+          - $ref: "#/components/messages/SendTextMessageCommandMessage"
+          - $ref: "#/components/messages/PlayVideoCommandMessage"
+          - $ref: "#/components/messages/StopVideoCommandMessage"
+    subscribe:
+      message:
+        oneOf:
+          - $ref: "#/components/messages/SendTextMessageReactionMessage"
+          - $ref: "#/components/messages/SendNotificationMessageReactionMessage"
+          - $ref: "#/components/messages/GetVideoStateReactionMessage"
+          - $ref: "#/components/messages/SynchronizeVideoReactionMessage"
+
+components:
+  schemas:
+    SendTextMessageReactionPayload:
+      $ref: "./schemas.json#/definitions/TextMessage"
+    SendNotificationMessageReactionPayload:
+      $ref: "./schemas.json#/definitions/NotificationMessage"
+    VideoState:
+      $ref: "./schemas.json#/definitions/IVideoState"
+    UserTokenCommandAck:
+      $ref: "./schemas.json#/definitions/UserTokenResponse"
+    CreateSessionCommandAck:
+      $ref: "./schemas.json#/definitions/CreateSessionResponse"
+    JoinSessionCommandAck:
+      $ref: "./schemas.json#/definitions/JoinSessionResponse"
+    LeaveSessionCommandAck:
+      $ref: "./schemas.json#/definitions/LeaveSessionResponse"
+    SendTextMessageCommandAck:
+      $ref: "./schemas.json#/definitions/SendMessageResponse"
+    PlayVideoCommandAck:
+      $ref: "./schemas.json#/definitions/PlayVideoResponse"
+    StopVideoCommandAck:
+      $ref: "./schemas.json#/definitions/StopVideoResponse"
+
+  messages:
+    UserTokenCommandMessage:
+      title: userToken
+      description: "User Token Command"
+      payload:
+        type: object
+        properties:
+          token:
+            type: string
+      x-ack:
+        $ref: "#/components/schemas/UserTokenCommandAck"
+
+    CreateSessionCommandMessage:
+      title: createSession
+      description: "Create Session Command"
+      payload:
+        type: object
+        properties:
+          videoUrl:
+            type: string
+      x-ack:
+        $ref: "#/components/schemas/CreateSessionCommandAck"
+
+    JoinSessionCommandMessage:
+      title: joinSession
+      description: "Join Session Command"
+      payload:
+        type: object
+        properties:
+          sessionName:
+            type: string
+      x-ack:
+        $ref: "#/components/schemas/JoinSessionCommandAck"
+
+    LeaveSessionCommandMessage:
+      title: leaveSession
+      description: "Leave Session Command"
+      x-ack:
+        $ref: "#/components/schemas/LeaveSessionCommandAck"
+
+    SendTextMessageCommandMessage:
+      title: sendMessage
+      description: "Send Chat Text Message Command"
+      payload:
+        type: object
+        properties:
+          message:
+            type: string
+      x-ack:
+        $ref: "#/components/schemas/SendTextMessageCommandAck"
+
+    PlayVideoCommandMessage:
+      title: playVideo
+      description: "Play Video Command"
+      payload:
+        type: object
+        properties:
+          timestamp:
+            type: number
+      x-ack:
+        $ref: "#/components/schemas/PlayVideoCommandAck"
+
+    StopVideoCommandMessage:
+      title: stopVideo
+      description: "Stop Video Command"
+      payload:
+        type: object
+        properties:
+          timestamp:
+            type: number
+      x-ack:
+        $ref: "#/components/schemas/StopVideoCommandAck"
+
+    SendTextMessageReactionMessage:
+      title: textMessage
+      description: "Send Chat Text Message Reaction"
+      payload:
+        $ref: "#/components/schemas/SendTextMessageReactionPayload"
+
+    SendNotificationMessageReactionMessage:
+      title: notificationMessage
+      description: "Send Chat Notification Message Reaction"
+      payload:
+        $ref: "#/components/schemas/SendNotificationMessageReactionPayload"
+
+    GetVideoStateReactionMessage:
+      title: videoState
+      description: "Get Video State Reaction"
+      x-ack:
+        $ref: "#/components/schemas/VideoState"
+
+    SynchronizeVideoReactionMessage:
+      title: synchronize
+      description: "Synchronize Video Reaction"
+      payload:
+        $ref: "#/components/schemas/VideoState"
