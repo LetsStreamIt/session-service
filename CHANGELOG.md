@@ -1,3 +1,21 @@
+## [1.1.1](https://github.com/LetsStreamIt/session-service/compare/v1.1.0...v1.1.1) (2024-11-05)
+
+### Documentation
+
+* edit release in async api spec ([67aa48a](https://github.com/LetsStreamIt/session-service/commit/67aa48ac79bb657e7a61379eda4b8dd4e090bc95))
+
+### Build and continuous integration
+
+* edit docs job ([01c301b](https://github.com/LetsStreamIt/session-service/commit/01c301b9ac3a255d63f1bcd9bec5ac21f0d35f12))
+* trigger docs after release ([c59a9c3](https://github.com/LetsStreamIt/session-service/commit/c59a9c37569582fa7bd9a748e49e9d2194037466))
+* trigger docs ci if builds succeeds ([5f8ef84](https://github.com/LetsStreamIt/session-service/commit/5f8ef84861ae717d3f1f71be11af6333dc81aa20))
+
+### General maintenance
+
+* edit api gen script, trigger ci on build ([2fafbe7](https://github.com/LetsStreamIt/session-service/commit/2fafbe798085d586dd064827ecfc2662104442c3))
+* edit docs dir structure, build doc commands ([6bd7062](https://github.com/LetsStreamIt/session-service/commit/6bd70620d888d6d0bad1fbe0f2853b8ea7e0c1cf))
+* remove files in docs, edit ci ([501d04f](https://github.com/LetsStreamIt/session-service/commit/501d04f801d40286ecfe5be800725fcd2366ed73))
+
 ## [1.1.0](https://github.com/LetsStreamIt/session-service/compare/v1.0.1...v1.1.0) (2024-11-05)
 
 ### Features
